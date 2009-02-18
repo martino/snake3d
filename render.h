@@ -10,5 +10,6 @@
 
 #include "share.h"
 
+void render();
 
 #endif

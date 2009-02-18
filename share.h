@@ -10,12 +10,30 @@
 #ifndef SHARE_H
 #define SHARE_H
 
+/**
+ * costanti
+ */
+
+#define winHeight 600
+#define winWidth  800
+
+
+
 /*
  * include comuni
  */
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/*
+ * include degli altri file
+ */
+
+#include "render.h"
+#include "event.h"
+#include "loop.h"
+
 
 /*
  * strutture dati

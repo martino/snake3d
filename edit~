@@ -1,0 +1,3 @@
+#!/bin/bash
+
+emacs event.c event.h loop.c loop.h main.c render.c render.h share.c share.h &

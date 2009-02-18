@@ -6,3 +6,18 @@
  */
 
 #include "render.h"
+
+
+/**
+   questa funzione ha il compito di disegnare SOLAMENTE il tutto
+
+   riflessi
+   nebbia...
+
+ */
+
+ 
+void render(){
+
+
+}

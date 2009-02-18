@@ -11,4 +11,8 @@
 #include "share.h"
 
 
+void event();
+
+
+
 #endif

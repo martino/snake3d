@@ -11,4 +11,6 @@
 #include "share.h"
 
 
+void loop();
+
 #endif
