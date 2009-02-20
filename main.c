@@ -7,7 +7,10 @@
 
 #include "share.h"
 
-
+/*
+ * funcizione che funge da "ciclo" principale
+ * vengono gestiti gli eventi, gli update ed alla fine viene disegnato tutto
+ */
 void TimerFunc(int value){
   event();
   loop();
@@ -17,19 +20,58 @@ void TimerFunc(int value){
 
 
 int initialize(int argc, char *argv[]){
+  /*
+   * bisogna inizializzare:
+   *   mondo
+   *   texture
+   *   oggetti
+   *   displaylist   
+   *
+   */
+
+  /*
+   * Inizializzazione della struttura mondo
+   */
+  programData.width = winWidth ;
+  programData.height = winHeight;
+
+  programData.frame = 0;
+  programData.time = 0;
+  programData.timebase = 0;
+  programData.timerender = 0;
+
+  programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
+  /*
+   * Inizializzazione openGL
+   */
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
   glutInitWindowPosition(0, 0);
-  glutInitWindowSize(winWidth, winHeight);
+  glutInitWindowSize(programData.width, programData.height);
   glutCreateWindow("SnakeTreD");
 
-  glutDisplayFunc(renerScene);
-/*   glutReshapeFunc(changeSize);  */
+  glutDisplayFunc(render);
+  glutReshapeFunc(changeSize);
+  
 
-/* devo assegnare le varie funzioni di gestione tasitera - mouse
- 
-   queste semplicemente gestistcono l'evento aggiungendo un messaggio in coda
- */
+  /*
+   * funzione per gestire il movimento del mouse
+   */
+  glutPassiveMotionFunc(mouseHandler);
+
+  /*
+   * funzione per gestire i tasti speciali:
+   *  - freccie
+   */
+  glutSpecialFunc(specialKeyHandler);
+
+  /*
+   * funzione per gestire i tasti normali:
+   *  - lettere
+   */
+  glutKeyboardFunc(keyHandler);
+
 
   glutTimerFunc(33, TimerFunc, 1);
   glutMainLoop();

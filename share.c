@@ -6,3 +6,6 @@
  */
 
 #include "share.h"
+
+
+Data programData;

@@ -77,6 +77,25 @@ typedef struct{
 
 } World;
 
+typedef struct{
+  /* gestione della finestra*/
+  GLfloat width, height;
+  /* gestione dei frame */
+  GLint frame, time, timebase, timerender;
+  /* font utilizzato nel programma */
+  GLint font;
+  
+  /* variabili utilizzate per l'OSD */
+  
+
+} Data;
+
+
+/*
+ * variabili extern
+ */
+
+extern Data programData;
 
 /*
  * prototipi funzioni

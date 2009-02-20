@@ -15,6 +15,14 @@
 
  */
 void loop(){
+  /* calcolo del framerate */
+  programData.frame++;
+  programData.time = glutGet(GLUT_ELAPSED_TIME);
+  if(programData.time - programData.timebase > 1000){
+    /* programData.frame*1000.0/(programData.time-programData.timebase) */
+    programData.timebase = programData.time;
+    programData.frame = 0;
+  }
 
 
 }
