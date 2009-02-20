@@ -86,8 +86,8 @@ typedef struct{
   GLint font;
   
   /* variabili utilizzate per l'OSD */
+  char fps[10];
   
-
 } Data;
 
 
