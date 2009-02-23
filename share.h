@@ -97,11 +97,13 @@ typedef struct{
   GLint font;
   
   /* variabili utilizzate per l'OSD */
-	
+  char fps[10];
+  
   /* gestione flusso del programma */
   GLint exit;
   GLint menu;
   GLint fullscreen; 
+  
 } Data;
 
 
