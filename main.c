@@ -40,6 +40,14 @@ int initialize(int argc, char *argv[]){
    *
    */
 
+
+  /*
+   * Carico le texutre
+   */
+  if(!gltLoadTGA("/tmp/prova.tga", &worldData.texWallR)) fprintf(stderr, "orrore, esco");
+
+  
+
   /*
    * Inizializzazione della struttura mondo
    */
@@ -55,6 +63,8 @@ int initialize(int argc, char *argv[]){
   programData.menu = 0;
   programData.exit = 0;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
+  
+  sprintf(programData.fps, "FPS: --");
   /*
    * Inizializzazione openGL
    */

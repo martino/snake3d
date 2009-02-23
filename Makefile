@@ -1,7 +1,7 @@
-#CFLAGS = -Wall -I. -I/usr/X11R6/include
-#LDFLAGS = -L/usr/X11R6/lib -lGL -lGLU -lglut -lm
-CFLAGS = -Wall
-LDFLAGS = -framework GLUT -framework OpenGL -framework Cocoa  -lc
+CFLAGS = -Wall -I. -I/usr/X11R6/include
+LDFLAGS = -L/usr/X11R6/lib -lGL -lGLU -lglut -lm
+#CFLAGS = -Wall
+#LDFLAGS = -framework GLUT -framework OpenGL -framework Cocoa  -lc
 CC = gcc
 
 all: main

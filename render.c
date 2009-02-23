@@ -109,33 +109,43 @@ void renderText(float x, float y, char *string){
  * Funzione per visualizzare il menù
  */
 void renderMenu(){
-	GLchar *text[20];
-	GLchar *c;
-	GLint x = 80, xi = 80, y = 80;
-	sprintf(text, "F - Fullscreen\n");
-	for(c = text; *c != '\0'; c++){
-		glRasterPos2f(xi, y);
-		glutBitmapCharacter((int *)programData.font, *c);
-		xi = xi + glutBitmapWidth((int *)programData.font, *c);
-	}
+  GLchar text[20];
+  GLchar *c;
+  GLint x = 80, xi = 80, y = 80;
+  sprintf(text, "F - Fullscreen\n");
+  for(c = text; *c != '\0'; c++){
+    glRasterPos2f(xi, y);
+    glutBitmapCharacter((int *)programData.font, *c);
+    xi = xi + glutBitmapWidth((int *)programData.font, *c);
+  }
 
-	xi = x; 
-	y = 100;
-	sprintf(text, "N - Nebbia\n");
-	for(c = text; *c != '\0'; c++){
-		glRasterPos2f(xi, y);
-		glutBitmapCharacter((int *)programData.font, *c);
-		xi = xi + glutBitmapWidth((int *)programData.font, *c);
-	}
+  xi = x; 
+  y = 100;
+  sprintf(text, "N - Nebbia\n");
+  for(c = text; *c != '\0'; c++){
+    glRasterPos2f(xi, y);
+    glutBitmapCharacter((int *)programData.font, *c);
+    xi = xi + glutBitmapWidth((int *)programData.font, *c);
+  }
 	
 }
 
-/**
-   questa funzione ha il compito di disegnare il tutto
+/*
+ * Funzione per disegnare il mondo
+ */
+void drawWorld(){
+  // richiama le varie list
+}
 
-   riflessi
-   nebbia...
 
+
+
+/*
+ *  questa funzione ha il compito di disegnare il tutto
+ *
+ * riflessi
+ * nebbia...
+ *
  */
  
 void render(){
