@@ -7,6 +7,13 @@
 
 #include "share.h"
 
+
+
+void cleanup(){
+
+}
+
+
 /*
  * funcizione che funge da "ciclo" principale
  * vengono gestiti gli eventi, gli update ed alla fine viene disegnato tutto
@@ -15,6 +22,10 @@ void TimerFunc(int value){
   event();
   loop();
   glutPostRedisplay();
+  if(programData.exit){
+	cleanup();
+	exit(0);
+  }
   glutTimerFunc(16, TimerFunc, 0);
 }
 
@@ -40,6 +51,9 @@ int initialize(int argc, char *argv[]){
   programData.timebase = 0;
   programData.timerender = 0;
 
+  programData.fullscreen = 0;
+  programData.menu = 0;
+  programData.exit = 0;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
   /*
    * Inizializzazione openGL
@@ -79,11 +93,6 @@ int initialize(int argc, char *argv[]){
 }
 
 
-void cleanup(){
-
-
-}
-
 
 int main(int argc, char *argv[]){
   
@@ -98,6 +107,6 @@ int main(int argc, char *argv[]){
 /*     render(); */
 /*   } */
 
-  cleanup();
+//  cleanup();
   return 1;
 }

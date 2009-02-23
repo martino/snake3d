@@ -18,11 +18,22 @@
 #define winWidth  800
 
 
+/*
+ * include OpenGL
+ */
+// Mac OS X
+#ifdef __APPLE__
+#include <OpenGL/gl.h>		// Apple OpenGL haders (version depends on OS X SDK version)
+#include <OpenGL/glu.h>		// OpenGL Utilities
+#include <Glut/glut.h>		// Apples Implementation of GLUT
+#elif
+#include <GL/glut.h>
+#endif
 
 /*
  * include comuni
  */
-#include <GL/glut.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -86,8 +97,11 @@ typedef struct{
   GLint font;
   
   /* variabili utilizzate per l'OSD */
-  
-
+	
+  /* gestione flusso del programma */
+  GLint exit;
+  GLint menu;
+  GLint fullscreen; 
 } Data;
 
 

@@ -19,7 +19,19 @@ void mouseHandler(int x, int y){
  * gestisce i tasti "normali"
  */ 
 void keyHandler(GLubyte key, GLint x, GLint y){
-
+	if(key== 'q'){
+		fprintf(stderr, "Exit\n");
+		programData.exit = 1;
+	}
+	
+	/* gestione dei vari effetti, compreso menù */
+	if(key == 'm'){ // menu
+		programData.menu = !programData.menu;
+	}
+	
+	if(key == 'f'){ // fullscreen
+		
+	}
 
 }
 
@@ -38,8 +50,7 @@ void specialKeyHandler(GLint key, GLint x, GLint y){
    Ci saranno due grandi categorie da gestire:
    - eventi del menu'
    - eventi di gioco
-
-   Utilizzando due code:
+	
    - coda movimenti (freccie tastiera + mouse)                              --> MovEvent
    - coda eventi    (le lettere che abilitano/disabilitano le varie cose)   --> ComEvent
 
