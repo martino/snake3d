@@ -39,7 +39,7 @@ int initialize(int argc, char *argv[]){
 
 
   GLint i = 0;
-  const char *texFiles[] = {"/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga"};
+  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", "texture/ground.tga","texture/sky.tga" };
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -162,13 +162,16 @@ int initialize(int argc, char *argv[]){
     
 
   }
+
    
   /*
    * Creo le display list
    */
-  worldData.wall = glGenLists(2);
-  worldData.sg    = worldData.wall + 1;
+  worldData.wall   = glGenLists(3);
+  worldData.ground = worldData.wall + 1;
+  worldData.sky    = worldData.wall + 2;
   createWorld();
+  worldData.cColor = 1;
   
   
 

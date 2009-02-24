@@ -20,8 +20,8 @@
 #define TWR   0
 #define TWG   1
 #define TWB   2
-#define TWU   3
-#define TWD   4
+#define TG    3
+#define TS    4
 #define NTEX  5
 #define WORLDIM 24.0f
 
@@ -115,8 +115,8 @@ typedef struct{
 typedef struct{
 
   GLuint texObj[NTEX];
-  GLuint wall, sg;
-
+  GLuint wall, ground, sky;
+  GLuint cColor;
 
 } World;
 

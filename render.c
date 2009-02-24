@@ -30,7 +30,7 @@ void changeSize(GLint w, GLint h){
    *      zNear  -> distanza minima visibile
    *      zFar   -> distanza massima visibile
    */
-  gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+  gluPerspective(45.0f, ratio, 0.1f, 200.0f);
   
   glMatrixMode(GL_MODELVIEW);
   
@@ -138,59 +138,81 @@ void createWorld(){
 
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
-   glColor3f(1.0f, 0.0f, 0.0f);
-   /* glBegin(GL_QUADS);
+
+   /*   glBegin(GL_QUADS);
     glVertex3f(-x, -y, z);
     glVertex3f( x, -y, z);
     glVertex3f( x,  y, z);
     glVertex3f(-x,  y, z);
-   glEnd();
-   */
-   /*fronte*/
-   /*   glBegin(GL_QUADS);
-    glVertex3f(-x, -y, -z);
-    glVertex3f( x, -y, -z);
-    glVertex3f( x,  y, -z);
-    glVertex3f(-x,  y, -z);
     glEnd();*/
-
+   
+   /*fronte*/
+   glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-x, -y, -z);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( x, -y, -z);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( x,  y, -z);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-x,  y, -z);
+   glEnd();
+   
    /*latoSX*/
    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-x, -y,  z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-x,  y,  z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-x,  y, -z);
    glEnd(); 
 
    /*latoDX*/
    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(x, -y, -z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(x, -y,  z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(x,  y,  z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(x,  y, -z);
    glEnd();
 
   glEndList();
 
 
-  glNewList(worldData.sg,GL_COMPILE);
+  glNewList(worldData.ground,GL_COMPILE);
   // ground
-  glColor3f(0.0f, 1.0f, 0.0f);
-  glBegin(GL_QUADS);
-   glVertex3f(-x, -y, -z);
-   glVertex3f( x, -y, -z);
-   glVertex3f( x, -y,  z);
-   glVertex3f(-x, -y,  z);
-  glEnd();
+
+   glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-x, -y, -z);
+    glTexCoord2f(10.0f, 0.0f);
+    glVertex3f( x, -y, -z);
+    glTexCoord2f(10.0f, 10.0f);
+    glVertex3f( x, -y,  z);
+    glTexCoord2f(0.0f, 10.0f);
+    glVertex3f(-x, -y,  z);
+   glEnd();
+  glEndList();
   
+  glNewList(worldData.sky,GL_COMPILE);
   // sky
-  glColor3f(0.0f, 0.0f, 1.0f);
-  glBegin(GL_QUADS);
-   glVertex3f(-x, y, -z);
-   glVertex3f( x, y, -z);
-   glVertex3f( x, y,  z);
-   glVertex3f(-x, y,  z);
-  glEnd();
+
+   glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-x, y, -z);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f( x, y, -z);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f( x, y,  z);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-x, y,  z);
+   glEnd();
 
   glEndList();
 }
@@ -200,10 +222,17 @@ void createWorld(){
  */
 void drawWorld(){
   // richiama le varie list in base al colore della texture i wall
+  glBindTexture(GL_TEXTURE_2D, worldData.cColor);
   glCallList(worldData.wall);
 
-  // ed infine il pavimento/soffitto
-  glCallList(worldData.sg);
+  // ed infine il pavimento
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
+  glCallList(worldData.ground);
+
+  // ed infine il soffitto
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
+  glCallList(worldData.sky);
+
 
 
 }

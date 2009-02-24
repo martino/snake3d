@@ -33,6 +33,20 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 		
 	}
 
+	if(key == 'r'){ 
+	  worldData.cColor = 1;
+	}
+
+	if(key == 't'){ 
+	  worldData.cColor = 2;
+	}
+
+	if(key == 'y'){ 
+	  worldData.cColor = 3;
+	}
+
+
+
 }
 
 /*  
