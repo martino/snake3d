@@ -16,7 +16,14 @@
 
 #define winHeight 600
 #define winWidth  800
-
+//texWallR, texWallG, texWallB, texUp, texDown;
+#define TWR   0
+#define TWG   1
+#define TWB   2
+#define TWU   3
+#define TWD   4
+#define NTEX  5
+#define WORLDIM 24.0f
 
 /*
  * include OpenGL
@@ -104,18 +111,12 @@ typedef struct{
 
 } Worm;
 
-typedef struct{
-  GLbyte *image;   // immagine
-  GLint width;     // larghezza
-  GLint height;    // altezza
-  GLint component; // componenti dell'immagine 1, 3, 4 (luminance, RGB, RGBA)
-  GLenum format;   // formato dell'immagine
-} Tex;
 
 typedef struct{
-  Tex texWallR, texWallG, texWallB;
-  Tex texUp, texDown;
-  
+
+  GLuint texObj[NTEX];
+  GLuint wall, sg;
+
 
 } World;
 
@@ -150,6 +151,6 @@ extern World worldData;
  */
 
 /* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
-//GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
-GLint gltLoadTGA(const char *, Tex *);
+GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
+
 #endif

@@ -131,10 +131,81 @@ void renderMenu(){
 }
 
 /*
+ * Funzione per creare la display list del mondo
+ */
+void createWorld(){
+  GLfloat x = WORLDIM, y = WORLDIM, z = WORLDIM;
+
+  glNewList(worldData.wall,GL_COMPILE);
+   /*retro*/
+   glColor3f(1.0f, 0.0f, 0.0f);
+   /* glBegin(GL_QUADS);
+    glVertex3f(-x, -y, z);
+    glVertex3f( x, -y, z);
+    glVertex3f( x,  y, z);
+    glVertex3f(-x,  y, z);
+   glEnd();
+   */
+   /*fronte*/
+   /*   glBegin(GL_QUADS);
+    glVertex3f(-x, -y, -z);
+    glVertex3f( x, -y, -z);
+    glVertex3f( x,  y, -z);
+    glVertex3f(-x,  y, -z);
+    glEnd();*/
+
+   /*latoSX*/
+   glBegin(GL_QUADS);
+    glVertex3f(-x, -y, -z);
+    glVertex3f(-x, -y,  z);
+    glVertex3f(-x,  y,  z);
+    glVertex3f(-x,  y, -z);
+   glEnd(); 
+
+   /*latoDX*/
+   glBegin(GL_QUADS);
+    glVertex3f(x, -y, -z);
+    glVertex3f(x, -y,  z);
+    glVertex3f(x,  y,  z);
+    glVertex3f(x,  y, -z);
+   glEnd();
+
+  glEndList();
+
+
+  glNewList(worldData.sg,GL_COMPILE);
+  // ground
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glBegin(GL_QUADS);
+   glVertex3f(-x, -y, -z);
+   glVertex3f( x, -y, -z);
+   glVertex3f( x, -y,  z);
+   glVertex3f(-x, -y,  z);
+  glEnd();
+  
+  // sky
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glBegin(GL_QUADS);
+   glVertex3f(-x, y, -z);
+   glVertex3f( x, y, -z);
+   glVertex3f( x, y,  z);
+   glVertex3f(-x, y,  z);
+  glEnd();
+
+  glEndList();
+}
+
+/*
  * Funzione per disegnare il mondo
  */
 void drawWorld(){
-  // richiama le varie list
+  // richiama le varie list in base al colore della texture i wall
+  glCallList(worldData.wall);
+
+  // ed infine il pavimento/soffitto
+  glCallList(worldData.sg);
+
+
 }
 
 
@@ -173,6 +244,12 @@ void render(){
   // parte il rendering normale
   
   // telecamera
+  glTranslatef(0.0f, 0.0f, -100.0f);
+
+  
+  drawWorld();
+  
+
 
   glutSwapBuffers();
 

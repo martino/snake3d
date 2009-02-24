@@ -31,26 +31,16 @@ void TimerFunc(int value){
 
 
 int initialize(int argc, char *argv[]){
-  /*
-   * bisogna inizializzare:
-   *   mondo
-   *   texture
-   *   oggetti
-   *   displaylist   
-   *
-   */
 
-
-  /*
-   * Carico le texutre
-   */
-  if(!gltLoadTGA("/tmp/prova.tga", &worldData.texWallR)) fprintf(stderr, "orrore, esco");
-
-  
 
   /*
    * Inizializzazione della struttura mondo
    */
+
+
+  GLint i = 0;
+  const char *texFiles[] = {"/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga", "/tmp/prova.tga"};
+
   programData.width = winWidth ;
   programData.height = winHeight;
 
@@ -65,6 +55,7 @@ int initialize(int argc, char *argv[]){
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
   
   sprintf(programData.fps, "FPS: --");
+
   /*
    * Inizializzazione openGL
    */
@@ -74,6 +65,112 @@ int initialize(int argc, char *argv[]){
   glutInitWindowPosition(0, 0);
   glutInitWindowSize(programData.width, programData.height);
   glutCreateWindow("SnakeTreD");
+
+
+  /*
+   * bisogna inizializzare:
+   *   mondo
+   *   oggetti
+   *
+   */
+
+
+  /*
+   * Carico le texutre
+   */
+  glEnable(GL_TEXTURE_2D);
+  glGenTextures(NTEX, worldData.texObj);
+  //parametri delle texutre
+  //  glTexEnvi(GL_TEXTURE....
+  for(i=0; i<NTEX; i++){ // carico tutte le texture
+    GLbyte *pImage;
+    GLint width, height, components;
+    GLenum format;
+    
+    glBindTexture(GL_TEXTURE_2D, worldData.texObj[i]);
+    pImage = gltLoadTGA(texFiles[i], &width, &height, &components, &format);
+   
+    /*
+     *	glTexImage2D  -> carica una texture 2d in memoria,
+     *	parametri:
+     *	  -> target: specifica il tipo di texture puo' essere GL_TEXTURE_2D oppure GL_PROXY_TEXTURE_2D,
+     *	  -> level: specifica il numero di livello di dettaglio, il livello 0 e' il base [mipmapping]
+     *	  -> internalformat: specifica il numero di colori nella texture, solitamente si usano questi simboli:
+     *		GL_ALPHA
+     *		GL_LUMINANCE
+     *		GL_LUMINANCE_ALPHA
+     *		GL_RGB
+     *		GL_RGBA
+     *	  -> width: larghezza della texture
+     *	  -> height:altezza della texture
+     *	  -> depth: profondita' di colore della texture
+     *		NB: questi tre parametri prima di opengl 2.0 dovevano essere interi potenze di 2
+     *	  -> border:	specifica la dimensione del bordo
+     *	  -> format: 	speficifo il formato dei dati che andrò a scrivere:
+     *		GL_COLOR_INDEX
+     *		GL_STENCIL_INDEX
+     *		GL_DEPTH_COMPONENT
+     *		GL_RGB
+     *		GL_BGR
+     *		GL_RGBA
+     *		GL_BGRA
+     *		GL_RED
+     *		GL_GREEN
+     *		GL_BLUE
+     *		GL_ALPHA
+     *		GL_LUMINANCE
+     *		GL_LUMINANCE_ALPHA
+     *	  -> type:   specifica il tipo di dati (es: GL_UNSIGNED_BYTE, etc etc)
+     *	  -> pixels: è un puntatore al blocco di pixel 
+     */
+    glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, pImage);
+    free(pImage);
+    
+    /*
+     *	glTexParameteri  -> imposta i parametri della texture
+     *	parametri:
+     *	  -> target: specifica la texture  GL_TEXTURE_1D, GL_TEXTURE_2D, or GL_TEXTURE_3D
+     *	  -> pname:  specifica quale parametro viene impostato
+     *		* basic filtering
+     *		   il processo di calcolare i "color fragmnet" da una texture map ingrandita o rimpicciolita è detto filtering
+     *		   posso agire sul funzionamento di quest'ultimo utilizzando due parametri:
+     *			--> GL_TEXTURE_MAG_FILTER magnification
+     *			--> GL_TEXTURE_MIN_FILTER minification  (bisogna sempre scegliere uno dei due filtri sottostanti se non utilizzo mipmapping)
+     *		   ed i parametri impostabili sono: (manca mipmapping)
+     *			--> GL_LINEAR  [linear filtering] è un pochino più esoso del NEAREST(ma con l'hw attuale non rappresenta un problmea)
+     *					il valore del pixel viene interpolato dai suoi vicini
+     *			--> GL_NEAREST [nearest	neighbor] è il filtro più veloce e semplice, restituisce il valore del texel più vicino al pixel che deve essere disegnato
+     *	 		
+     *		* texture warp	
+     *		   normalmente le coordinate texture vengono specificate tra 0.0 e 1.0, se però le coordinate texture escono da questo range allora OpenGL funziona in base alla warp mode impostata
+     *		   il warp si può configurare per ogni coordinata quindi ho a disposizione:
+     *			--> GL_TEXTURE_WARP_S
+     *			--> GL_TEXTURE_WARP_T
+     *			--> GL_TEXTURE_WARP_R
+     *		   ed i parametri disponibili sono:
+     *			--> GL_REPEAT	semplicemente fa in modo che la texture si ripeta nella direzione in cui la coordinata è maggiore di 1.0
+     *					questo metodo è molto comodo per ripetere le texture più volte
+     *			--> GL_CLAMP	i texel vengono presi dal bordo della texture oppure da TEXTURE_BORDER_COLOR (impostato dempre con la glTexParameter) 
+     *			--> GL_CLAMP_TO_EDGE	i texel fuori dal range vengono presi dall'ultima riga/colonna
+     *			--> GL_CLAMP_TO_BORDER	utilizza i border texel 
+     *	 -> param:  specifica il valore del parametro
+     */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);	
+    
+
+  }
+   
+  /*
+   * Creo le display list
+   */
+  worldData.wall = glGenLists(2);
+  worldData.sg    = worldData.wall + 1;
+  createWorld();
+  
+  
 
   glutDisplayFunc(render);
   glutReshapeFunc(changeSize);
