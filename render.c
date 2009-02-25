@@ -131,6 +131,58 @@ void renderMenu(){
 }
 
 /*
+ * Funzione che gestisce le luci
+ */
+
+void lightWorld(){
+
+  glEnable(GL_LIGHTING);
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
+
+
+  /*
+   * imposta i parametri per le luci
+   * 
+   * il primo parametro è il nome della luce:
+   * GL_LIGHT n  -> 0 <= n <= maxlight
+   * 
+   * il secondo parametro sono i parametri della luce che si imposteranno:
+   *  * GL_AMBIENT
+   *  * GL_DIFFUSE
+   *  * GL_SPECULAR
+   *  * GL_POSITION
+   *  * GL_SPOT_CUTOFF
+   *  * GL_SPOT_DIRECTION
+   *  * GL_SPOT_EXPONENT
+   *  * GL_CONSTANT_ATTENUATION
+   *  * GL_LINEAR_ATTENUATION
+   *  * GL_QUADRATIC_ATTENUATION
+   * 
+   * l'ultimo parametro sono i valori che si impostano
+   */
+  glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
+  glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
+  glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
+  /* test spotlight */
+  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 60.0f);
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, worldData.spotDirA);
+  /* abilito la luce */
+  glEnable(GL_LIGHT0);
+
+  glLightfv(GL_LIGHT1, GL_AMBIENT,  worldData.ambientLight);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE,  worldData.diffuseLight);	
+  glLightfv(GL_LIGHT1, GL_SPECULAR, worldData.specularLight);
+  glLightfv(GL_LIGHT1, GL_POSITION, worldData.positionB);
+  /* test spotlight */
+  glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 60.0f);
+  glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, worldData.spotDirB);
+  /* abilito la luce */
+  glEnable(GL_LIGHT1);
+
+
+}
+/*
  * Funzione per creare la display list del mondo
  */
 void createWorld(){
@@ -138,16 +190,22 @@ void createWorld(){
 
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
-
-   /*   glBegin(GL_QUADS);
+   /*glBegin(GL_QUADS);
+    glNormal3f(0.0f, 0.0f, -10.0f);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f( x, -y, z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f( x,  y, z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-x,  y, z);
-    glEnd();*/
-   
+
+   glEnd();
+   */
    /*fronte*/
    glBegin(GL_QUADS);
+    glNormal3f(0.0f, 0.0f, 10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
     glTexCoord2f(1.0f, 0.0f);
@@ -160,6 +218,7 @@ void createWorld(){
    
    /*latoSX*/
    glBegin(GL_QUADS);
+    glNormal3f(10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
     glTexCoord2f(1.0f, 0.0f);
@@ -172,6 +231,7 @@ void createWorld(){
 
    /*latoDX*/
    glBegin(GL_QUADS);
+    glNormal3f(-10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(x, -y, -z);
     glTexCoord2f(1.0f, 0.0f);
@@ -189,6 +249,7 @@ void createWorld(){
   // ground
 
    glBegin(GL_QUADS);
+    glNormal3f(0.0f, 10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
     glTexCoord2f(10.0f, 0.0f);
@@ -204,6 +265,7 @@ void createWorld(){
   // sky
 
    glBegin(GL_QUADS);
+    glNormal3f(0.0f, -10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, y, -z);
     glTexCoord2f(1.0f, 0.0f);
@@ -224,14 +286,16 @@ void drawWorld(){
   // richiama le varie list in base al colore della texture i wall
   glBindTexture(GL_TEXTURE_2D, worldData.cColor);
   glCallList(worldData.wall);
-
+  //soffitto
+  //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
+  glCallList(worldData.sky);
   // ed infine il pavimento
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
   glCallList(worldData.ground);
 
-  // ed infine il soffitto
-  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
-  glCallList(worldData.sky);
+
+
+
 
 
 
@@ -255,6 +319,11 @@ void render(){
   glEnable(GL_DEPTH_TEST);
   glLoadIdentity();
 
+  glPushAttrib(GL_LIGHTING_BIT);
+
+  // Turn off lighting and specify a bright yellow sphere
+  glDisable(GL_LIGHTING);
+  
   setOrtographicProjection();
   glLoadIdentity();
   renderText(8, 20, programData.fps);
@@ -266,18 +335,23 @@ void render(){
     glLoadIdentity();
 	renderMenu();
 	resetPerspectiveProjection();
-	glutSwapBuffers();
-	return;
+	/*	glutSwapBuffers();
+		return;*/
   }
+
+  // Restore lighting state variables
+  glPopAttrib();
 
   // parte il rendering normale
   
   // telecamera
-  glTranslatef(0.0f, 0.0f, -100.0f);
+
+  glTranslatef(0.0f, 0.0f, -85.0f);
+  //  glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 
   
   drawWorld();
-  
+  lightWorld();
 
 
   glutSwapBuffers();

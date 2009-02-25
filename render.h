@@ -15,6 +15,7 @@ void changeSize(GLint, GLint);
 void setOrtographicProjection();
 void resetPerspectiveProjection();
 void drawWorld();
+void lightWorld();
 void createWorld();
 void renderText(float, float, char *);
 #endif

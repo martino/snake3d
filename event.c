@@ -44,9 +44,39 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 	if(key == 'y'){ 
 	  worldData.cColor = 3;
 	}
+	/*
+	if(key == 'u'){ 
+	  worldData.position[0] += 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
+
+	if(key == 'j'){ 
+	  worldData.position[0] -= 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
+
+	if(key == 'i'){ 
+	  worldData.position[1] += 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
+
+	if(key == 'k'){ 
+	  worldData.position[1] -= 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
+
+	if(key == 'o'){ 
+	  worldData.position[2] += 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
+
+	if(key == 'l'){ 
+	  worldData.position[2] -= 0.1f;
+	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+	}
 
 
-
+*/
 }
 
 /*  

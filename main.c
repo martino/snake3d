@@ -174,6 +174,66 @@ int initialize(int argc, char *argv[]){
   worldData.cColor = 1;
   
   
+  /*
+   * Gestione luci
+   */
+
+  /* luce ambientale bianca */
+  worldData.ambientLight[0] = 0.2f;
+  worldData.ambientLight[1] = 0.2f;
+  worldData.ambientLight[2] = 0.2f;
+  worldData.ambientLight[3] = 1.0f;
+  
+  worldData.diffuseLight[0] = 0.4f;
+  worldData.diffuseLight[1] = 0.4f;
+  worldData.diffuseLight[2] = 0.4f;
+  worldData.diffuseLight[3] = 1.0f;
+
+  worldData.specularLight[0] = 1.0f;
+  worldData.specularLight[1] = 1.0f;
+  worldData.specularLight[2] = 1.0f;
+  worldData.specularLight[3] = 1.0f;
+
+  worldData.positionA[0] =  -23.0f;
+  worldData.positionA[1] =  -23.0f;
+  worldData.positionA[2] =  -23.0f;
+  worldData.positionA[3] =   1.0f;
+
+  worldData.spotDirA[0] = -1.0f;
+  worldData.spotDirA[1] = -1.0f;
+  worldData.spotDirA[2] = -1.0f;
+
+  worldData.positionB[0] =  23.0f;
+  worldData.positionB[1] = -23.0f;
+  worldData.positionB[2] = -23.0f;
+  worldData.positionB[3] =   1.0f;
+
+  worldData.spotDirB[0] =  1.0f;
+  worldData.spotDirB[1] = -1.0f;
+  worldData.spotDirB[2] = -1.0f;
+
+
+  
+
+
+
+  // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor
+  glEnable(GL_COLOR_MATERIAL);
+	
+  glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+  
+  // imposto la componente speculare sul materiale
+  //		NB: fino a che non richiamo ancora glMaterialfv tutte le superfici sono trasparenti
+  worldData.specref[0] = 1.0f;
+  worldData.specref[1] = 1.0f;
+  worldData.specref[2] = 1.0f;
+  worldData.specref[3] = 1.0f;
+
+  glMaterialfv(GL_FRONT, GL_SPECULAR, worldData.specref);
+  
+  // ora però devo specificare l'esponente di brilantezza (0 è come non impostare nulla)
+  glMateriali(GL_FRONT, GL_SHININESS, 128);
+  
 
   glutDisplayFunc(render);
   glutReshapeFunc(changeSize);

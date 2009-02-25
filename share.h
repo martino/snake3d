@@ -113,11 +113,21 @@ typedef struct{
 
 
 typedef struct{
-
+  /* texture */
   GLuint texObj[NTEX];
   GLuint wall, ground, sky;
   GLuint cColor;
-
+  
+  /* luci */
+  GLfloat ambientLight[4];
+  GLfloat diffuseLight[4];
+  GLfloat specularLight[4];
+  GLfloat positionA[4];
+  GLfloat spotDirA[3];
+  GLfloat positionB[4];
+  GLfloat spotDirB[3];
+  /* materiali */
+  GLfloat specref[4];
 } World;
 
 typedef struct{
