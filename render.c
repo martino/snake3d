@@ -30,7 +30,7 @@ void changeSize(GLint w, GLint h){
    *      zNear  -> distanza minima visibile
    *      zFar   -> distanza massima visibile
    */
-  gluPerspective(45.0f, ratio, 0.1f, 200.0f);
+  gluPerspective(45.0f, ratio, 0.1f, 1000.0f);
   
   glMatrixMode(GL_MODELVIEW);
   
@@ -182,6 +182,7 @@ void lightWorld(){
 
 
 }
+
 /*
  * Funzione per creare la display list del mondo
  */
@@ -344,10 +345,12 @@ void render(){
 
   // parte il rendering normale
   
-  // telecamera
-
-  glTranslatef(0.0f, 0.0f, -85.0f);
-  //  glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+  /* telecamera */
+ 
+  glRotatef(worldData.angleX, 1.0f, 0.0f, 0.0f);
+  glRotatef(worldData.angleY, 0.0f, 1.0f, 0.0f);
+  glTranslatef(worldData.x, worldData.y, -worldData.z);
+  
 
   
   drawWorld();

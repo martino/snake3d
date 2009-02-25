@@ -194,18 +194,19 @@ int initialize(int argc, char *argv[]){
   worldData.specularLight[2] = 1.0f;
   worldData.specularLight[3] = 1.0f;
 
-  worldData.positionA[0] =  -23.0f;
-  worldData.positionA[1] =  -23.0f;
-  worldData.positionA[2] =  -23.0f;
+  /* posizioni delle due luci spot in fronte basso che puntano verso l'alto*/
+  worldData.positionA[0] =  -(WORLDIM - 1.0f);
+  worldData.positionA[1] =  -(WORLDIM - 1.0f);
+  worldData.positionA[2] =  -(WORLDIM - 1.0f);
   worldData.positionA[3] =   1.0f;
 
   worldData.spotDirA[0] = -1.0f;
   worldData.spotDirA[1] = -1.0f;
   worldData.spotDirA[2] = -1.0f;
 
-  worldData.positionB[0] =  23.0f;
-  worldData.positionB[1] = -23.0f;
-  worldData.positionB[2] = -23.0f;
+  worldData.positionB[0] =  WORLDIM - 1.0f;
+  worldData.positionB[1] = -(WORLDIM - 1.0f);
+  worldData.positionB[2] = -(WORLDIM - 1.0f);
   worldData.positionB[3] =   1.0f;
 
   worldData.spotDirB[0] =  1.0f;
@@ -213,7 +214,14 @@ int initialize(int argc, char *argv[]){
   worldData.spotDirB[2] = -1.0f;
 
 
+  /* Inizializzo la posizione della telecamera */
+  worldData.x = 0.0f;
+  worldData.y = 0.0f;
+  worldData.z = 0.0f;
+  worldData.angleX = 0.0f;
+  worldData.angleY = 0.0f;
   
+
 
 
 

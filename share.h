@@ -10,20 +10,6 @@
 #ifndef SHARE_H
 #define SHARE_H
 
-/**
- * costanti
- */
-
-#define winHeight 600
-#define winWidth  800
-//texWallR, texWallG, texWallB, texUp, texDown;
-#define TWR   0
-#define TWG   1
-#define TWB   2
-#define TG    3
-#define TS    4
-#define NTEX  5
-#define WORLDIM 24.0f
 
 /*
  * include OpenGL
@@ -43,6 +29,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 /*
  * include degli altri file
@@ -52,6 +39,21 @@
 #include "event.h"
 #include "loop.h"
 
+/**
+ * costanti
+ */
+
+#define winHeight 600
+#define winWidth  800
+//texWallR, texWallG, texWallB, texUp, texDown;
+#define TWR   0
+#define TWG   1
+#define TWB   2
+#define TG    3
+#define TS    4
+#define NTEX  5
+#define WORLDIM 100.0f
+#define PIOVER180 0.0174532925f
 
 /*
  * strutture dati
@@ -128,6 +130,11 @@ typedef struct{
   GLfloat spotDirB[3];
   /* materiali */
   GLfloat specref[4];
+
+  /* telecamera */
+  GLfloat angleX, angleY;
+  GLfloat x, y, z;
+
 } World;
 
 typedef struct{
