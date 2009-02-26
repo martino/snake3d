@@ -83,7 +83,29 @@ void keyHandler(GLubyte key, GLint x, GLint y){
  * gestisce le freccie
  */
 void specialKeyHandler(GLint key, GLint x, GLint y){
+  if(key == GLUT_KEY_RIGHT){
+    /*     worldData.angleY += 90.0f; */
+    worldData.kright = 1;
+  }
 
+  if(key == GLUT_KEY_LEFT){
+    /*     worldData.angleY -= 90.0f; */
+    worldData.kleft = 1;
+  }
+  
+
+  if(key == GLUT_KEY_UP){
+/*     worldData.angleY += 90.0f; */
+    worldData.kup = 1;
+
+  }
+
+  if(key == GLUT_KEY_DOWN){
+/*     worldData.angleY -= 90.0f; */
+    worldData.kdown = 1;
+
+  }
+  
 
 }
 

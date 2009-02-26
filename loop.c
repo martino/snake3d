@@ -27,21 +27,137 @@ void loop(){
   }
 
   /* se sono nel menu' non devo muovere nulla */
+  if(programData.menu == 1)
+    return;
+
   /* movimento della telecamera a scatti */
   if(programData.time - programData.timerender > 500){
     moveFrame = 1;
     programData.timerender = programData.time + ((programData.time - programData.timerender)-500);
   }
 
+  /* controllo l'input dell'utente */
+  if(worldData.kup){
+    switch(worldData.yStatus){ /* controllo lo status attuale */
+    case 0:
+      if(worldData.nextYstatus == 2) /* controllo se sto andando verso il basso*/
+	worldData.nextYstatus = 0;  /* in caso torno al piano */
+      else
+	worldData.nextYstatus = 1; /* altrimenti vado in alto*/
+      break;
+    case 2: /* se sono in basso in ogni caso vado sul piano */
+      worldData.nextYstatus = 0;
+      break;	
+    }
+    worldData.kup = 0;
+  }
+
+  if(worldData.kdown){
+    switch(worldData.yStatus){ /* controllo lo status attuale */
+    case 0:
+      if(worldData.nextYstatus == 1) /* controllo se sto andando verso l'alto*/
+	worldData.nextYstatus = 0;  /* in caso torno al piano */
+      else
+	worldData.nextYstatus = 2; /* altrimenti vado in basso*/
+      break;
+    case 1: /* se sono in alto in ogni caso vado sul piano */
+      worldData.nextYstatus = 0;
+      break;	
+    }
+    worldData.kdown = 0;
+  }
+
+  if(worldData.kleft){
+    switch(worldData.xStatus){
+    case 0:
+      if(worldData.nextXstatus == 2) /* se sto andando verso destra */
+	worldData.nextXstatus = 0; /* torno in centro */
+      else
+	worldData.nextXstatus = 1; /* altrimenti vado a sinistra */
+      break;
+    case 2: /* se sono a destra torno in centro */
+      worldData.nextXstatus = 0;
+      break;
+    }
+    worldData.kleft = 0;
+  }
+
+  if(worldData.kright){
+    switch(worldData.xStatus){
+    case 0:
+      if(worldData.nextXstatus == 1) /* se sto andando verso sinistra */
+	worldData.nextXstatus = 0; /* torno in centro */
+      else
+	worldData.nextXstatus = 2; /* altrimenti vado a destra*/
+      break;
+    case 1: /* se sono sinistra  torno in centro */
+      worldData.nextXstatus = 0;
+      break;
+    }
+
+
+    worldData.kright = 0;
+  }
+
+  /* bisogna controllare gli angoli */
+
+  if(worldData.xStatus != worldData.nextXstatus){
+    switch(worldData.nextXstatus){
+    case 0:
+      if(worldData.xStatus == 1)
+	worldData.angleY += 90.0f;
+      if(worldData.xStatus == 2)
+	worldData.angleY -= 90.0f;
+      worldData.xStatus = 0;
+      break;
+    case 1:
+      worldData.angleY -= 90.0f;
+      /* qui devo calcolare l'angolo a cui dovro' arrivare */
+      worldData.xStatus = 1;
+      break;
+    case 2:
+      worldData.angleY += 90.0f;
+      worldData.xStatus = 2;
+      break;
+    }
+  }
+  
+  
+  if(worldData.yStatus != worldData.nextYstatus){
+    switch(worldData.nextYstatus){
+    case 0:
+      if(worldData.yStatus == 1)
+	worldData.angleX += 90.0f;
+      if(worldData.yStatus == 2)
+	worldData.angleX -= 90.0f;
+      worldData.yStatus = 0;
+      break;
+    case 1:
+      worldData.angleX -= 90.0f;
+      worldData.yStatus = 1;
+      break;
+    case 2:
+      worldData.angleX += 90.0f;
+      worldData.yStatus = 2;
+      break;
+      
+    }
+  }
+ 
+  /* qui devo vedere se sono nell'angolo corretto altrimenti mi devo "muovere" */
+
+
+  /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){
+    if(worldData.yStatus == 0){
+      /* movimento sul piano X */
+      worldData.x -= (float)sin(worldData.angleY * PIOVER180) * 3.5f;
+      worldData.z -= (float)cos(worldData.angleY * PIOVER180) * 3.5f;
+    }else{
     /* movimento sul piano Y */
-    /*    worldData.y += (float)sin(worldData.angleX * PIOVER180) * 1.05f;
-    worldData.z += (float)cos(worldData.angleX * PIOVER180) * 1.05f;
-    */
-    /* movimento sul piano X */
-    
-    worldData.x -= (float)sin(worldData.angleY * PIOVER180) * 1.05f;
-    worldData.z -= (float)cos(worldData.angleY * PIOVER180) * 1.05f;
+      worldData.y += (float)sin(worldData.angleX * PIOVER180) * 3.05f;
+      worldData.z += (float)cos(worldData.angleX * PIOVER180) * 3.05f;
+    }
     
 /*     fprintf(stderr, "%f %f %f %f\n", worldData.x, worldData.y, worldData.z, (float)(cos(0))); */
   }

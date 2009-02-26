@@ -191,7 +191,7 @@ void createWorld(){
 
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
-   /*glBegin(GL_QUADS);
+   glBegin(GL_QUADS);
     glNormal3f(0.0f, 0.0f, -10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, z);
@@ -203,7 +203,7 @@ void createWorld(){
     glVertex3f(-x,  y, z);
 
    glEnd();
-   */
+  
    /*fronte*/
    glBegin(GL_QUADS);
     glNormal3f(0.0f, 0.0f, 10.0f);
@@ -352,9 +352,9 @@ void render(){
   glTranslatef(worldData.x, worldData.y, -worldData.z);
   
 
-  
-  drawWorld();
   lightWorld();
+  drawWorld();
+
 
 
   glutSwapBuffers();

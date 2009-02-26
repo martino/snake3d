@@ -217,10 +217,22 @@ int initialize(int argc, char *argv[]){
   /* Inizializzo la posizione della telecamera */
   worldData.x = 0.0f;
   worldData.y = 0.0f;
-  worldData.z = 0.0f;
+  worldData.z = 80.0f;
   worldData.angleX = 0.0f;
   worldData.angleY = 0.0f;
   
+  /* Inizializzo i dati utilizzati per la telecamera */
+
+  worldData.kup    = 0;
+  worldData.kdown  = 0;
+  worldData.kleft  = 0;
+  worldData.kright = 0;
+  
+  worldData.xStatus = 0;
+  worldData.yStatus = 0;
+
+  worldData.nextXstatus = 0;
+  worldData.nextYstatus = 0;
 
 
 
@@ -241,7 +253,7 @@ int initialize(int argc, char *argv[]){
   
   // ora però devo specificare l'esponente di brilantezza (0 è come non impostare nulla)
   glMateriali(GL_FRONT, GL_SHININESS, 128);
-  
+
 
   glutDisplayFunc(render);
   glutReshapeFunc(changeSize);
