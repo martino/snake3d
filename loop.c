@@ -78,6 +78,10 @@ void loop(){
     case 2: /* se sono a destra torno in centro */
       worldData.nextXstatus = 0;
       break;
+    case 1:
+      worldData.nextXstatus = 1;
+      worldData.change = 1;
+      break;
     }
     worldData.kleft = 0;
   }
@@ -93,33 +97,41 @@ void loop(){
     case 1: /* se sono sinistra  torno in centro */
       worldData.nextXstatus = 0;
       break;
+    case 2: /* se sono destra giro ancora */
+      worldData.nextXstatus = 2;
+      worldData.change = 1;
+      break;
     }
-
-
     worldData.kright = 0;
   }
 
   /* bisogna controllare gli angoli */
 
-  if(worldData.xStatus != worldData.nextXstatus){
+  if((worldData.xStatus != worldData.nextXstatus)||worldData.change){
     switch(worldData.nextXstatus){
     case 0:
       if(worldData.xStatus == 1)
-	worldData.angleY += 90.0f;
+	/* worldData.angleY += 90.0f;*/
+	worldData.nextAngleY = worldData.angleY + 90.0f;
       if(worldData.xStatus == 2)
-	worldData.angleY -= 90.0f;
+	/* worldData.angleY -= 90.0f;*/
+	worldData.nextAngleY = worldData.angleY - 90.0f;
       worldData.xStatus = 0;
       break;
     case 1:
-      worldData.angleY -= 90.0f;
+      /* worldData.angleY -= 90.0f;*/
+      worldData.nextAngleY = worldData.angleY - 90.0f;
       /* qui devo calcolare l'angolo a cui dovro' arrivare */
       worldData.xStatus = 1;
       break;
     case 2:
-      worldData.angleY += 90.0f;
+      /* worldData.angleY += 90.0f;*/
+      worldData.nextAngleY = worldData.angleY + 90.0f;
       worldData.xStatus = 2;
       break;
     }
+    worldData.lastAngleY = worldData.angleY;
+    worldData.change = 0;
   }
   
   
@@ -127,25 +139,33 @@ void loop(){
     switch(worldData.nextYstatus){
     case 0:
       if(worldData.yStatus == 1)
-	worldData.angleX += 90.0f;
+	/* worldData.angleX += 90.0f; */
+	worldData.nextAngleX = worldData.angleX + 90.0f;
       if(worldData.yStatus == 2)
-	worldData.angleX -= 90.0f;
+	/* worldData.angleX -= 90.0f; */
+	worldData.nextAngleX = worldData.angleX - 90.0f;
       worldData.yStatus = 0;
       break;
     case 1:
-      worldData.angleX -= 90.0f;
+      /*worldData.angleX -= 90.0f;*/
+      worldData.nextAngleX = worldData.angleX - 90.0f;
       worldData.yStatus = 1;
       break;
     case 2:
-      worldData.angleX += 90.0f;
+      /* worldData.angleX += 90.0f; */
+      worldData.nextAngleX = worldData.angleX + 90.0f;
       worldData.yStatus = 2;
       break;
-      
     }
+    worldData.lastAngleX = worldData.angleX;
   }
  
   /* qui devo vedere se sono nell'angolo corretto altrimenti mi devo "muovere" */
 
+  if(){
+
+  }
+  
 
   /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){

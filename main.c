@@ -220,6 +220,12 @@ int initialize(int argc, char *argv[]){
   worldData.z = 80.0f;
   worldData.angleX = 0.0f;
   worldData.angleY = 0.0f;
+
+  worldData.nextAngleX = 0.0f;
+  worldData.nextAngleY = 0.0f;
+
+  worldData.lastAngleX = 0.0f;
+  worldData.lastAngleY = 0.0f;
   
   /* Inizializzo i dati utilizzati per la telecamera */
 
@@ -234,7 +240,7 @@ int initialize(int argc, char *argv[]){
   worldData.nextXstatus = 0;
   worldData.nextYstatus = 0;
 
-
+  worldData.change = 0;
 
 
   // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor
