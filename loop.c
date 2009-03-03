@@ -8,11 +8,9 @@
 #include "loop.h"
 
 
-/**
-   qui bisogna gestire tutto quello che riguarda i vari "update" del gioco, quindi
-   movimento del verme(velocita', direzione...) , mappa, collision detection
-   
-
+/*
+ *  qui bisogna gestire tutto quello che riguarda i vari "update" del gioco, quindi
+ * movimento del verme(velocita', direzione...) , mappa, collision detection
  */
 void loop(){
   GLuint moveFrame = 0;
@@ -67,74 +65,64 @@ void loop(){
     worldData.kdown = 0;
   }
 
-  if(worldData.kleft){
-    switch(worldData.xStatus){
-    case 0:
-      if(worldData.nextXstatus == 2) /* se sto andando verso destra */
-	worldData.nextXstatus = 0; /* torno in centro */
-      else
-	worldData.nextXstatus = 1; /* altrimenti vado a sinistra */
-      break;
-    case 2: /* se sono a destra torno in centro */
-      worldData.nextXstatus = 0;
-      break;
-    case 1:
-      worldData.nextXstatus = 1;
-      worldData.change = 1;
-      break;
+  /* movimento laterale */
+  if((worldData.kleft)||(worldData.kright)){
+    if(worldData.xStatus == 0){ /* sto andando dritto */
+      if(worldData.kleft){
+	worldData.nextXstatus = 1; /* vado a sinistra */
+	worldData.nextAngleY = worldData.angleY - 90.0f ;
+      }
+      else{
+	worldData.nextXstatus = 2; /* vado a destra */
+	worldData.nextAngleY = worldData.angleY + 90.0f ;
+      }
+      worldData.xStatus = 1;
+    }else{
+      switch(worldData.nextXstatus){
+      case 1: /* sto andando verso sinistra */
+	if(worldData.kright){
+	  worldData.nextAngleY = worldData.nextAngleY + 90.0f;
+	  worldData.nextXstatus = 2;
+	}
+	break;
+      case 2: /* sto andando verso destra */
+	if(worldData.kleft){
+	  worldData.nextAngleY = worldData.nextAngleY - 90.0f;
+	  worldData.nextXstatus = 1;
+	}
+	break;
+      }
     }
-    worldData.kleft = 0;
-  }
-
-  if(worldData.kright){
-    switch(worldData.xStatus){
-    case 0:
-      if(worldData.nextXstatus == 1) /* se sto andando verso sinistra */
-	worldData.nextXstatus = 0; /* torno in centro */
-      else
-	worldData.nextXstatus = 2; /* altrimenti vado a destra*/
-      break;
-    case 1: /* se sono sinistra  torno in centro */
-      worldData.nextXstatus = 0;
-      break;
-    case 2: /* se sono destra giro ancora */
-      worldData.nextXstatus = 2;
-      worldData.change = 1;
-      break;
-    }
+    worldData.kleft  = 0;
     worldData.kright = 0;
   }
+ 
+  
 
-  /* bisogna controllare gli angoli */
-
-  if((worldData.xStatus != worldData.nextXstatus)||worldData.change){
+  if(worldData.xStatus){ /* modifico l'angolo Y */
     switch(worldData.nextXstatus){
-    case 0:
-      if(worldData.xStatus == 1)
-	/* worldData.angleY += 90.0f;*/
-	worldData.nextAngleY = worldData.angleY + 90.0f;
-      if(worldData.xStatus == 2)
-	/* worldData.angleY -= 90.0f;*/
-	worldData.nextAngleY = worldData.angleY - 90.0f;
-      worldData.xStatus = 0;
+    case 1: /* devo muovermi a sinistra */
+      worldData.angleY -= 1.0f;
+      if(worldData.angleY < worldData.nextAngleY){
+	worldData.angleY = worldData.nextAngleY;
+	worldData.xStatus = 0;
+	worldData.nextXstatus = 0;
+      }
       break;
-    case 1:
-      /* worldData.angleY -= 90.0f;*/
-      worldData.nextAngleY = worldData.angleY - 90.0f;
-      /* qui devo calcolare l'angolo a cui dovro' arrivare */
-      worldData.xStatus = 1;
-      break;
-    case 2:
-      /* worldData.angleY += 90.0f;*/
-      worldData.nextAngleY = worldData.angleY + 90.0f;
-      worldData.xStatus = 2;
+    case 2: /* devo muovermi a destra */
+      worldData.angleY += 1.0f;
+      if(worldData.angleY > worldData.nextAngleY){
+	worldData.angleY = worldData.nextAngleY;
+	worldData.xStatus = 0;
+	worldData.nextXstatus = 0;
+      }
+
       break;
     }
-    worldData.lastAngleY = worldData.angleY;
-    worldData.change = 0;
+    
   }
   
-  
+  /* modifico l'angolo X */
   if(worldData.yStatus != worldData.nextYstatus){
     switch(worldData.nextYstatus){
     case 0:
@@ -162,9 +150,6 @@ void loop(){
  
   /* qui devo vedere se sono nell'angolo corretto altrimenti mi devo "muovere" */
 
-  if(){
-
-  }
   
 
   /* controllo se sono in posizione tale da muovermi */
@@ -174,11 +159,11 @@ void loop(){
       worldData.x -= (float)sin(worldData.angleY * PIOVER180) * 3.5f;
       worldData.z -= (float)cos(worldData.angleY * PIOVER180) * 3.5f;
     }else{
-    /* movimento sul piano Y */
+      /* movimento sul piano Y */
       worldData.y += (float)sin(worldData.angleX * PIOVER180) * 3.05f;
       worldData.z += (float)cos(worldData.angleX * PIOVER180) * 3.05f;
     }
     
-/*     fprintf(stderr, "%f %f %f %f\n", worldData.x, worldData.y, worldData.z, (float)(cos(0))); */
+    /*     fprintf(stderr, "%f %f %f %f\n", worldData.x, worldData.y, worldData.z, (float)(cos(0))); */
   }
 }

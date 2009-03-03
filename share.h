@@ -133,12 +133,15 @@ typedef struct{
 
   /* telecamera */
   GLfloat angleX, angleY;
+  GLfloat nextAngleX, nextAngleY;
+  GLfloat lastAngleX, lastAngleY;
+
   GLfloat x, y, z;
   
   GLuint kup, kdown, kleft, kright;
   GLuint xStatus, yStatus;
   GLuint nextXstatus, nextYstatus;
-
+  GLuint change; /* da capire se lo uso */
 
 } World;
 
