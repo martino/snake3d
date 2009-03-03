@@ -35,37 +35,151 @@ void loop(){
   }
 
   /* controllo l'input dell'utente */
-  if(worldData.kup){
-    switch(worldData.yStatus){ /* controllo lo status attuale */
-    case 0:
-      if(worldData.nextYstatus == 2) /* controllo se sto andando verso il basso*/
-	worldData.nextYstatus = 0;  /* in caso torno al piano */
-      else
-	worldData.nextYstatus = 1; /* altrimenti vado in alto*/
-      break;
-    case 2: /* se sono in basso in ogni caso vado sul piano */
-      worldData.nextYstatus = 0;
-      break;	
+/*   if(worldData.kup){ */
+/*     switch(worldData.yStatus){ /\* controllo lo status attuale *\/ */
+/*     case 0: */
+/*       if(worldData.nextYstatus == 2) /\* controllo se sto andando verso il basso*\/ */
+/* 	worldData.nextYstatus = 0;  /\* in caso torno al piano *\/ */
+/*       else */
+/* 	worldData.nextYstatus = 1; /\* altrimenti vado in alto*\/ */
+/*       break; */
+/*     case 2: /\* se sono in basso in ogni caso vado sul piano *\/ */
+/*       worldData.nextYstatus = 0; */
+/*       break;	 */
+/*     } */
+/*     worldData.kup = 0; */
+/*   } */
+
+/*   if(worldData.kdown){ */
+/*     switch(worldData.yStatus){ /\* controllo lo status attuale *\/ */
+/*     case 0: */
+/*       if(worldData.nextYstatus == 1) /\* controllo se sto andando verso l'alto*\/ */
+/* 	worldData.nextYstatus = 0;  /\* in caso torno al piano *\/ */
+/*       else */
+/* 	worldData.nextYstatus = 2; /\* altrimenti vado in basso*\/ */
+/*       break; */
+/*     case 1: /\* se sono in alto in ogni caso vado sul piano *\/ */
+/*       worldData.nextYstatus = 0; */
+/*       break;	 */
+/*     } */
+/*     worldData.kdown = 0; */
+/*   } */
+
+  /* movimento verticale --> freccia up e down */
+  if((worldData.kup)||(worldData.kdown)){
+    if(worldData.yStatus == worldData.nextYstatus){ /* sono fermo */
+      switch(worldData.yStatus){
+      case 0: /*sono orizzontale*/
+	if(worldData.kup){
+	  worldData.nextYstatus = 1;
+	  worldData.nextAngleX -= 90.0f;
+	}else{
+	  worldData.nextYstatus = 2;
+	  worldData.nextAngleX += 90.0f;
+	}
+	break;
+      case 1: /*sono in alto*/
+	if(worldData.kdown){
+	  worldData.nextYstatus = 0;
+	  worldData.nextAngleX += 90.0f;
+	}
+	break;
+      case 2: /*sono in basso*/\
+	if(worldData.kup){
+	  worldData.nextYstatus = 0;
+	  worldData.nextAngleX -= 90.0f;
+	}
+	break;
+      }
+    }else{ /* caso in cui sono in movimento*/
+      if(worldData.kup){
+	if(worldData.nextYstatus == 2){ /*sto andando verso il basso*/
+	  worldData.nextYstatus = 0;
+	  worldData.yStatus = 2;
+	  worldData.nextAngleX -= 90.0f;
+	}
+      }else{
+	if(worldData.nextYstatus == 1){ /*sto andando verso l'alto*/
+	  worldData.nextYstatus = 0;
+	  worldData.yStatus = 1;
+	  worldData.nextAngleX += 90.0f;
+	}
+
+      }
+      
     }
+
     worldData.kup = 0;
-  }
-
-  if(worldData.kdown){
-    switch(worldData.yStatus){ /* controllo lo status attuale */
-    case 0:
-      if(worldData.nextYstatus == 1) /* controllo se sto andando verso l'alto*/
-	worldData.nextYstatus = 0;  /* in caso torno al piano */
-      else
-	worldData.nextYstatus = 2; /* altrimenti vado in basso*/
-      break;
-    case 1: /* se sono in alto in ogni caso vado sul piano */
-      worldData.nextYstatus = 0;
-      break;	
-    }
     worldData.kdown = 0;
+
   }
 
-  /* movimento laterale */
+
+
+  /* modifico l'angolo X */
+  if(worldData.yStatus != worldData.nextYstatus){
+    switch(worldData.nextYstatus){
+    case 0:  /* devo arrivare sul piano */
+      switch(worldData.yStatus){
+      case 1:
+	worldData.angleX += 1.0f;
+	if(worldData.angleX > worldData.nextAngleX){
+	  worldData.angleX = worldData.nextAngleX;
+	  worldData.yStatus = 0;
+	}
+	return;
+	break;
+      case 2:
+	worldData.angleX -= 1.0f;
+	if(worldData.angleX < worldData.nextAngleX){
+	  worldData.angleX = worldData.nextAngleX;
+	  worldData.yStatus = 0;
+	}
+	return;
+	break;
+      }
+    case 1:
+      worldData.angleX -= 1.0f;
+      if(worldData.angleX < worldData.nextAngleX){
+	worldData.angleX = worldData.nextAngleX;
+	worldData.yStatus = 1;
+      }
+      break;
+    case 2:
+      worldData.angleX += 1.0f;
+      if(worldData.angleX > worldData.nextAngleX){
+	worldData.angleX = worldData.nextAngleX;
+	worldData.yStatus = 2;
+      }
+      break;
+    }
+
+     /*  if(worldData.yStatus == 1) */
+/* 	/\* worldData.angleX += 90.0f; *\/ */
+/* 	worldData.nextAngleX = worldData.angleX + 90.0f; */
+/*       if(worldData.yStatus == 2) */
+/* 	/\* worldData.angleX -= 90.0f; *\/ */
+/* 	worldData.nextAngleX = worldData.angleX - 90.0f; */
+/*       worldData.yStatus = 0; */
+/*       break; */
+/*     case 1: */
+/*       /\*worldData.angleX -= 90.0f;*\/ */
+/*       worldData.nextAngleX = worldData.angleX - 90.0f; */
+/*       worldData.yStatus = 1; */
+/*       break; */
+/*     case 2: */
+/*       /\* worldData.angleX += 90.0f; *\/ */
+/*       worldData.nextAngleX = worldData.angleX + 90.0f; */
+/*       worldData.yStatus = 2; */
+/*       break; */
+/*     } */
+/*     worldData.lastAngleX = worldData.angleX; */
+  }
+
+
+
+
+  /* movimento laterale --> freccia sx e dx */
   if((worldData.kleft)||(worldData.kright)){
     if(worldData.xStatus == 0){ /* sto andando dritto */
       if(worldData.kleft){
@@ -121,32 +235,8 @@ void loop(){
     }
     
   }
+
   
-  /* modifico l'angolo X */
-  if(worldData.yStatus != worldData.nextYstatus){
-    switch(worldData.nextYstatus){
-    case 0:
-      if(worldData.yStatus == 1)
-	/* worldData.angleX += 90.0f; */
-	worldData.nextAngleX = worldData.angleX + 90.0f;
-      if(worldData.yStatus == 2)
-	/* worldData.angleX -= 90.0f; */
-	worldData.nextAngleX = worldData.angleX - 90.0f;
-      worldData.yStatus = 0;
-      break;
-    case 1:
-      /*worldData.angleX -= 90.0f;*/
-      worldData.nextAngleX = worldData.angleX - 90.0f;
-      worldData.yStatus = 1;
-      break;
-    case 2:
-      /* worldData.angleX += 90.0f; */
-      worldData.nextAngleX = worldData.angleX + 90.0f;
-      worldData.yStatus = 2;
-      break;
-    }
-    worldData.lastAngleX = worldData.angleX;
-  }
  
   /* qui devo vedere se sono nell'angolo corretto altrimenti mi devo "muovere" */
 
