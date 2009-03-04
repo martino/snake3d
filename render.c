@@ -347,8 +347,8 @@ void render(){
   
   /* telecamera */
  
-  glRotatef(worldData.angleX, 1.0f, 0.0f, 0.0f);
-  glRotatef(worldData.angleY, 0.0f, 1.0f, 0.0f);
+  glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
+  glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
   glTranslatef(worldData.x, worldData.y, -worldData.z);
   
 

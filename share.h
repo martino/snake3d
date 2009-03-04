@@ -54,6 +54,7 @@
 #define NTEX  5
 #define WORLDIM 100.0f
 #define PIOVER180 0.0174532925f
+#define RSPEED 2.0f
 
 /*
  * strutture dati
@@ -133,8 +134,9 @@ typedef struct{
 
   /* telecamera */
   GLfloat angleX, angleY;
+  GLfloat angleMX, angleMY;
   GLfloat nextAngleX, nextAngleY;
-  GLfloat lastAngleX, lastAngleY;
+
 
   GLfloat x, y, z;
   

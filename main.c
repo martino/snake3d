@@ -221,11 +221,12 @@ int initialize(int argc, char *argv[]){
   worldData.angleX = 0.0f;
   worldData.angleY = 0.0f;
 
+  worldData.angleMX = 0.0f;
+  worldData.angleMY = 0.0f;
+
   worldData.nextAngleX = 0.0f;
   worldData.nextAngleY = 0.0f;
 
-  worldData.lastAngleX = 0.0f;
-  worldData.lastAngleY = 0.0f;
   
   /* Inizializzo i dati utilizzati per la telecamera */
 

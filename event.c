@@ -11,7 +11,28 @@
  * gestisce il mouse
  */
 void mouseHandler(int x, int y){
+  float tmpX, tmpY;
 
+  if((worldData.angleY != worldData.nextAngleY) || (worldData.angleX != worldData.nextAngleX))
+    return;
+  
+  tmpX = x - (programData.width / 2);
+  tmpY = y - (programData.height / 2);
+  
+  if((tmpX == 0.0f) && (tmpY == 0.0f))
+    return;
+
+  worldData.angleMX += tmpY * 0.25f;
+  worldData.angleMY += tmpX * 0.25f;
+  
+  if( (worldData.angleMY > (worldData.angleY+45.0f)) ||  (worldData.angleMY< (worldData.angleY-45.0f) ))
+    worldData.angleMY -= tmpX * 0.25f;
+
+  if( (worldData.angleMX > (worldData.angleX+45.0f)) ||  (worldData.angleMX< (worldData.angleX-45.0f) ))
+    worldData.angleMX -= tmpY * 0.25f;
+
+
+  glutWarpPointer(programData.width/2, programData.height/2);
 
 }
 
