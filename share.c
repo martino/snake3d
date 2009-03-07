@@ -8,8 +8,131 @@
 #include "share.h"
 
 
-Data programData;
+Data  programData;
 World worldData;
+Worm  myWorm;
+
+
+/* Gestione del verme */
+
+/*
+ * Inizializzazione del verme
+ */
+int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia, GLfloat velocity){
+  WSphere *tmp;
+
+  if(dia == 0 ) dia = WORMDIA;
+  if(velocity == 0) velocity = WORMVEL;
+
+  tmp = calloc(1, sizeof(WSphere));
+  if(tmp == NULL) return 0;
+  
+  tmp->x = x;
+  tmp->y = y;
+  tmp->z = z;
+
+  myWorm.tail = tmp;
+  myWorm.head = tmp;
+  myWorm.dim = 1;
+  myWorm.dia = dia;
+  myWorm.vel = velocity;
+  return 1;
+}
+
+/*
+ * Deallocazione della memoria utilizzata per il verme
+ */
+void destroyWorm(){
+  WSphere *ite = myWorm.head;
+  WSphere *tmp;
+
+  while(ite != NULL){
+    tmp = ite;
+    ite = ite->prev;
+    if(tmp != NULL) free(tmp);
+  }
+}
+
+/*
+ * Funzione che fa crescere il verme
+ */
+int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
+  WSphere *tmp = calloc(1, sizeof(WSphere));
+  if(tmp == NULL) return 0;
+
+  /* xz o yz si capisce come si capisce il movimento */
+  /* il piu' o meno si capisce uguale in base al caso xz o yz */
+
+  if(dir == 0 ){
+    /* sposto il verme sul piano X */
+    tmp->x = (myWorm.tail)->x + (xy*myWorm.dia);
+    tmp->y = (myWorm.tail)->y;
+    tmp->z = (myWorm.tail)->z + (z*myWorm.dia);
+
+  }else{
+    /* sposto il verme sul piano Y */
+    tmp->x = (myWorm.tail)->x;
+    tmp->y = (myWorm.tail)->y - (xy*myWorm.dia);
+    tmp->z = (myWorm.tail)->z - (z*myWorm.dia);
+  }
+
+  tmp->prev = NULL;
+  tmp->next = myWorm.tail;
+  (myWorm.tail)->prev = tmp;
+
+  myWorm.tail = tmp;
+  myWorm.dim++;
+  return 1;
+}
+
+/*
+ * Funzione che muove il verme in avanti
+ *  dir -> indica il piano in cui mi muovo 0=xz 1=yz
+ *  xy e z -> sono i "segni"
+ */
+void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
+  WSphere *oldHead = myWorm.head;
+  WSphere *oldTail = myWorm.tail;
+
+  if(myWorm.dim != 1){
+
+
+  /* sistemo la coda */
+  (oldTail->next)->prev = NULL;
+  myWorm.tail = oldTail->next;
+
+  /* sistemo la testa */
+  oldHead->next = oldTail;
+  oldTail->prev = oldHead;
+  oldTail->next = NULL;
+  myWorm.head = oldTail;
+  }
+
+  if(dir == 0 ){
+    /* sposto il verme sul piano X */
+    (myWorm.head)->x = oldHead->x - (xy*myWorm.dia);
+    (myWorm.head)->y = oldHead->y;
+    (myWorm.head)->z = oldHead->z - (z*myWorm.dia);
+    //    fprintf(stderr, "%f %f %f\n", oldHead->z, z, myWorm.dia);
+
+  }else{
+    /* sposto il verme sul piano Y */
+    (myWorm.head)->x = oldHead->x;
+    (myWorm.head)->y = oldHead->y + (xy*myWorm.dia);
+    (myWorm.head)->z = oldHead->z + (z*myWorm.dia);
+  }
+}
+
+/* Funzione di DEBUG che visualizza il verme*/
+void printWorm(){
+  WSphere *ite = myWorm.head;
+  fprintf(stderr,"--- BEGIN WORM ---\n");
+  while(ite != NULL){
+    fprintf(stderr,"Palla X %f  Y %f  Z %f \n", ite->x, ite->y, ite->z);
+    ite = ite->prev;
+  }
+  fprintf(stderr,"--- END WORM ---\n");
+}
 
 /*
  * Funzione che carica le tga (senza RLE encoding!!)

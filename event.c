@@ -50,10 +50,26 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 		programData.menu = !programData.menu;
 	}
 	
-	if(key == 'f'){ // fullscreen
+ 	if(key == 'f'){ // fullscreen
 		
 	}
 
+ 	if(key == 'n'){ // nuova partita
+	  programData.gameStatus = 1;
+	  worldData.x = 0.0f;
+	  worldData.y = 0.0f;
+	  worldData.z = 0.0f;
+	  /* inizializza il verme */
+	  /* azzera i punti */
+	  /* inizializza altro se serve*/
+	  
+	}
+	if(key == 'a'){
+	  if(worldData.yStatus == 0)
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	  else
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	}
 	if(key == 'r'){ 
 	  worldData.cColor = 1;
 	}

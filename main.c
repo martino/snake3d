@@ -39,7 +39,7 @@ int initialize(int argc, char *argv[]){
 
 
   GLint i = 0;
-  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", "texture/ground.tga","texture/sky.tga" };
+  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", "texture/ground.tga","texture/sky.tga", "texture/ball.tga", "texture/bref.tga" };
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -52,6 +52,7 @@ int initialize(int argc, char *argv[]){
   programData.fullscreen = 0;
   programData.menu = 0;
   programData.exit = 0;
+  programData.gameStatus = 1;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
   
   sprintf(programData.fps, "FPS: --");
@@ -163,13 +164,26 @@ int initialize(int argc, char *argv[]){
 
   }
 
+  /* imposto  Sphere Mapping */
+  glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+  glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+
+  worldData.q = gluNewQuadric();
+  /* specifico le normali
+   *   GL_SMOOTH specifica di calcolare la normale per ogni vertice
+   */
+  gluQuadricNormals(worldData.q, GL_SMOOTH);
+  /* genera le coordinate texture */
+  gluQuadricTexture(worldData.q, GL_TRUE);
+
    
   /*
    * Creo le display list
    */
-  worldData.wall   = glGenLists(3);
+  worldData.wall   = glGenLists(4);
   worldData.ground = worldData.wall + 1;
   worldData.sky    = worldData.wall + 2;
+  worldData.ball   = worldData.wall + 3;
   createWorld();
   worldData.cColor = 1;
   
@@ -179,9 +193,9 @@ int initialize(int argc, char *argv[]){
    */
 
   /* luce ambientale bianca */
-  worldData.ambientLight[0] = 0.2f;
-  worldData.ambientLight[1] = 0.2f;
-  worldData.ambientLight[2] = 0.2f;
+  worldData.ambientLight[0] = 0.4f;
+  worldData.ambientLight[1] = 0.4f;
+  worldData.ambientLight[2] = 0.4f;
   worldData.ambientLight[3] = 1.0f;
   
   worldData.diffuseLight[0] = 0.4f;
@@ -227,6 +241,8 @@ int initialize(int argc, char *argv[]){
   worldData.nextAngleX = 0.0f;
   worldData.nextAngleY = 0.0f;
 
+  /* Inizializzo il verme */
+  initializeWorm(0.0f, 0.0f, 83.5f, 3.5f, 3.5f);
   
   /* Inizializzo i dati utilizzati per la telecamera */
 
@@ -240,8 +256,6 @@ int initialize(int argc, char *argv[]){
 
   worldData.nextXstatus = 0;
   worldData.nextYstatus = 0;
-
-  worldData.change = 0;
 
 
   // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor
@@ -260,6 +274,8 @@ int initialize(int argc, char *argv[]){
   
   // ora però devo specificare l'esponente di brilantezza (0 è come non impostare nulla)
   glMateriali(GL_FRONT, GL_SHININESS, 128);
+
+  
 
 
   glutDisplayFunc(render);

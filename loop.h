@@ -12,5 +12,7 @@
 
 
 void loop();
+int checkWall(float, float, int);
+
 
 #endif

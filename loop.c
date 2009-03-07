@@ -7,6 +7,49 @@
 
 #include "loop.h"
 
+/*
+ * Funzione che controlla se il verme sta uscendo dai confini di gioco
+ */
+int checkWall(float xy, float z, int piano){
+  switch(piano){
+  case 1: /* controllo il piano X */
+    if((worldData.y < xy)&&(xy >= WORLDIM )) return 0;
+    if((worldData.y > xy)&&(xy <= -WORLDIM )) return 0;
+    break;
+  case 2: /* controllo il piano Y */
+    if((worldData.y < xy)&&(xy >= WORLDIM )) return 0;
+    if((worldData.y > xy)&&(xy <= -WORLDIM )) return 0;
+    break;
+  default:
+    break;
+  }
+
+  /* controllo il piano Z */
+  if((worldData.z > z)&&( z <= -WORLDIM)) return 0;
+  if((worldData.z < z)&&( z >= WORLDIM)) return 0;
+  return 1;
+}
+
+
+
+
+/*
+ * Collision detection tra due sfere
+ *   x-y-z1 e' l'oggetto in movimento
+ *
+ */
+int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
+  GLuint x=0,y=0,z=0;
+  GLfloat dim = DIA;
+  if((x1+dim > x2-dim)&&(x1-dim < x2+dim)) x=1; 
+  if((y1+dim > y2-dim)&&(y1-dim < y2+dim)) y=1; 
+  if((z1-dim < z2+dim)&&(z1+dim > z2-dim)) z=1; 
+  
+  if(x&&y&&z)
+    return 1;
+  else 
+    return 0;
+}
 
 /*
  *  qui bisogna gestire tutto quello che riguarda i vari "update" del gioco, quindi
@@ -24,9 +67,25 @@ void loop(){
     programData.frame = 0;
   }
 
+  /* controllo lo stato della partita */
+  switch(programData.gameStatus){
+  case 0: /* ho perso */
+    return;
+    break;
+  case 1: /* sto giocando */
+    /* continuo*/
+    break;
+  case 2: /* ho vinto */
+    return;
+    break;
+  default:
+    break;
+  }
+
   /* se sono nel menu' non devo muovere nulla */
   if(programData.menu == 1)
     return;
+  
 
   /* movimento della telecamera a scatti */
   if(programData.time - programData.timerender > 500){
@@ -64,6 +123,8 @@ void loop(){
 	  worldData.nextAngleX -= 90.0f;
 	  worldData.angleX = worldData.angleMX;
 	}
+	break;
+      default:
 	break;
       }
     }else{ /* caso in cui sono in movimento*/
@@ -116,6 +177,8 @@ void loop(){
 	  worldData.angleY = worldData.angleMY;
 	}
 	break;
+      default:
+	break;
       }
     }
     worldData.kleft  = 0;
@@ -145,6 +208,8 @@ void loop(){
 	  worldData.yStatus = 0;
 	}
 	break;
+      default:
+	break;
       }
       break;
     case 1:
@@ -162,6 +227,8 @@ void loop(){
 	worldData.angleX = worldData.nextAngleX;
 	worldData.yStatus = 2;
       }
+      break;
+    default:
       break;
     }
   }
@@ -187,6 +254,8 @@ void loop(){
 	worldData.nextXstatus = 0;
       }
       break;
+    default:
+      break;
     }
   }
 
@@ -194,14 +263,42 @@ void loop(){
 
   /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){
+    //        printWorm();
     if(worldData.yStatus == 0){
       /* movimento sul piano X */
-      worldData.x -= (float)sin(worldData.angleY * PIOVER180) * 3.5f;
-      worldData.z -= (float)cos(worldData.angleY * PIOVER180) * 3.5f;
+      float offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
+      float offSetZ = (float)cos(worldData.angleY * PIOVER180) * 3.5f;
+      if(checkWall(worldData.x - offSetX, worldData.z - offSetZ, 1)){
+	worldData.x -= offSetX;
+	worldData.z -= offSetZ;
+	/*collision testa del verme*/
+	moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
+	  fprintf(stderr, " presa!\n");
+      }else{
+	/* e' uscito dai muri */
+	programData.gameStatus = 0;
+	fprintf(stderr, "sono uscito\n");
+      }
     }else{
       /* movimento sul piano Y */
-      worldData.y += (float)sin(worldData.angleX * PIOVER180) * 3.05f;
-      worldData.z += (float)cos(worldData.angleX * PIOVER180) * 3.05f;
+      float offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
+      float offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
+      if(checkWall(worldData.y + offSetY, worldData.z + offSetZ, 2)){
+	worldData.y += offSetY;
+	worldData.z += offSetZ;
+	/*collision testa del verme*/
+	moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
+	  fprintf(stderr, " presa!\n");
+      }else{
+	/* e' uscito dai muri */
+	programData.gameStatus = 0;
+	fprintf(stderr, "sono uscito\n");
+      }
     }
+/*     fprintf(stderr, "Verme %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z); */
+/*     fprintf(stderr, "Telecamera %f %f %f\n", worldData.x, worldData.y, worldData.z); */
+
   }
 }

@@ -112,7 +112,7 @@ void renderMenu(){
   GLchar text[20];
   GLchar *c;
   GLint x = 80, xi = 80, y = 80;
-  sprintf(text, "F - Fullscreen\n");
+  sprintf(text, "F - Fullscreen");
   for(c = text; *c != '\0'; c++){
     glRasterPos2f(xi, y);
     glutBitmapCharacter((int *)programData.font, *c);
@@ -121,7 +121,7 @@ void renderMenu(){
 
   xi = x; 
   y = 100;
-  sprintf(text, "N - Nebbia\n");
+  sprintf(text, "N - Nebbia");
   for(c = text; *c != '\0'; c++){
     glRasterPos2f(xi, y);
     glutBitmapCharacter((int *)programData.font, *c);
@@ -129,6 +129,46 @@ void renderMenu(){
   }
 	
 }
+
+
+/*
+ * Funzione per visualizzare la vittoria/sconfitta
+ */
+void renderStatus(){
+  GLchar text[40];
+  GLchar *c;
+  GLint x = (programData.width/2)-80, xi , y = programData.height/2;
+  xi = x;
+  switch(programData.gameStatus){
+  case 0:
+    sprintf(text, "HAI PERSO"); /* premi pippo per riniziare*/
+    break;
+  case 2:
+    sprintf(text, "HAI VINTO!!");
+  break;
+  default:
+    sprintf(text, "Ma che ci fai qui??");
+    break;
+  }
+  for(c = text; *c != '\0'; c++){
+    glRasterPos2f(xi, y);
+    glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+    xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+  }
+
+
+  xi = x - 70;
+  y += 25;
+
+  sprintf(text, "Premi N per ricominciare");
+  for(c = text; *c != '\0'; c++){
+    glRasterPos2f(xi, y);
+    glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+    xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+  }
+
+}
+
 
 /*
  * Funzione che gestisce le luci
@@ -184,10 +224,77 @@ void lightWorld(){
 }
 
 /*
+ * Prova di una luce frontale
+ */
+void lightFront(){
+glEnable(GL_LIGHTING);
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
+
+
+  /*
+   * imposta i parametri per le luci
+   * 
+   * il primo parametro è il nome della luce:
+   * GL_LIGHT n  -> 0 <= n <= maxlight
+   * 
+   * il secondo parametro sono i parametri della luce che si imposteranno:
+   *  * GL_AMBIENT
+   *  * GL_DIFFUSE
+   *  * GL_SPECULAR
+   *  * GL_POSITION
+   *  * GL_SPOT_CUTOFF
+   *  * GL_SPOT_DIRECTION
+   *  * GL_SPOT_EXPONENT
+   *  * GL_CONSTANT_ATTENUATION
+   *  * GL_LINEAR_ATTENUATION
+   *  * GL_QUADRATIC_ATTENUATION
+   * 
+   * l'ultimo parametro sono i valori che si impostano
+   */
+  glDisable(GL_LIGHT1);
+  
+  worldData.ambientLight[0] = 0.6f;
+  worldData.ambientLight[1] = 0.6f;
+  worldData.ambientLight[2] = 0.6f;
+  worldData.ambientLight[3] = 1.0f;
+  
+  worldData.diffuseLight[0] = 0.0f;
+  worldData.diffuseLight[1] = 0.0f;
+  worldData.diffuseLight[2] = 0.0f;
+  worldData.diffuseLight[3] = 1.0f;
+
+
+
+  worldData.positionA[0] =  0.0f;
+  worldData.positionA[1] =  0.0f;
+  worldData.positionA[2] =  0.0f;
+  worldData.positionA[3] =  0.0f;
+
+  worldData.spotDirA[0] = 0.0f;
+  worldData.spotDirA[1] = 0.0f;
+  worldData.spotDirA[2] = 5.0f;
+
+  
+  glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
+  glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
+  glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
+
+
+
+  /* abilito la luce */
+  glEnable(GL_LIGHT0);
+
+
+
+}
+
+/*
  * Funzione per creare la display list del mondo
  */
 void createWorld(){
   GLfloat x = WORLDIM, y = WORLDIM, z = WORLDIM;
+  GLfloat dim = WORMDIA;
 
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
@@ -264,7 +371,6 @@ void createWorld(){
   
   glNewList(worldData.sky,GL_COMPILE);
   // sky
-
    glBegin(GL_QUADS);
     glNormal3f(0.0f, -10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
@@ -276,9 +382,35 @@ void createWorld(){
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-x, y,  z);
    glEnd();
-
+  glEndList();
+  
+  glNewList(worldData.ball, GL_COMPILE);
+    gluSphere(worldData.q, dim, 32, 16);
   glEndList();
 }
+
+
+
+/* 
+ * Funzione che disegna il verme
+ */
+void drawWorm(){
+  WSphere *ite = myWorm.head;
+  glBindTexture(GL_TEXTURE_2D, 2);
+  //  fprintf(stderr, "--- begin verme ---\n");
+  while(ite != NULL){
+    //    fprintf(stderr,"Palla X %f  Y %f  Z %f \n", ite->x, ite->y, ite->z);
+    glPushMatrix();
+    glTranslatef(ite->x, ite->y, ite->z);
+    glCallList(worldData.ball);
+    glPopMatrix();
+    ite = ite->prev;
+  }
+  //  fprintf(stderr, "--- end verme ---\n");
+
+}
+
+
 
 /*
  * Funzione per disegnare il mondo
@@ -294,12 +426,36 @@ void drawWorld(){
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
   glCallList(worldData.ground);
 
+  /* visualizzo il verme */
+  drawWorm();
+  /* visualizzo la palla */
+
+  glPushMatrix();
+  glTranslatef(0.0f,0.0f, -50.0f);
+  
+  glColor3f(1.0f, 1.0f, 1.0f);
+
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[BR]);
+
+  //  gluSphere(worldData.q, 3.0f, 32, 16);
+  glCallList(worldData.ball);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[BREF]);
+  glColor4f(1.0f, 1.0f, 1.0f, 0.4f);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+  glEnable(GL_TEXTURE_GEN_S);
+  glEnable(GL_TEXTURE_GEN_T);
+  //gluSphere(worldData.q, 3.0f, 32, 16);
+  glCallList(worldData.ball);
+
+  glPopMatrix();
+  
 
 
-
-
-
-
+  glDisable(GL_TEXTURE_GEN_S);
+  glDisable(GL_TEXTURE_GEN_T);
+  glDisable(GL_BLEND);
+  
 }
 
 
@@ -339,6 +495,22 @@ void render(){
 	/*	glutSwapBuffers();
 		return;*/
   }
+  
+  switch(programData.gameStatus){
+  case 0:
+  case 2:
+    setOrtographicProjection();
+    glLoadIdentity();
+    renderStatus();
+    resetPerspectiveProjection();
+    glutSwapBuffers();
+    return;
+    break;
+  default:
+    break;
+
+  }
+
 
   // Restore lighting state variables
   glPopAttrib();
@@ -352,7 +524,8 @@ void render(){
   glTranslatef(worldData.x, worldData.y, -worldData.z);
   
 
-  lightWorld();
+  //lightWorld();
+  lightFront();
   drawWorld();
 
 

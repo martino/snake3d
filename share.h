@@ -51,10 +51,15 @@
 #define TWB   2
 #define TG    3
 #define TS    4
-#define NTEX  5
+#define BR    5
+#define BREF  6
+#define NTEX  7
 #define WORLDIM 100.0f
 #define PIOVER180 0.0174532925f
 #define RSPEED 2.0f
+#define WORMDIA 3.5f;
+#define DIA     3.5f;
+#define WORMVEL 3.5f;
 
 /*
  * strutture dati
@@ -94,31 +99,40 @@ typedef struct{
 #pragma pack(8)
 
 
-typedef struct{
-
-} MovEvent;
 
 typedef struct{
-
-} ComEvent;
-
-typedef struct{
-
+  GLfloat x, y,z; /* centro */
+  GLint   dia;  /* diametro */
+  
 } Sphere;
 
+struct WSphereStruct;
+
+typedef struct WSphereStruct{
+  struct WSphereStruct *next;
+  struct WSphereStruct *prev;
+
+  /* data */
+  GLfloat x, y, z;
+
+} WSphere;
+
 typedef struct{
-
-} SphereList;
-
-typedef struct{
-
+  WSphere *head;/*testa*/
+  WSphere *tail;/*coda*/
+  
+  // velocita
+  GLfloat vel;
+  // dimensione
+  GLfloat dim;
+  GLfloat  dia;
 } Worm;
 
 
 typedef struct{
   /* texture */
   GLuint texObj[NTEX];
-  GLuint wall, ground, sky;
+  GLuint wall, ground, sky, ball;
   GLuint cColor;
   
   /* luci */
@@ -143,7 +157,9 @@ typedef struct{
   GLuint kup, kdown, kleft, kright;
   GLuint xStatus, yStatus;
   GLuint nextXstatus, nextYstatus;
-  GLuint change; /* da capire se lo uso */
+
+  /* quadric object*/
+  GLUquadricObj *q;
 
 } World;
 
@@ -162,7 +178,8 @@ typedef struct{
   GLint exit;
   GLint menu;
   GLint fullscreen; 
-  
+  GLint gameStatus; /* flag per la gestione della sconfitta*/
+
 } Data;
 
 
@@ -170,8 +187,9 @@ typedef struct{
  * variabili extern
  */
 
-extern Data programData;
+extern Data  programData;
 extern World worldData;
+extern Worm  myWorm;
 
 /*
  * prototipi funzioni
@@ -180,4 +198,9 @@ extern World worldData;
 /* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
 GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
 
+int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+int increaseWorm(GLfloat, GLfloat, GLuint);
+void destroyWorm();
+void moveWorm(GLfloat, GLfloat, GLuint);
+void printWorm();
 #endif
