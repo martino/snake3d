@@ -149,6 +149,14 @@ void loop(){
 
   /* movimento laterale --> freccia sx e dx */
   if((worldData.kleft)||(worldData.kright)){
+    fprintf(stderr, "begin %f %f\n", worldData.x, worldData.z);
+    worldData.lastX = worldData.x - ((float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f);
+    worldData.lastY = worldData.y;
+    worldData.lastZ = worldData.z - ((float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f);
+    fprintf(stderr, "begin giusti  %f %f\n", worldData.lastX, worldData.lastZ);
+    /* se l'angleMX non e' uguale son cazzi*/
+
+    
     if(worldData.xStatus == 0){ /* sto andando dritto */
       if(worldData.kleft){
 	worldData.nextXstatus = 1; /* vado a sinistra */
@@ -235,23 +243,72 @@ void loop(){
 
   /* modifico l'angolo Y */
   if(worldData.xStatus){ 
+    float offSetX, offSetZ;
+    float tmpX, tmpZ;
+    
     switch(worldData.nextXstatus){
     case 1: /* devo muovermi a sinistra */
       worldData.angleMY -= RSPEED;
+
+      offSetX = (float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
+      offSetZ = (float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
+      fprintf(stderr, "gradi %f osX %f osZ %f\n", worldData.angleMY,offSetX, offSetZ);
+
+      worldData.x = worldData.lastX - offSetX;
+      worldData.z = worldData.lastZ - offSetZ;
+
+      fprintf(stderr, "mezzo %f %f\n", worldData.x, worldData.z);
       if(worldData.angleMY < worldData.nextAngleY){
+
+	offSetX = (float)sin(worldData.nextAngleY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
+	offSetZ = (float)cos(worldData.nextAngleY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
+
+
 	worldData.angleMY = worldData.nextAngleY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
+
+	worldData.x = worldData.lastX - offSetX;
+	worldData.z = worldData.lastZ - offSetZ;
+
+
+	fprintf(stderr, "alla fine %f %f\n", worldData.x, worldData.z);
+
+
       }
       break;
     case 2: /* devo muovermi a destra */
       worldData.angleMY += RSPEED;
+
+      offSetX = (float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
+      offSetZ = (float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
+      fprintf(stderr, "gradi %f osX %f osZ %f\n", worldData.angleMY,offSetX, offSetZ);
+
+      worldData.x = worldData.lastX - offSetX;
+      worldData.z = worldData.lastZ - offSetZ;
+
+      fprintf(stderr, "mezzo %f %f\n", worldData.x, worldData.z);
+
       if(worldData.angleMY > worldData.nextAngleY){
+
+	offSetX = (float)sin(worldData.nextAngleY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
+	offSetZ = (float)cos(worldData.nextAngleY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
+
+
 	worldData.angleMY = worldData.nextAngleY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
+
+
+	worldData.x = worldData.lastX - offSetX;
+	worldData.z = worldData.lastZ - offSetZ;
+
+
+	fprintf(stderr, "alla fine fine %f %f\n", worldData.x, worldData.z);
+ 
+
       }
       break;
     default:
@@ -260,10 +317,10 @@ void loop(){
   }
 
     
-
+  moveFrame =0;
   /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){
-    //        printWorm();
+    //printWorm();
     if(worldData.yStatus == 0){
       /* movimento sul piano X */
       float offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
@@ -297,8 +354,8 @@ void loop(){
 	fprintf(stderr, "sono uscito\n");
       }
     }
-/*     fprintf(stderr, "Verme %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z); */
-/*     fprintf(stderr, "Telecamera %f %f %f\n", worldData.x, worldData.y, worldData.z); */
+    fprintf(stderr, "Verme %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z);
+    fprintf(stderr, "Telecamera %f %f %f\n", worldData.x, worldData.y, worldData.z);
 
   }
 }

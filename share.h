@@ -153,6 +153,7 @@ typedef struct{
 
 
   GLfloat x, y, z;
+  GLfloat lastX, lastY, lastZ;
   
   GLuint kup, kdown, kleft, kright;
   GLuint xStatus, yStatus;

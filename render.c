@@ -30,7 +30,7 @@ void changeSize(GLint w, GLint h){
    *      zNear  -> distanza minima visibile
    *      zFar   -> distanza massima visibile
    */
-  gluPerspective(45.0f, ratio, 0.1f, 1000.0f);
+  gluPerspective(45.0f, ratio, 0.3f, 1000.0f);
   
   glMatrixMode(GL_MODELVIEW);
   
@@ -522,6 +522,7 @@ void render(){
   glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
   glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
   glTranslatef(worldData.x, worldData.y, -worldData.z);
+
   
 
   //lightWorld();

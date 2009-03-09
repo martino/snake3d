@@ -110,7 +110,7 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
 
   if(dir == 0 ){
     /* sposto il verme sul piano X */
-    (myWorm.head)->x = oldHead->x - (xy*myWorm.dia);
+    (myWorm.head)->x = oldHead->x + (xy*myWorm.dia);
     (myWorm.head)->y = oldHead->y;
     (myWorm.head)->z = oldHead->z - (z*myWorm.dia);
     //    fprintf(stderr, "%f %f %f\n", oldHead->z, z, myWorm.dia);
@@ -118,7 +118,7 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   }else{
     /* sposto il verme sul piano Y */
     (myWorm.head)->x = oldHead->x;
-    (myWorm.head)->y = oldHead->y + (xy*myWorm.dia);
+    (myWorm.head)->y = oldHead->y - (xy*myWorm.dia);
     (myWorm.head)->z = oldHead->z + (z*myWorm.dia);
   }
 }

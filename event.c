@@ -25,6 +25,7 @@ void mouseHandler(int x, int y){
   worldData.angleMX += tmpY * 0.25f;
   worldData.angleMY += tmpX * 0.25f;
   
+  /*tolti tempraeamente per debug*/
   if( (worldData.angleMY > (worldData.angleY+45.0f)) ||  (worldData.angleMY< (worldData.angleY-45.0f) ))
     worldData.angleMY -= tmpX * 0.25f;
 
