@@ -180,10 +180,11 @@ int initialize(int argc, char *argv[]){
   /*
    * Creo le display list
    */
-  worldData.wall   = glGenLists(4);
+  worldData.wall   = glGenLists(5);
   worldData.ground = worldData.wall + 1;
   worldData.sky    = worldData.wall + 2;
   worldData.ball   = worldData.wall + 3;
+  worldData.wallsd = worldData.wall + 4;
   createWorld();
   worldData.cColor = 1;
   
@@ -229,9 +230,9 @@ int initialize(int argc, char *argv[]){
 
 
   /* Inizializzo la posizione della telecamera */
-  worldData.x = 0.0f;
+  /*  worldData.x = 0.0f;
   worldData.y = 0.0f;
-  worldData.z = 80.0f;
+  worldData.z = 80.0f;*/
   worldData.angleX = 0.0f;
   worldData.angleY = 0.0f;
 
@@ -242,7 +243,7 @@ int initialize(int argc, char *argv[]){
   worldData.nextAngleY = 0.0f;
 
   /* Inizializzo il verme */
-  initializeWorm(0.0f, 0.0f, 83.5f, 3.5f, 3.5f);
+  initializeWorm(0.0f, 0.0f, 83.5f, 0);
   
   /* Inizializzo i dati utilizzati per la telecamera */
 

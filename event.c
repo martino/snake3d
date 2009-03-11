@@ -25,7 +25,6 @@ void mouseHandler(int x, int y){
   worldData.angleMX += tmpY * 0.25f;
   worldData.angleMY += tmpX * 0.25f;
   
-  /*tolti tempraeamente per debug*/
   if( (worldData.angleMY > (worldData.angleY+45.0f)) ||  (worldData.angleMY< (worldData.angleY-45.0f) ))
     worldData.angleMY -= tmpX * 0.25f;
 
@@ -41,77 +40,80 @@ void mouseHandler(int x, int y){
  * gestisce i tasti "normali"
  */ 
 void keyHandler(GLubyte key, GLint x, GLint y){
-	if(key== 'q'){
-		fprintf(stderr, "Exit\n");
-		programData.exit = 1;
-	}
-	
-	/* gestione dei vari effetti, compreso menù */
-	if(key == 'm'){ // menu
-		programData.menu = !programData.menu;
-	}
-	
- 	if(key == 'f'){ // fullscreen
-		
-	}
-
- 	if(key == 'n'){ // nuova partita
-	  programData.gameStatus = 1;
-	  worldData.x = 0.0f;
-	  worldData.y = 0.0f;
-	  worldData.z = 0.0f;
-	  /* inizializza il verme */
-	  /* azzera i punti */
-	  /* inizializza altro se serve*/
+  if(key== 'q'){
+    fprintf(stderr, "Exit\n");
+    programData.exit = 1;
+  }
+  
+  /* gestione dei vari effetti, compreso menù */
+  if(key == 'm'){ // menu
+    programData.menu = !programData.menu;
+  }
+  
+  if(key == 'f'){ // fullscreen
+    
+  }
+  
+  if(key == 'n'){ // nuova partita
+    programData.gameStatus = 1;
+    /*worldData.x = 0.0f;
+    worldData.y = 0.0f;
+    worldData.z = 0.0f;*/
+    /*distruggo il verme*/
+    
+    /* inizializza il verme */
+    
+    /* azzera i punti */
+    /* inizializza altro se serve*/
 	  
-	}
-	if(key == 'a'){
-	  if(worldData.yStatus == 0)
-	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
-	  else
-	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
-	}
-	if(key == 'r'){ 
-	  worldData.cColor = 1;
-	}
+  }
+  if(key == 'a'){
+    if(worldData.yStatus == 0)
+      increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+    else
+      increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+  }
+  if(key == 'r'){ 
+    worldData.cColor = 1;
+  }
 
-	if(key == 't'){ 
-	  worldData.cColor = 2;
-	}
+  if(key == 't'){ 
+    worldData.cColor = 2;
+  }
 
-	if(key == 'y'){ 
-	  worldData.cColor = 3;
-	}
-	/*
-	if(key == 'u'){ 
-	  worldData.position[0] += 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+  if(key == 'y'){ 
+    worldData.cColor = 3;
+  }
+  /*
+    if(key == 'u'){ 
+    worldData.position[0] += 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
-	if(key == 'j'){ 
-	  worldData.position[0] -= 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+    if(key == 'j'){ 
+    worldData.position[0] -= 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
-	if(key == 'i'){ 
-	  worldData.position[1] += 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+    if(key == 'i'){ 
+    worldData.position[1] += 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
-	if(key == 'k'){ 
-	  worldData.position[1] -= 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+    if(key == 'k'){ 
+    worldData.position[1] -= 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
-	if(key == 'o'){ 
-	  worldData.position[2] += 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+    if(key == 'o'){ 
+    worldData.position[2] += 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
-	if(key == 'l'){ 
-	  worldData.position[2] -= 0.1f;
-	  fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-	}
+    if(key == 'l'){ 
+    worldData.position[2] -= 0.1f;
+    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
+    }
 
 
 */

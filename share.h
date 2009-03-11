@@ -57,9 +57,9 @@
 #define WORLDIM 100.0f
 #define PIOVER180 0.0174532925f
 #define RSPEED 2.0f
-#define WORMDIA 3.5f;
-#define DIA     3.5f;
-#define WORMVEL 3.5f;
+#define WORMDIA 3.5f
+#define DIA     3.5f
+#define TIMEMOVE 125
 
 /*
  * strutture dati
@@ -125,14 +125,14 @@ typedef struct{
   GLfloat vel;
   // dimensione
   GLfloat dim;
-  GLfloat  dia;
+  GLfloat dia;
 } Worm;
 
 
 typedef struct{
   /* texture */
   GLuint texObj[NTEX];
-  GLuint wall, ground, sky, ball;
+  GLuint wall, wallsd, ground, sky, ball;
   GLuint cColor;
   
   /* luci */
@@ -150,10 +150,11 @@ typedef struct{
   GLfloat angleX, angleY;
   GLfloat angleMX, angleMY;
   GLfloat nextAngleX, nextAngleY;
+  GLfloat nextAngleMX, nextAngleMY;
 
 
-  GLfloat x, y, z;
-  GLfloat lastX, lastY, lastZ;
+  /*  GLfloat x, y, z;*/
+  /*  GLfloat lastX, lastY, lastZ;*/
   
   GLuint kup, kdown, kleft, kright;
   GLuint xStatus, yStatus;
@@ -199,7 +200,7 @@ extern Worm  myWorm;
 /* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
 GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
 
-int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat);
 int increaseWorm(GLfloat, GLfloat, GLuint);
 void destroyWorm();
 void moveWorm(GLfloat, GLfloat, GLuint);

@@ -323,7 +323,9 @@ void createWorld(){
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-x,  y, -z);
    glEnd();
-   
+  glEndList();
+
+  glNewList(worldData.wallsd, GL_COMPILE); 
    /*latoSX*/
    glBegin(GL_QUADS);
     glNormal3f(10.0f, 0.0f, 0.0f);
@@ -401,7 +403,8 @@ void drawWorm(){
   while(ite != NULL){
     //    fprintf(stderr,"Palla X %f  Y %f  Z %f \n", ite->x, ite->y, ite->z);
     glPushMatrix();
-    glTranslatef(ite->x, ite->y, ite->z);
+
+    glTranslatef(-ite->x, -ite->y, ite->z);
     glCallList(worldData.ball);
     glPopMatrix();
     ite = ite->prev;
@@ -410,27 +413,13 @@ void drawWorm(){
 
 }
 
-
-
 /*
- * Funzione per disegnare il mondo
+ * Funzione che disegna la palla
  */
-void drawWorld(){
-  // richiama le varie list in base al colore della texture i wall
-  glBindTexture(GL_TEXTURE_2D, worldData.cColor);
-  glCallList(worldData.wall);
-  //soffitto
-  //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
-  glCallList(worldData.sky);
-  // ed infine il pavimento
-  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
-  glCallList(worldData.ground);
-
-  /* visualizzo il verme */
-  drawWorm();
-  /* visualizzo la palla */
+void drawBall(){
 
   glPushMatrix();
+
   glTranslatef(0.0f,0.0f, -50.0f);
   
   glColor3f(1.0f, 1.0f, 1.0f);
@@ -449,12 +438,39 @@ void drawWorld(){
   glCallList(worldData.ball);
 
   glPopMatrix();
-  
 
 
   glDisable(GL_TEXTURE_GEN_S);
   glDisable(GL_TEXTURE_GEN_T);
   glDisable(GL_BLEND);
+
+}
+
+/*
+ * Funzione per disegnare il mondo
+ */
+void drawWorld(){
+  /* disegno le pareti */
+  glPushMatrix();
+
+  // richiama le varie list in base al colore della texture i wall
+  glBindTexture(GL_TEXTURE_2D, worldData.cColor+2);
+  glCallList(worldData.wallsd);
+  glBindTexture(GL_TEXTURE_2D, worldData.cColor);
+  glCallList(worldData.wall);
+  //soffitto
+  //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
+  glCallList(worldData.sky);
+  // ed infine il pavimento
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
+  glCallList(worldData.ground);
+  glPopMatrix();
+
+  /* disegno il verme */
+  drawWorm();
+  /* disegno la palla */
+  drawBall();
+  
   
 }
 
@@ -464,7 +480,6 @@ void drawWorld(){
 /*
  *  questa funzione ha il compito di disegnare il tutto
  *
- * riflessi
  * nebbia...
  *
  */
@@ -517,18 +532,22 @@ void render(){
 
   // parte il rendering normale
   
-  /* telecamera */
- 
+
+ /* telecamera */
+  glLoadIdentity();
+  glTranslatef(0, 0, myWorm.dia);   
   glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
   glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
-  glTranslatef(worldData.x, worldData.y, -worldData.z);
+  glTranslatef((myWorm.head)->x, (myWorm.head)->y, -(myWorm.head)->z);
 
-  
 
   //lightWorld();
   lightFront();
   drawWorld();
 
+  
+ 
+  
 
 
   glutSwapBuffers();

@@ -18,11 +18,10 @@ Worm  myWorm;
 /*
  * Inizializzazione del verme
  */
-int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia, GLfloat velocity){
+int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia){
   WSphere *tmp;
 
   if(dia == 0 ) dia = WORMDIA;
-  if(velocity == 0) velocity = WORMVEL;
 
   tmp = calloc(1, sizeof(WSphere));
   if(tmp == NULL) return 0;
@@ -35,7 +34,6 @@ int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia, GLfloat velocit
   myWorm.head = tmp;
   myWorm.dim = 1;
   myWorm.dia = dia;
-  myWorm.vel = velocity;
   return 1;
 }
 
@@ -62,6 +60,8 @@ int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
 
   /* xz o yz si capisce come si capisce il movimento */
   /* il piu' o meno si capisce uguale in base al caso xz o yz */
+
+  /* secondo me non e' sempre uguale il segno */
 
   if(dir == 0 ){
     /* sposto il verme sul piano X */
@@ -94,9 +94,7 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   WSphere *oldHead = myWorm.head;
   WSphere *oldTail = myWorm.tail;
 
-  if(myWorm.dim != 1){
-
-
+  if(myWorm.dim > 1){
   /* sistemo la coda */
   (oldTail->next)->prev = NULL;
   myWorm.tail = oldTail->next;
@@ -110,7 +108,7 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
 
   if(dir == 0 ){
     /* sposto il verme sul piano X */
-    (myWorm.head)->x = oldHead->x + (xy*myWorm.dia);
+    (myWorm.head)->x = oldHead->x - (xy*myWorm.dia);
     (myWorm.head)->y = oldHead->y;
     (myWorm.head)->z = oldHead->z - (z*myWorm.dia);
     //    fprintf(stderr, "%f %f %f\n", oldHead->z, z, myWorm.dia);
@@ -118,7 +116,7 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   }else{
     /* sposto il verme sul piano Y */
     (myWorm.head)->x = oldHead->x;
-    (myWorm.head)->y = oldHead->y - (xy*myWorm.dia);
+    (myWorm.head)->y = oldHead->y + (xy*myWorm.dia);
     (myWorm.head)->z = oldHead->z + (z*myWorm.dia);
   }
 }

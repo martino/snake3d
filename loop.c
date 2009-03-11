@@ -13,20 +13,20 @@
 int checkWall(float xy, float z, int piano){
   switch(piano){
   case 1: /* controllo il piano X */
-    if((worldData.y < xy)&&(xy >= WORLDIM )) return 0;
-    if((worldData.y > xy)&&(xy <= -WORLDIM )) return 0;
+    if((xy >=  WORLDIM)) return 0;
+    if((xy <= -WORLDIM)) return 0;
     break;
   case 2: /* controllo il piano Y */
-    if((worldData.y < xy)&&(xy >= WORLDIM )) return 0;
-    if((worldData.y > xy)&&(xy <= -WORLDIM )) return 0;
+    if((xy >=  WORLDIM)) return 0;
+    if((xy <= -WORLDIM)) return 0;
     break;
   default:
     break;
   }
 
   /* controllo il piano Z */
-  if((worldData.z > z)&&( z <= -WORLDIM)) return 0;
-  if((worldData.z < z)&&( z >= WORLDIM)) return 0;
+  if( z <= -WORLDIM) return 0;
+  if( z >=  WORLDIM) return 0;
   return 1;
 }
 
@@ -88,9 +88,9 @@ void loop(){
   
 
   /* movimento della telecamera a scatti */
-  if(programData.time - programData.timerender > 500){
+  if(programData.time - programData.timerender > TIMEMOVE){
     moveFrame = 1;
-    programData.timerender = programData.time + ((programData.time - programData.timerender)-500);
+    programData.timerender = programData.time + ((programData.time - programData.timerender)-TIMEMOVE);
   }
 
   /* controllo l'input dell'utente */
@@ -128,16 +128,21 @@ void loop(){
 	break;
       }
     }else{ /* caso in cui sono in movimento*/
+
       if(worldData.kup){
 	if(worldData.nextYstatus == 2){ /*sto andando verso il basso*/
 	  worldData.nextYstatus = 0;
 	  worldData.yStatus = 2;
+	  worldData.angleX = worldData.nextAngleX;
+	  /* qui bisogna muovere il verme */
 	  worldData.nextAngleX -= 90.0f;
 	}
       }else{
 	if(worldData.nextYstatus == 1){ /*sto andando verso l'alto*/
 	  worldData.nextYstatus = 0;
 	  worldData.yStatus = 1;
+ 	  worldData.angleX = worldData.nextAngleX;
+	  /* qui bisogna muovere il verme */
 	  worldData.nextAngleX += 90.0f;
 	}
       }
@@ -149,22 +154,17 @@ void loop(){
 
   /* movimento laterale --> freccia sx e dx */
   if((worldData.kleft)||(worldData.kright)){
-    fprintf(stderr, "begin %f %f\n", worldData.x, worldData.z);
-    worldData.lastX = worldData.x - ((float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f);
-    worldData.lastY = worldData.y;
-    worldData.lastZ = worldData.z - ((float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f);
-    fprintf(stderr, "begin giusti  %f %f\n", worldData.lastX, worldData.lastZ);
-    /* se l'angleMX non e' uguale son cazzi*/
-
     
     if(worldData.xStatus == 0){ /* sto andando dritto */
       if(worldData.kleft){
 	worldData.nextXstatus = 1; /* vado a sinistra */
+	/*-----*/
 	worldData.nextAngleY = worldData.angleY - 90.0f ;
 	worldData.angleY = worldData.angleMY;
       }
       else{
 	worldData.nextXstatus = 2; /* vado a destra */
+	/*-----*/
 	worldData.nextAngleY = worldData.angleY + 90.0f ;
 	worldData.angleY = worldData.angleMY;
       }
@@ -197,11 +197,13 @@ void loop(){
 
   /* modifico l'angolo X */
   if(worldData.yStatus != worldData.nextYstatus){
+
     switch(worldData.nextYstatus){
     case 0:  /* devo arrivare sul piano */
       switch(worldData.yStatus){
       case 1:
 	worldData.angleMX += RSPEED;
+	moveFrame = 0;
 	if(worldData.angleMX > worldData.nextAngleX){
 	  worldData.angleMX = worldData.nextAngleX;
 	  worldData.angleX = worldData.nextAngleX;
@@ -210,6 +212,7 @@ void loop(){
 	break;
       case 2:
 	worldData.angleMX -= RSPEED;
+	moveFrame = 0;
 	if(worldData.angleMX < worldData.nextAngleX){
 	  worldData.angleMX = worldData.nextAngleX;
 	  worldData.angleX = worldData.nextAngleX;
@@ -222,6 +225,7 @@ void loop(){
       break;
     case 1:
       worldData.angleMX -= RSPEED;
+      moveFrame = 0;
       if(worldData.angleMX < worldData.nextAngleX){
 	worldData.angleMX = worldData.nextAngleX;
 	worldData.angleX = worldData.nextAngleX;
@@ -230,6 +234,7 @@ void loop(){
       break;
     case 2:
       worldData.angleMX += RSPEED;
+      moveFrame = 0;
       if(worldData.angleMX > worldData.nextAngleX){
 	worldData.angleMX = worldData.nextAngleX;
 	worldData.angleX = worldData.nextAngleX;
@@ -243,72 +248,25 @@ void loop(){
 
   /* modifico l'angolo Y */
   if(worldData.xStatus){ 
-    float offSetX, offSetZ;
-    float tmpX, tmpZ;
-    
     switch(worldData.nextXstatus){
     case 1: /* devo muovermi a sinistra */
       worldData.angleMY -= RSPEED;
-
-      offSetX = (float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
-      offSetZ = (float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
-      fprintf(stderr, "gradi %f osX %f osZ %f\n", worldData.angleMY,offSetX, offSetZ);
-
-      worldData.x = worldData.lastX - offSetX;
-      worldData.z = worldData.lastZ - offSetZ;
-
-      fprintf(stderr, "mezzo %f %f\n", worldData.x, worldData.z);
+      moveFrame = 0;
       if(worldData.angleMY < worldData.nextAngleY){
-
-	offSetX = (float)sin(worldData.nextAngleY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
-	offSetZ = (float)cos(worldData.nextAngleY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
-
-
 	worldData.angleMY = worldData.nextAngleY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
-
-	worldData.x = worldData.lastX - offSetX;
-	worldData.z = worldData.lastZ - offSetZ;
-
-
-	fprintf(stderr, "alla fine %f %f\n", worldData.x, worldData.z);
-
-
       }
       break;
     case 2: /* devo muovermi a destra */
       worldData.angleMY += RSPEED;
-
-      offSetX = (float)sin(worldData.angleMY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
-      offSetZ = (float)cos(worldData.angleMY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
-      fprintf(stderr, "gradi %f osX %f osZ %f\n", worldData.angleMY,offSetX, offSetZ);
-
-      worldData.x = worldData.lastX - offSetX;
-      worldData.z = worldData.lastZ - offSetZ;
-
-      fprintf(stderr, "mezzo %f %f\n", worldData.x, worldData.z);
-
+      moveFrame = 0;
       if(worldData.angleMY > worldData.nextAngleY){
-
-	offSetX = (float)sin(worldData.nextAngleY * PIOVER180)*3.5f - (float)sin(worldData.angleY * PIOVER180)*3.5f; 
-	offSetZ = (float)cos(worldData.nextAngleY * PIOVER180)*3.5f - (float)cos(worldData.angleY * PIOVER180)*3.5f;
-
-
 	worldData.angleMY = worldData.nextAngleY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
-
-
-	worldData.x = worldData.lastX - offSetX;
-	worldData.z = worldData.lastZ - offSetZ;
-
-
-	fprintf(stderr, "alla fine fine %f %f\n", worldData.x, worldData.z);
- 
-
       }
       break;
     default:
@@ -316,20 +274,17 @@ void loop(){
     }
   }
 
-    
-  moveFrame =0;
+  
   /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){
-    //printWorm();
+    float offSetX = 0.0f, offSetY = 0.0f, offSetZ = 0.0f;
     if(worldData.yStatus == 0){
       /* movimento sul piano X */
-      float offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
-      float offSetZ = (float)cos(worldData.angleY * PIOVER180) * 3.5f;
-      if(checkWall(worldData.x - offSetX, worldData.z - offSetZ, 1)){
-	worldData.x -= offSetX;
-	worldData.z -= offSetZ;
+      offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
+      offSetZ = (float)cos(worldData.angleY * PIOVER180) * 3.5f;
+      moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+      if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 1)){
 	/*collision testa del verme*/
-	moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
 	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
 	  fprintf(stderr, " presa!\n");
       }else{
@@ -339,11 +294,9 @@ void loop(){
       }
     }else{
       /* movimento sul piano Y */
-      float offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
-      float offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
-      if(checkWall(worldData.y + offSetY, worldData.z + offSetZ, 2)){
-	worldData.y += offSetY;
-	worldData.z += offSetZ;
+      offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
+      offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
+      if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/
 	moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
 	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
@@ -354,8 +307,6 @@ void loop(){
 	fprintf(stderr, "sono uscito\n");
       }
     }
-    fprintf(stderr, "Verme %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z);
-    fprintf(stderr, "Telecamera %f %f %f\n", worldData.x, worldData.y, worldData.z);
 
   }
 }
