@@ -57,6 +57,7 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
  */
 void loop(){
   GLuint moveFrame = 0;
+  GLint timeFrame = 1250/worldData.velocity;
 
   /* calcolo del framerate */
   programData.frame++;
@@ -88,9 +89,9 @@ void loop(){
   
 
   /* movimento della telecamera a scatti */
-  if(programData.time - programData.timerender > TIMEMOVE){
+  if(programData.time - programData.timerender > timeFrame){
     moveFrame = 1;
-    programData.timerender = programData.time + ((programData.time - programData.timerender)-TIMEMOVE);
+    programData.timerender = programData.time + ((programData.time - programData.timerender)-timeFrame);
   }
 
   /* controllo l'input dell'utente */
@@ -296,9 +297,9 @@ void loop(){
       /* movimento sul piano Y */
       offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
       offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
+      moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/
-	moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
 	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
 	  fprintf(stderr, " presa!\n");
       }else{
