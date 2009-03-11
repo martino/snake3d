@@ -257,6 +257,7 @@ int initialize(int argc, char *argv[]){
 
   worldData.nextXstatus = 0;
   worldData.nextYstatus = 0;
+  worldData.velocity = VELOCITY;
 
 
   // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor

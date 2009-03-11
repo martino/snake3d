@@ -103,25 +103,29 @@ void loop(){
       case 0: /*sono orizzontale*/
 	if(worldData.kup){
 	  worldData.nextYstatus = 1;
-	  worldData.nextAngleX -= 90.0f;
+	  worldData.nextAngleX  = worldData.angleX - 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX -90.0f;
 	  worldData.angleX = worldData.angleMX;
 	}else{
 	  worldData.nextYstatus = 2;
-	  worldData.nextAngleX += 90.0f;
+	  worldData.nextAngleX = worldData.angleX + 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX + 90.0f;
 	  worldData.angleX = worldData.angleMX;
 	}
 	break;
       case 1: /*sono in alto*/
 	if(worldData.kdown){
 	  worldData.nextYstatus = 0;
-	  worldData.nextAngleX += 90.0f;
+	  worldData.nextAngleX = worldData.angleX + 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX + 90.0f;
 	  worldData.angleX = worldData.angleMX;
 	}
 	break;
       case 2: /*sono in basso*/\
 	if(worldData.kup){
 	  worldData.nextYstatus = 0;
-	  worldData.nextAngleX -= 90.0f;
+	  worldData.nextAngleX = worldData.angleX - 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX -90.0f;
 	  worldData.angleX = worldData.angleMX;
 	}
 	break;
@@ -136,7 +140,9 @@ void loop(){
 	  worldData.yStatus = 2;
 	  worldData.angleX = worldData.nextAngleX;
 	  /* qui bisogna muovere il verme */
-	  worldData.nextAngleX -= 90.0f;
+	  worldData.nextAngleX = worldData.angleX - 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX - 90.0f;
+
 	}
       }else{
 	if(worldData.nextYstatus == 1){ /*sto andando verso l'alto*/
@@ -144,7 +150,8 @@ void loop(){
 	  worldData.yStatus = 1;
  	  worldData.angleX = worldData.nextAngleX;
 	  /* qui bisogna muovere il verme */
-	  worldData.nextAngleX += 90.0f;
+	  worldData.nextAngleX = worldData.angleX  + 90.0f;
+	  worldData.nextAngleMX = worldData.angleMX + 90.0f;
 	}
       }
     }
@@ -161,12 +168,14 @@ void loop(){
 	worldData.nextXstatus = 1; /* vado a sinistra */
 	/*-----*/
 	worldData.nextAngleY = worldData.angleY - 90.0f ;
+	worldData.nextAngleMY = worldData.angleMY - 90.0f ;
 	worldData.angleY = worldData.angleMY;
       }
       else{
 	worldData.nextXstatus = 2; /* vado a destra */
 	/*-----*/
 	worldData.nextAngleY = worldData.angleY + 90.0f ;
+	worldData.nextAngleMY = worldData.angleMY + 90.0f ;
 	worldData.angleY = worldData.angleMY;
       }
       worldData.xStatus = 1;
@@ -175,6 +184,7 @@ void loop(){
       case 1: /* sto andando verso sinistra */
 	if(worldData.kright){
 	  worldData.nextAngleY = worldData.nextAngleY + 90.0f;
+	  worldData.nextAngleMY = worldData.nextAngleMY + 90.0f;
 	  worldData.nextXstatus = 2;
 	  worldData.angleY = worldData.angleMY;
 	}
@@ -182,6 +192,7 @@ void loop(){
       case 2: /* sto andando verso destra */
 	if(worldData.kleft){
 	  worldData.nextAngleY = worldData.nextAngleY - 90.0f;
+	  worldData.nextAngleMY = worldData.nextAngleMY - 90.0f;
 	  worldData.nextXstatus = 1;
 	  worldData.angleY = worldData.angleMY;
 	}
@@ -205,8 +216,8 @@ void loop(){
       case 1:
 	worldData.angleMX += RSPEED;
 	moveFrame = 0;
-	if(worldData.angleMX > worldData.nextAngleX){
-	  worldData.angleMX = worldData.nextAngleX;
+	if(worldData.angleMX > worldData.nextAngleMX){
+	  worldData.angleMX = worldData.nextAngleMX;
 	  worldData.angleX = worldData.nextAngleX;
 	  worldData.yStatus = 0;
 	}
@@ -214,8 +225,8 @@ void loop(){
       case 2:
 	worldData.angleMX -= RSPEED;
 	moveFrame = 0;
-	if(worldData.angleMX < worldData.nextAngleX){
-	  worldData.angleMX = worldData.nextAngleX;
+	if(worldData.angleMX < worldData.nextAngleMX){
+	  worldData.angleMX = worldData.nextAngleMX;
 	  worldData.angleX = worldData.nextAngleX;
 	  worldData.yStatus = 0;
 	}
@@ -227,8 +238,8 @@ void loop(){
     case 1:
       worldData.angleMX -= RSPEED;
       moveFrame = 0;
-      if(worldData.angleMX < worldData.nextAngleX){
-	worldData.angleMX = worldData.nextAngleX;
+      if(worldData.angleMX < worldData.nextAngleMX){
+	worldData.angleMX = worldData.nextAngleMX;
 	worldData.angleX = worldData.nextAngleX;
 	worldData.yStatus = 1;
       }
@@ -236,8 +247,8 @@ void loop(){
     case 2:
       worldData.angleMX += RSPEED;
       moveFrame = 0;
-      if(worldData.angleMX > worldData.nextAngleX){
-	worldData.angleMX = worldData.nextAngleX;
+      if(worldData.angleMX > worldData.nextAngleMX){
+	worldData.angleMX = worldData.nextAngleMX;
 	worldData.angleX = worldData.nextAngleX;
 	worldData.yStatus = 2;
       }
@@ -253,8 +264,8 @@ void loop(){
     case 1: /* devo muovermi a sinistra */
       worldData.angleMY -= RSPEED;
       moveFrame = 0;
-      if(worldData.angleMY < worldData.nextAngleY){
-	worldData.angleMY = worldData.nextAngleY;
+      if(worldData.angleMY < worldData.nextAngleMY){
+	worldData.angleMY = worldData.nextAngleMY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
@@ -263,8 +274,8 @@ void loop(){
     case 2: /* devo muovermi a destra */
       worldData.angleMY += RSPEED;
       moveFrame = 0;
-      if(worldData.angleMY > worldData.nextAngleY){
-	worldData.angleMY = worldData.nextAngleY;
+      if(worldData.angleMY > worldData.nextAngleMY){
+	worldData.angleMY = worldData.nextAngleMY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;

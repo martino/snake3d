@@ -56,10 +56,11 @@
 #define NTEX  7
 #define WORLDIM 100.0f
 #define PIOVER180 0.0174532925f
-#define RSPEED 2.0f
+#define RSPEED 1.0f
 #define WORMDIA 3.5f
 #define DIA     3.5f
-#define TIMEMOVE 125
+#define VELOCITY 5
+
 
 /*
  * strutture dati
@@ -160,6 +161,7 @@ typedef struct{
   GLuint xStatus, yStatus;
   GLuint nextXstatus, nextYstatus;
 
+  GLint velocity;
   /* quadric object*/
   GLUquadricObj *q;
 

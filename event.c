@@ -73,6 +73,20 @@ void keyHandler(GLubyte key, GLint x, GLint y){
     else
       increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
   }
+  
+
+  if(key == 's'){
+    worldData.velocity  += 5;
+    fprintf(stderr, " velocity %d \n", worldData.velocity);
+  }
+
+  if(key == 'x'){
+    worldData.velocity  -= 5;
+    if(worldData.velocity == 0)
+      worldData.velocity = 1;
+    fprintf(stderr, " velocity %d \n", worldData.velocity);
+  }
+  
   if(key == 'r'){ 
     worldData.cColor = 1;
   }
