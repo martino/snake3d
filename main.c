@@ -257,7 +257,11 @@ int initialize(int argc, char *argv[]){
 
   worldData.nextXstatus = 0;
   worldData.nextYstatus = 0;
-  worldData.velocity = VELOCITY;
+  programData.velocity = VELOCITY;
+  programData.timeFrame = 1250/programData.velocity;
+  programData.velAngolare = 30/programData.velocity;
+    
+  fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
 
 
   // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor

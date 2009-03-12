@@ -76,15 +76,19 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   
 
   if(key == 's'){
-    worldData.velocity  += 5;
-    fprintf(stderr, " velocity %d \n", worldData.velocity);
+    programData.velocity  += 5;
+    programData.timeFrame = 1250/programData.velocity;
+    programData.velAngolare = 30/programData.velocity;
+    fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
   }
 
   if(key == 'x'){
-    worldData.velocity  -= 5;
-    if(worldData.velocity == 0)
-      worldData.velocity = 1;
-    fprintf(stderr, " velocity %d \n", worldData.velocity);
+    programData.velocity  -= 5;
+    if(programData.velocity == 0)
+      programData.velocity = 1;
+    programData.timeFrame = 1250/programData.velocity;
+    programData.velAngolare = 30/programData.velocity;
+    fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
   }
   
   if(key == 'r'){ 

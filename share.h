@@ -56,7 +56,6 @@
 #define NTEX  7
 #define WORLDIM 100.0f
 #define PIOVER180 0.0174532925f
-#define RSPEED 1.0f
 #define WORMDIA 3.5f
 #define DIA     3.5f
 #define VELOCITY 5
@@ -161,7 +160,7 @@ typedef struct{
   GLuint xStatus, yStatus;
   GLuint nextXstatus, nextYstatus;
 
-  GLint velocity;
+  
   /* quadric object*/
   GLUquadricObj *q;
 
@@ -172,6 +171,10 @@ typedef struct{
   GLfloat width, height;
   /* gestione dei frame */
   GLint frame, time, timebase, timerender;
+  /* velocita' di gioco */
+  GLint velocity;
+  GLint timeFrame;
+  GLfloat velAngolare;
   /* font utilizzato nel programma */
   GLint font;
   

@@ -57,8 +57,6 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
  */
 void loop(){
   GLuint moveFrame = 0;
-  GLint timeFrame = 1250/worldData.velocity;
-
   /* calcolo del framerate */
   programData.frame++;
   programData.time = glutGet(GLUT_ELAPSED_TIME);
@@ -89,9 +87,10 @@ void loop(){
   
 
   /* movimento della telecamera a scatti */
-  if(programData.time - programData.timerender > timeFrame){
+  if(programData.time - programData.timerender > programData.timeFrame){
     moveFrame = 1;
-    programData.timerender = programData.time + ((programData.time - programData.timerender)-timeFrame);
+    programData.timerender = programData.time + ((programData.time - programData.timerender)- programData.timeFrame);
+    fprintf(stderr, "timebase %d timerender %d\n", programData.time, programData.timerender);
   }
 
   /* controllo l'input dell'utente */
@@ -214,7 +213,7 @@ void loop(){
     case 0:  /* devo arrivare sul piano */
       switch(worldData.yStatus){
       case 1:
-	worldData.angleMX += RSPEED;
+	worldData.angleMX += programData.velAngolare;
 	moveFrame = 0;
 	if(worldData.angleMX > worldData.nextAngleMX){
 	  worldData.angleMX = worldData.nextAngleMX;
@@ -223,7 +222,7 @@ void loop(){
 	}
 	break;
       case 2:
-	worldData.angleMX -= RSPEED;
+	worldData.angleMX -= programData.velAngolare;
 	moveFrame = 0;
 	if(worldData.angleMX < worldData.nextAngleMX){
 	  worldData.angleMX = worldData.nextAngleMX;
@@ -236,7 +235,7 @@ void loop(){
       }
       break;
     case 1:
-      worldData.angleMX -= RSPEED;
+      worldData.angleMX -= programData.velAngolare;
       moveFrame = 0;
       if(worldData.angleMX < worldData.nextAngleMX){
 	worldData.angleMX = worldData.nextAngleMX;
@@ -245,7 +244,7 @@ void loop(){
       }
       break;
     case 2:
-      worldData.angleMX += RSPEED;
+      worldData.angleMX += programData.velAngolare;
       moveFrame = 0;
       if(worldData.angleMX > worldData.nextAngleMX){
 	worldData.angleMX = worldData.nextAngleMX;
@@ -262,7 +261,7 @@ void loop(){
   if(worldData.xStatus){ 
     switch(worldData.nextXstatus){
     case 1: /* devo muovermi a sinistra */
-      worldData.angleMY -= RSPEED;
+      worldData.angleMY -= programData.velAngolare;
       moveFrame = 0;
       if(worldData.angleMY < worldData.nextAngleMY){
 	worldData.angleMY = worldData.nextAngleMY;
@@ -272,7 +271,7 @@ void loop(){
       }
       break;
     case 2: /* devo muovermi a destra */
-      worldData.angleMY += RSPEED;
+      worldData.angleMY += programData.velAngolare;
       moveFrame = 0;
       if(worldData.angleMY > worldData.nextAngleMY){
 	worldData.angleMY = worldData.nextAngleMY;
