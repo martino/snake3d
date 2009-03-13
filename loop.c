@@ -57,9 +57,12 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
  */
 void loop(){
   GLuint moveFrame = 0;
+  GLuint delay = 0;
+
   /* calcolo del framerate */
   programData.frame++;
   programData.time = glutGet(GLUT_ELAPSED_TIME);
+  if(programData.timerender == 0) programData.timerender = programData.time;
   if(programData.time - programData.timebase > 1000){
     sprintf(programData.fps, "FPS: %.0f", programData.frame*1000.0/(programData.time-programData.timebase));
     programData.timebase = programData.time;
@@ -89,8 +92,8 @@ void loop(){
   /* movimento della telecamera a scatti */
   if(programData.time - programData.timerender > programData.timeFrame){
     moveFrame = 1;
-    programData.timerender = programData.time + ((programData.time - programData.timerender)- programData.timeFrame);
-    fprintf(stderr, "timebase %d timerender %d\n", programData.time, programData.timerender);
+    delay = programData.time - (programData.timerender + programData.timeFrame);    
+    programData.timerender = programData.time + delay ;
   }
 
   /* controllo l'input dell'utente */
