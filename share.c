@@ -11,6 +11,7 @@
 Data  programData;
 World worldData;
 Worm  myWorm;
+Sphere ball;
 
 
 /* Gestione del verme */
@@ -23,7 +24,7 @@ int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia){
 
   if(dia == 0 ) dia = WORMDIA;
 
-  tmp = calloc(1, sizeof(WSphere));
+  tmp = (WSphere *)calloc(1, sizeof(WSphere));
   if(tmp == NULL) return 0;
   
   tmp->x = x;
@@ -55,7 +56,7 @@ void destroyWorm(){
  * Funzione che fa crescere il verme
  */
 int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
-  WSphere *tmp = calloc(1, sizeof(WSphere));
+  WSphere *tmp = (WSphere *)calloc(1, sizeof(WSphere));
   if(tmp == NULL) return 0;
 
   /* xz o yz si capisce come si capisce il movimento */
@@ -131,6 +132,45 @@ void printWorm(){
   }
   fprintf(stderr,"--- END WORM ---\n");
 }
+
+
+
+/* Gestione delle sfere */
+
+/* Inizializzazione palla */
+int initializeBall(){
+  
+  ball.x = 0.0f;
+  ball.y = 0.0f;
+  ball.z = -50.0f;
+  ball.timer = 10000;
+  ball.texture = BR;
+  
+  /* generateBall() */
+  return 1;
+}
+
+/* genera una nuova palla */
+void generateBall(){
+  float randf;
+  randf = ((float)random())/RAND_MAX;
+  ball.x =  (int)(randf*(WORLDIM-DIA));
+
+  randf = ((float)random())/RAND_MAX;
+  ball.y =  (int)(randf*(WORLDIM-DIA));
+
+  randf = ((float)random())/RAND_MAX;
+  ball.z =  (int)(randf*(WORLDIM-DIA));
+
+  fprintf(stderr, "x %f y %f z %f\n", ball.x, ball.y, ball.z);
+}
+
+/* distrugge una palla */
+void destroyBall(){
+
+}
+
+
 
 /*
  * Funzione che carica le tga (senza RLE encoding!!)

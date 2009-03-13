@@ -39,7 +39,9 @@ int initialize(int argc, char *argv[]){
 
 
   GLint i = 0;
-  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", "texture/ground.tga","texture/sky.tga", "texture/ball.tga", "texture/bref.tga" };
+  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", 
+			    "texture/ground.tga","texture/sky.tga", 
+			    "texture/ball.tga", "texture/bref.tga" };
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -244,7 +246,11 @@ int initialize(int argc, char *argv[]){
 
   /* Inizializzo il verme */
   initializeWorm(0.0f, 0.0f, 83.5f, 0);
+  srand(time(NULL));
   
+  /* Inizializzo la palla */
+  initializeBall();
+
   /* Inizializzo i dati utilizzati per la telecamera */
 
   worldData.kup    = 0;

@@ -8,7 +8,7 @@ CC = gcc
 
 all: main
 
-main: main.c  share.h event.c  loop.c  render.c  share.c event.h  loop.h  render.h 
+main: main.c  event.c  loop.c  render.c  share.c 
 
 clean: 
 	@rm -vf *.o main

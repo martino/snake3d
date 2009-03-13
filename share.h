@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 /*
  * include degli altri file
@@ -46,15 +48,15 @@
 #define winHeight 600
 #define winWidth  800
 //texWallR, texWallG, texWallB, texUp, texDown;
-#define TWR   0
-#define TWG   1
-#define TWB   2
-#define TG    3
-#define TS    4
-#define BR    5
-#define BREF  6
+#define TWR   0  /*wallr.tga*/
+#define TWG   1  /*wallg.tga*/
+#define TWB   2  /*wallb.tga*/
+#define TG    3  /*ground.tga*/
+#define TS    4  /*sky.tga*/
+#define BR    5  /*ball.tga*/
+#define BREF  6  /*bref.tga*/
 #define NTEX  7
-#define WORLDIM 100.0f
+#define WORLDIM 200.0f
 #define PIOVER180 0.0174532925f
 #define WORMDIA 3.5f
 #define DIA     3.5f
@@ -102,8 +104,8 @@ typedef struct{
 
 typedef struct{
   GLfloat x, y,z; /* centro */
-  GLint   dia;  /* diametro */
-  
+  GLint   timer;  /* timer */
+  GLint   texture;/* texture utilizzata */
 } Sphere;
 
 struct WSphereStruct;
@@ -197,6 +199,7 @@ typedef struct{
 extern Data  programData;
 extern World worldData;
 extern Worm  myWorm;
+extern Sphere ball;
 
 /*
  * prototipi funzioni
@@ -204,10 +207,15 @@ extern Worm  myWorm;
 
 /* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
 GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
-
+/* gestione verme */
 int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat);
 int increaseWorm(GLfloat, GLfloat, GLuint);
 void destroyWorm();
 void moveWorm(GLfloat, GLfloat, GLuint);
 void printWorm();
+/* gestione sfere */
+int initializeBall();
+void generateBall();
+void destroyBall();
+
 #endif

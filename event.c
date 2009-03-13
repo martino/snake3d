@@ -102,6 +102,9 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   if(key == 'y'){ 
     worldData.cColor = 3;
   }
+  if(key == 'd'){ 
+    generateBall();
+  }
   /*
     if(key == 'u'){ 
     worldData.position[0] += 0.1f;

@@ -294,7 +294,6 @@ glEnable(GL_LIGHTING);
  */
 void createWorld(){
   GLfloat x = WORLDIM, y = WORLDIM, z = WORLDIM;
-  GLfloat dim = WORMDIA;
 
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
@@ -387,7 +386,7 @@ void createWorld(){
   glEndList();
   
   glNewList(worldData.ball, GL_COMPILE);
-    gluSphere(worldData.q, dim, 32, 16);
+    gluSphere(worldData.q, DIA, 32, 16);
   glEndList();
 }
 
@@ -420,29 +419,27 @@ void drawBall(){
 
   glPushMatrix();
 
-  glTranslatef(0.0f,0.0f, -50.0f);
+  glTranslatef(ball.x, ball.y, ball.z);
   
-  glColor3f(1.0f, 1.0f, 1.0f);
+/*   glColor3f(1.0f, 1.0f, 1.0f); */
 
-  glBindTexture(GL_TEXTURE_2D, worldData.texObj[BR]);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
-  //  gluSphere(worldData.q, 3.0f, 32, 16);
   glCallList(worldData.ball);
-  glBindTexture(GL_TEXTURE_2D, worldData.texObj[BREF]);
-  glColor4f(1.0f, 1.0f, 1.0f, 0.4f);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-  glEnable(GL_TEXTURE_GEN_S);
-  glEnable(GL_TEXTURE_GEN_T);
-  //gluSphere(worldData.q, 3.0f, 32, 16);
-  glCallList(worldData.ball);
+  /* glBindTexture(GL_TEXTURE_2D, worldData.texObj[BREF]); */
+/*   glColor4f(1.0f, 1.0f, 1.0f, 0.4f); */
+/*   glEnable(GL_BLEND); */
+/*   glBlendFunc(GL_SRC_ALPHA, GL_ONE); */
+/*   glEnable(GL_TEXTURE_GEN_S); */
+/*   glEnable(GL_TEXTURE_GEN_T); */
+/*   glCallList(worldData.ball); */
 
   glPopMatrix();
 
 
-  glDisable(GL_TEXTURE_GEN_S);
-  glDisable(GL_TEXTURE_GEN_T);
-  glDisable(GL_BLEND);
+/*   glDisable(GL__TEXTURE_GEN_S); */
+/*   glDisable(GL_TEXTURE_GEN_T); */
+/*   glDisable(GL_BLEND); */
 
 }
 
