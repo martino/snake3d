@@ -384,10 +384,17 @@ void createWorld(){
     glVertex3f(-x, y,  z);
    glEnd();
   glEndList();
-  
+
+  /*verme*/
+  glNewList(worldData.worm, GL_COMPILE);
+    gluSphere(worldData.q, WORMDIA, 32, 16);
+  glEndList();
+
+  /*palla*/
   glNewList(worldData.ball, GL_COMPILE);
     gluSphere(worldData.q, DIA, 32, 16);
   glEndList();
+
 }
 
 
@@ -404,7 +411,7 @@ void drawWorm(){
     glPushMatrix();
 
     glTranslatef(-ite->x, -ite->y, ite->z);
-    glCallList(worldData.ball);
+    glCallList(worldData.worm);
     glPopMatrix();
     ite = ite->prev;
   }

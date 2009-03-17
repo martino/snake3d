@@ -59,8 +59,8 @@
 #define WORLDIM 200.0f
 #define PIOVER180 0.0174532925f
 #define WORMDIA 3.5f
-#define DIA     3.5f
-#define VELOCITY 5
+#define DIA     7.0f
+#define VELOCITY 40
 
 
 /*
@@ -134,7 +134,7 @@ typedef struct{
 typedef struct{
   /* texture */
   GLuint texObj[NTEX];
-  GLuint wall, wallsd, ground, sky, ball;
+  GLuint wall, wallsd, ground, sky, ball, worm;
   GLuint cColor;
   
   /* luci */

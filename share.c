@@ -154,13 +154,24 @@ int initializeBall(){
 void generateBall(){
   float randf;
   randf = ((float)random())/RAND_MAX;
-  ball.x =  (int)(randf*(WORLDIM-DIA));
+  ball.x =  (int)(randf*((WORLDIM-DIA)/2));
 
   randf = ((float)random())/RAND_MAX;
-  ball.y =  (int)(randf*(WORLDIM-DIA));
+  if(((int)(randf*10))%2)
+    ball.x = ball.x * -1;
+ 
+  randf = ((float)random())/RAND_MAX;
+  ball.y =  (int)(randf*((WORLDIM-DIA)/2));
+  randf = ((float)random())/RAND_MAX;
+  if(((int)(randf*10))%2)
+    ball.y = ball.y * -1;
+
 
   randf = ((float)random())/RAND_MAX;
-  ball.z =  (int)(randf*(WORLDIM-DIA));
+  ball.z =  (int)(randf*((WORLDIM-DIA)/2));
+  randf = ((float)random())/RAND_MAX;
+  if(((int)(randf*10))%2)
+    ball.z = ball.z * -1;
 
   fprintf(stderr, "x %f y %f z %f\n", ball.x, ball.y, ball.z);
 }

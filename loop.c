@@ -38,13 +38,17 @@ int checkWall(float xy, float z, int piano){
  *   x-y-z1 e' l'oggetto in movimento
  *
  */
-int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
+int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
   GLuint x=0,y=0,z=0;
-  GLfloat dim = DIA;
-  if((x1+dim > x2-dim)&&(x1-dim < x2+dim)) x=1; 
-  if((y1+dim > y2-dim)&&(y1-dim < y2+dim)) y=1; 
-  if((z1-dim < z2+dim)&&(z1+dim > z2-dim)) z=1; 
   
+  /* fprintf(stderr, "oggetto 1 %f %f %f %f\n", x1, y1, z1, dim1); */
+/*   fprintf(stderr, "oggetto 2 %f %f %f %f\n", x2, y2, z2, dim2); */
+    
+  if((x1+dim1 > x2-dim2)&&(x1-dim1 < x2+dim2)) x=1; 
+  if((y1+dim1 > y2-dim2)&&(y1-dim1 < y2+dim2)) y=1; 
+  if((z1-dim1 < z2+dim2)&&(z1+dim1 > z2-dim2)) z=1; 
+  
+  /* fprintf(stderr, "risultato x %d y %d z %d\n", x, y, z); */
   if(x&&y&&z)
     return 1;
   else 
@@ -299,8 +303,23 @@ void loop(){
       moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 1)){
 	/*collision testa del verme*/
-	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
-	  fprintf(stderr, " presa!\n");
+	if(sCollisionDetection(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z, WORMDIA, DIA)){
+	  if(worldData.yStatus == 0){
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	  }
+	  else{
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	  }
+	  generateBall();
+	  fprintf(stderr, "nuove coordinate ball %f %f %f\n", ball.x, ball.y, ball.z);
+	  fprintf(stderr, " presa X!\n");
+	}
       }else{
 	/* e' uscito dai muri */
 	programData.gameStatus = 0;
@@ -313,8 +332,22 @@ void loop(){
       moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/
-	if(sCollisionDetection((myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, 0, 0, -50.0f))
-	  fprintf(stderr, " presa!\n");
+	if(sCollisionDetection(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z, WORMDIA, DIA)){
+	  if(worldData.yStatus == 0){
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+	  }
+	  else{
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+	  }
+	  generateBall();
+	  fprintf(stderr, " presa Y!\n");
+	}
       }else{
 	/* e' uscito dai muri */
 	programData.gameStatus = 0;

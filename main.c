@@ -182,11 +182,12 @@ int initialize(int argc, char *argv[]){
   /*
    * Creo le display list
    */
-  worldData.wall   = glGenLists(5);
+  worldData.wall   = glGenLists(6);
   worldData.ground = worldData.wall + 1;
   worldData.sky    = worldData.wall + 2;
   worldData.ball   = worldData.wall + 3;
   worldData.wallsd = worldData.wall + 4;
+  worldData.worm   = worldData.wall + 5;
   createWorld();
   worldData.cColor = 1;
   
@@ -265,7 +266,7 @@ int initialize(int argc, char *argv[]){
   worldData.nextYstatus = 0;
   programData.velocity = VELOCITY;
   programData.timeFrame = 1250/programData.velocity;
-  programData.velAngolare = 30/programData.velocity;
+  programData.velAngolare = programData.velocity*0.2;
     
   fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
 
