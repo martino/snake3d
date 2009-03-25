@@ -59,8 +59,9 @@ int initialize(int argc, char *argv[]){
   
   sprintf(programData.fps, "FPS: --");
 
-
+  /* Effetti grafici */
   programData.multisample = 0;
+  programData.fog = 0;
 
   /*
    * Inizializzazione openGL

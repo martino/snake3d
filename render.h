@@ -21,4 +21,5 @@ void lightWorld();
 void lightFront();
 void createWorld();
 void renderText(float, float, char *);
+void fog(GLint);
 #endif

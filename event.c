@@ -74,7 +74,18 @@ void keyHandler(GLubyte key, GLint x, GLint y){
       fprintf(stderr, "MULTISAMPLE OFF\n");
       glDisable(GL_MULTISAMPLE);
     }
-    
+  }
+
+  if(key == 'g'){ // nebbia
+    programData.fog= !programData.fog;
+    if(programData.fog){
+      fprintf(stderr, "FOG ON\n");
+      fog(1);
+    }
+    else{
+      fprintf(stderr, "FOG OFF\n");
+      fog(0);
+    }
   }
   
   if(key == 'n'){ // nuova partita

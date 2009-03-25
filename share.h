@@ -191,6 +191,7 @@ typedef struct{
 
   /* effetti grafici */
   GLint multisample;
+  GLint fog;
 
 } Data;
 
