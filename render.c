@@ -33,6 +33,7 @@ void changeSize(GLint w, GLint h){
   gluPerspective(45.0f, ratio, 0.3f, 1000.0f);
   
   glMatrixMode(GL_MODELVIEW);
+  glutWarpPointer(programData.width/2, programData.height/2);
   
 }
 

@@ -11,19 +11,28 @@
  * gestisce il mouse
  */
 void mouseHandler(int x, int y){
-  float tmpX, tmpY;
+  float tmpX = 0.0f, tmpY = 0.0f;
 
   if((worldData.angleY != worldData.nextAngleY) || (worldData.angleX != worldData.nextAngleX))
     return;
   
   tmpX = x - (programData.width / 2);
   tmpY = y - (programData.height / 2);
-  
+
   if((tmpX == 0.0f) && (tmpY == 0.0f))
     return;
 
+  if(tmpY > 8.0f)
+    tmpY = 8.0;
+  if(tmpX > 8.0f)
+    tmpX = 8.0;
+
   worldData.angleMX += tmpY * 0.25f;
   worldData.angleMY += tmpX * 0.25f;
+  
+/*   fprintf(stderr, "MX %f  MY %f ", worldData.angleMX, worldData.angleMY); */
+/*   fprintf(stderr, "tmp x %f  y %f ", tmpX, tmpY); */
+/*   fprintf(stderr, "x %d  y %d \n", x, y); */
   
   if( (worldData.angleMY > (worldData.angleY+45.0f)) ||  (worldData.angleMY< (worldData.angleY-45.0f) ))
     worldData.angleMY -= tmpX * 0.25f;
@@ -33,6 +42,7 @@ void mouseHandler(int x, int y){
 
 
   glutWarpPointer(programData.width/2, programData.height/2);
+
 
 }
 
@@ -51,6 +61,19 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   }
   
   if(key == 'f'){ // fullscreen
+    
+  }
+
+  if(key == 'b'){ // multisample
+    programData.multisample = !programData.multisample;
+    if(programData.multisample){
+      fprintf(stderr, "MULTISAMPLE ON\n");
+      glEnable(GL_MULTISAMPLE);
+    }
+    else{
+      fprintf(stderr, "MULTISAMPLE OFF\n");
+      glDisable(GL_MULTISAMPLE);
+    }
     
   }
   

@@ -59,12 +59,15 @@ int initialize(int argc, char *argv[]){
   
   sprintf(programData.fps, "FPS: --");
 
+
+  programData.multisample = 0;
+
   /*
    * Inizializzazione openGL
    */
 
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
   glutInitWindowPosition(0, 0);
   glutInitWindowSize(programData.width, programData.height);
   glutCreateWindow("SnakeTreD");
@@ -233,9 +236,7 @@ int initialize(int argc, char *argv[]){
 
 
   /* Inizializzo la posizione della telecamera */
-  /*  worldData.x = 0.0f;
-  worldData.y = 0.0f;
-  worldData.z = 80.0f;*/
+
   worldData.angleX = 0.0f;
   worldData.angleY = 0.0f;
 
@@ -244,6 +245,9 @@ int initialize(int argc, char *argv[]){
 
   worldData.nextAngleX = 0.0f;
   worldData.nextAngleY = 0.0f;
+
+  worldData.nextAngleMX = 0.0f;
+  worldData.nextAngleMY = 0.0f;
 
   /* Inizializzo il verme */
   initializeWorm(0.0f, 0.0f, 83.5f, 0);

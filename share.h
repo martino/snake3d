@@ -60,7 +60,7 @@
 #define PIOVER180 0.0174532925f
 #define WORMDIA 3.5f
 #define DIA     7.0f
-#define VELOCITY 40
+#define VELOCITY 10
 
 
 /*
@@ -188,6 +188,9 @@ typedef struct{
   GLint menu;
   GLint fullscreen; 
   GLint gameStatus; /* flag per la gestione della sconfitta*/
+
+  /* effetti grafici */
+  GLint multisample;
 
 } Data;
 

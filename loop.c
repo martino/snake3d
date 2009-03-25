@@ -172,14 +172,12 @@ void loop(){
     if(worldData.xStatus == 0){ /* sto andando dritto */
       if(worldData.kleft){
 	worldData.nextXstatus = 1; /* vado a sinistra */
-	/*-----*/
 	worldData.nextAngleY = worldData.angleY - 90.0f ;
 	worldData.nextAngleMY = worldData.angleMY - 90.0f ;
 	worldData.angleY = worldData.angleMY;
       }
       else{
 	worldData.nextXstatus = 2; /* vado a destra */
-	/*-----*/
 	worldData.nextAngleY = worldData.angleY + 90.0f ;
 	worldData.nextAngleMY = worldData.angleMY + 90.0f ;
 	worldData.angleY = worldData.angleMY;
@@ -279,12 +277,14 @@ void loop(){
       break;
     case 2: /* devo muovermi a destra */
       worldData.angleMY += programData.velAngolare;
+/*       fprintf(stderr, "%f \n", worldData.angleMY); */
       moveFrame = 0;
       if(worldData.angleMY > worldData.nextAngleMY){
 	worldData.angleMY = worldData.nextAngleMY;
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
+	fprintf(stderr, "---- %f \n", worldData.angleMY);
       }
       break;
     default:
