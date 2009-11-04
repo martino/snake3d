@@ -137,6 +137,64 @@ void renderText(float x, float y, char *string){
 }
 
 /*
+ * Funzione che visualizza la mappa di gioco
+ */
+void renderMap(){
+  GLint x=10, y, dim=120, bdim = 2;
+  GLfloat xw,xb,yw,yb,dw=5.0,db = 10.0;
+  GLfloat xrb=0, yrb=0, xrw=0, yrw=0;
+  GLfloat maxD,currD;
+  GLfloat br=0.0f;
+  yrw = ((((myWorm.head)->x+ WORLDIM )*(dim-dw))/(WORLDIM*2));
+  xrw = ((((myWorm.head)->z+ WORLDIM )*(dim-dw))/(WORLDIM*2));
+
+  yrb = (((ball.x+ WORLDIM )*(dim-db))/(WORLDIM*2));
+  xrb = (((ball.z+ WORLDIM )*(dim-db))/(WORLDIM*2));
+
+  printf("%f %f\n",xrb, ball.z);
+  y=600-dim-10;
+
+  xw = x;
+  xb = x;
+  yw = y;
+  yb = y;
+
+  maxD = WORLDIM - WORMDIA - DIA;
+  currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-WORMDIA-DIA/2;
+  
+  br = 1-(currD)/(maxD);
+
+    
+  setOrtographicProjection(); 
+  glLoadIdentity();
+  glDisable(GL_TEXTURE_2D);
+
+  glColor3f(0.0f, 1.0f, 0.0f); 
+  glRectf(xw+xrw,yw+yrw, xw+10+xrw, yw+10+yrw);	
+
+
+  glColor3f(br, 0.0f, 0.0f); 
+  glRectf(xb+xrb,yb+yrb, xb+xrb+db, yb+yrb+db);	
+
+  glColor3f(0.6f, 0.6f, 0.6f); 
+  // mappa vera e propria
+  glRectf(x,y, x+dim, y+dim);
+  //bordi
+  glColor3f(0.0f, 0.0f, 0.0f); 
+  glRectf(x-bdim,y-bdim, x, y+dim+bdim);
+  glRectf(x+dim,y-bdim, x+dim+bdim, y+dim+bdim);
+  glRectf(x,y-bdim, x+dim, y+bdim);
+  glRectf(x,y+dim, x+dim, y+dim+bdim);
+
+
+
+
+  glColor3f(1.0f, 1.0f, 1.0f); 
+  glEnable(GL_TEXTURE_2D);
+  resetPerspectiveProjection();
+}
+
+/*
  * Funzione per visualizzare il menù
  */
 void renderMenu(){
@@ -528,13 +586,13 @@ void render(){
 
   glPushAttrib(GL_LIGHTING_BIT);
 
-  // Turn off lighting and specify a bright yellow sphere
   glDisable(GL_LIGHTING);
   
   setOrtographicProjection();
   glLoadIdentity();
   renderText(8, 20, programData.fps);
   renderText(660, 20, programData.pointsOSD);
+  //  renderMap();
   resetPerspectiveProjection();
 
   /* nel caso si visualizzasse il menù */
@@ -581,7 +639,7 @@ void render(){
   lightFront();
   drawWorld();
 
-
+  renderMap();
   glutSwapBuffers();
 
 }

@@ -38,7 +38,7 @@ int checkWall(float xy, float z, int piano){
  *   x-y-z1 e' l'oggetto in movimento
  *
  */
-int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
+int sCollisionDetectionOld(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
   GLuint x=0,y=0,z=0;
   
   if(dim1==dim2){
@@ -62,6 +62,23 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
   else 
     return 0;
 }
+
+
+int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
+  GLdouble d;
+  dim1 = dim1/2;
+  dim2 = dim2/2;
+
+  d = dist2Point(x1, y1, z1, x2, y2, z2);
+  //  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
+
+  if(d<(dim1+dim2))
+    return 1;
+  else
+    return 0;
+  
+}
+
 
 /*
  *  qui bisogna gestire tutto quello che riguarda i vari "update" del gioco, quindi

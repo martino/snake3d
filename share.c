@@ -120,6 +120,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
     (myWorm.head)->z = oldHead->z + (z*myWorm.dia);
   }
   
+
   tmp = (myWorm.head)->prev;
   /* collision detection tra le sfere del verme*/
   
@@ -131,6 +132,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
     tmp = tmp->prev;
   }
   //  fprintf(stderr, "ok ... \n");
+  //  printf("%f %f %f \n", (myWorm.head)->y,(myWorm.head)->x,(myWorm.head)->z);
   return 1;
 }
 
@@ -280,3 +282,11 @@ GLbyte *gltLoadTGA(const char *fileName, GLint *iWidth, GLint *iHeight, GLint *i
   return pBits;
 }
         
+
+/*
+ * Funzione che calcola la distanza euclidea
+ */
+
+GLdouble dist2Point(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
+  return sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2)));
+}

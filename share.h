@@ -223,5 +223,6 @@ void printWorm();
 int initializeBall();
 void generateBall();
 void destroyBall();
+GLdouble dist2Point(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
 
 #endif
