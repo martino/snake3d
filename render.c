@@ -140,46 +140,54 @@ void renderText(float x, float y, char *string){
  * Funzione che visualizza la mappa di gioco
  */
 void renderMap(){
-  GLint x=10, y, dim=120, bdim = 2;
-  GLfloat xw,xb,yw,yb,dw=5.0,db = 10.0;
+  GLint x=10, y, dim=120, bdim = 2; // variabili per la gestione della mappa
+  GLfloat xw,xb,yw,yb,dw=5.0,db = 10.0; // gestione del verme e della palla
   GLfloat xrb=0, yrb=0, xrw=0, yrw=0;
   GLfloat maxD,currD;
   GLfloat br=0.0f;
-  yrw = ((((myWorm.head)->x+ WORLDIM )*(dim-dw))/(WORLDIM*2));
-  xrw = ((((myWorm.head)->z+ WORLDIM )*(dim-dw))/(WORLDIM*2));
 
-  yrb = (((ball.x+ WORLDIM )*(dim-db))/(WORLDIM*2));
-  xrb = (((ball.z+ WORLDIM )*(dim-db))/(WORLDIM*2));
-
-  printf("%f %f\n",xrb, ball.z);
+  /* inizializzo le variabili */
   y=600-dim-10;
-
   xw = x;
   xb = x;
   yw = y;
   yb = y;
 
+
+  /* calcolo le coordinate in cui si trovano gli oggetti */
+  yrw = ((((myWorm.head)->x+ WORLDIM )*(dim-dw))/(WORLDIM*2));
+  xrw = ((((myWorm.head)->z+ WORLDIM )*(dim-dw))/(WORLDIM*2));
+
+  yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2));
+  xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2));
+
+
+  /* 
+   * calcolo l'intensita` del colore per la palla 
+   *  nero -> distante   rosso -> vicino
+   */
+
   maxD = WORLDIM - WORMDIA - DIA;
   currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-WORMDIA-DIA/2;
-  
   br = 1-(currD)/(maxD);
 
     
   setOrtographicProjection(); 
   glLoadIdentity();
   glDisable(GL_TEXTURE_2D);
-
+    
+  /* disegno il verme */
   glColor3f(0.0f, 1.0f, 0.0f); 
   glRectf(xw+xrw,yw+yrw, xw+10+xrw, yw+10+yrw);	
 
-
+  /* disegno la palla */
   glColor3f(br, 0.0f, 0.0f); 
   glRectf(xb+xrb,yb+yrb, xb+xrb+db, yb+yrb+db);	
 
   glColor3f(0.6f, 0.6f, 0.6f); 
-  // mappa vera e propria
+  /* rettangolo della mappa */
   glRectf(x,y, x+dim, y+dim);
-  //bordi
+  /* bordi della mappa */
   glColor3f(0.0f, 0.0f, 0.0f); 
   glRectf(x-bdim,y-bdim, x, y+dim+bdim);
   glRectf(x+dim,y-bdim, x+dim+bdim, y+dim+bdim);
