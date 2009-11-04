@@ -90,6 +90,46 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   
   if(key == 'n'){ // nuova partita
     programData.gameStatus = 1;
+    programData.points= 0;
+
+    /* Inizializzo la posizione della telecamera */
+    
+    worldData.angleX = 0.0f;
+    worldData.angleY = 0.0f;
+    
+    worldData.angleMX = 0.0f;
+    worldData.angleMY = 0.0f;
+    
+    worldData.nextAngleX = 0.0f;
+    worldData.nextAngleY = 0.0f;
+    
+    worldData.nextAngleMX = 0.0f;
+    worldData.nextAngleMY = 0.0f;
+    
+    /* Inizializzo il verme */
+    initializeWorm(0.0f, 0.0f, 83.5f, 0);
+    srand(time(NULL));
+    
+    /* Inizializzo la palla */
+    initializeBall();
+    
+    /* Inizializzo i dati utilizzati per la telecamera */
+    
+    worldData.kup    = 0;
+    worldData.kdown  = 0;
+    worldData.kleft  = 0;
+    worldData.kright = 0;
+    
+    worldData.xStatus = 0;
+    worldData.yStatus = 0;
+    
+    worldData.nextXstatus = 0;
+    worldData.nextYstatus = 0;
+    programData.velocity = VELOCITY;
+    programData.timeFrame = 1250/programData.velocity;
+    programData.velAngolare = programData.velocity*0.2;
+    
+
     /*worldData.x = 0.0f;
     worldData.y = 0.0f;
     worldData.z = 0.0f;*/

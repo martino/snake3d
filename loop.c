@@ -41,14 +41,22 @@ int checkWall(float xy, float z, int piano){
 int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
   GLuint x=0,y=0,z=0;
   
-  /* fprintf(stderr, "oggetto 1 %f %f %f %f\n", x1, y1, z1, dim1); */
-/*   fprintf(stderr, "oggetto 2 %f %f %f %f\n", x2, y2, z2, dim2); */
-    
-  if((x1+dim1 > x2-dim2)&&(x1-dim1 < x2+dim2)) x=1; 
-  if((y1+dim1 > y2-dim2)&&(y1-dim1 < y2+dim2)) y=1; 
-  if((z1-dim1 < z2+dim2)&&(z1+dim1 > z2-dim2)) z=1; 
-  
-  /* fprintf(stderr, "risultato x %d y %d z %d\n", x, y, z); */
+  if(dim1==dim2){
+    /*hanno lo stesso raggio*/
+    if((x1-dim1 == x2) || (x1+dim1 == x2) || (x1 == x2)) x=1; 
+    if((y1-dim1 == y2) || (y1+dim1 == y2) || (y1 == y2)) y=1; 
+    if((z1-dim1 == z2) || (z1+dim1 == z2) || (z1 == z2)) z=1; 
+
+    fprintf(stderr, "oggetto 1 %f %f %f %f\n", x1, y1, z1, dim1);
+    fprintf(stderr, "oggetto 2 %f %f %f %f\n", x2, y2, z2, dim2);
+  }else{
+    if((x1+dim1 > x2-dim2)&&(x1-dim1 < x2+dim2)) x=1; 
+    if((y1+dim1 > y2-dim2)&&(y1-dim1 < y2+dim2)) y=1; 
+    if((z1-dim1 < z2+dim2)&&(z1+dim1 > z2-dim2)) z=1; 
+  }
+
+/*   if(dim1==dim2) */
+   /*  fprintf(stderr, "risultato x %d y %d z %d\n", x, y, z); */
   if(x&&y&&z)
     return 1;
   else 
@@ -79,7 +87,8 @@ void loop(){
     return;
     break;
   case 1: /* sto giocando */
-    /* continuo*/
+    /* continuo e stampo i punti */
+    sprintf(programData.pointsOSD, "PUNTI: %d",programData.points );
     break;
   case 2: /* ho vinto */
     return;
@@ -319,6 +328,7 @@ void loop(){
 	  generateBall();
 	  fprintf(stderr, "nuove coordinate ball %f %f %f\n", ball.x, ball.y, ball.z);
 	  fprintf(stderr, " presa X!\n");
+	  programData.points+=100;
 	}
       }else{
 	/* e' uscito dai muri */
@@ -347,6 +357,7 @@ void loop(){
 	  }
 	  generateBall();
 	  fprintf(stderr, " presa Y!\n");
+	  programData.points+=100;
 	}
       }else{
 	/* e' uscito dai muri */

@@ -13,6 +13,6 @@
 
 void loop();
 int checkWall(float, float, int);
-
+int sCollisionDetection(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
 
 #endif

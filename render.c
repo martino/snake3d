@@ -27,7 +27,7 @@ void fog(GLint flag){
 	 *	* GL_FOG_END		specifica dove termina la nebbia (default 1)
 	 */
 	glFogfv(GL_FOG_COLOR, fFog);		
-	glFogf(GL_FOG_DENSITY, 0.1f);
+	glFogf(GL_FOG_DENSITY, 0.01f);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 
 
@@ -534,16 +534,17 @@ void render(){
   setOrtographicProjection();
   glLoadIdentity();
   renderText(8, 20, programData.fps);
+  renderText(660, 20, programData.pointsOSD);
   resetPerspectiveProjection();
 
   /* nel caso si visualizzasse il menù */
   if(programData.menu){
-	setOrtographicProjection();
+    setOrtographicProjection();
     glLoadIdentity();
-	renderMenu();
-	resetPerspectiveProjection();
-	/*	glutSwapBuffers();
-		return;*/
+    renderMenu();
+    resetPerspectiveProjection();
+    /*	glutSwapBuffers();
+	return;*/
   }
   
   switch(programData.gameStatus){
@@ -579,10 +580,6 @@ void render(){
   //lightWorld();
   lightFront();
   drawWorld();
-
-  
- 
-  
 
 
   glutSwapBuffers();

@@ -14,12 +14,12 @@
 /*
  * include OpenGL
  */
-// Mac OS X
-#ifdef __APPLE__
+
+#ifdef __APPLE__                // Mac OS X
 #include <OpenGL/gl.h>		// Apple OpenGL haders (version depends on OS X SDK version)
 #include <OpenGL/glu.h>		// OpenGL Utilities
 #include <Glut/glut.h>		// Apples Implementation of GLUT
-#else  // conto di essere in linux
+#else                           // Linux
 #include <GL/glut.h>
 #endif
 
@@ -182,12 +182,14 @@ typedef struct{
   
   /* variabili utilizzate per l'OSD */
   GLchar fps[10];
+  GLchar pointsOSD[100];
   
   /* gestione flusso del programma */
   GLint exit;
   GLint menu;
   GLint fullscreen; 
   GLint gameStatus; /* flag per la gestione della sconfitta*/
+  GLint points;
 
   /* effetti grafici */
   GLint multisample;
@@ -215,7 +217,7 @@ GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
 int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat);
 int increaseWorm(GLfloat, GLfloat, GLuint);
 void destroyWorm();
-void moveWorm(GLfloat, GLfloat, GLuint);
+int moveWorm(GLfloat, GLfloat, GLuint);
 void printWorm();
 /* gestione sfere */
 int initializeBall();

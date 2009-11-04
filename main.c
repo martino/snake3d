@@ -56,8 +56,11 @@ int initialize(int argc, char *argv[]){
   programData.exit = 0;
   programData.gameStatus = 1;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
-  
+  programData.points= 0;
+
   sprintf(programData.fps, "FPS: --");
+  sprintf(programData.pointsOSD, "PUNTI: %d", programData.points);
+  
 
   /* Effetti grafici */
   programData.multisample = 0;

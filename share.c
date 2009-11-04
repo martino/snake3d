@@ -91,9 +91,10 @@ int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
  *  dir -> indica il piano in cui mi muovo 0=xz 1=yz
  *  xy e z -> sono i "segni"
  */
-void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
+int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   WSphere *oldHead = myWorm.head;
   WSphere *oldTail = myWorm.tail;
+  WSphere *tmp;
 
   if(myWorm.dim > 1){
   /* sistemo la coda */
@@ -112,14 +113,25 @@ void moveWorm(GLfloat xy, GLfloat z, GLuint dir){
     (myWorm.head)->x = oldHead->x - (xy*myWorm.dia);
     (myWorm.head)->y = oldHead->y;
     (myWorm.head)->z = oldHead->z - (z*myWorm.dia);
-    //    fprintf(stderr, "%f %f %f\n", oldHead->z, z, myWorm.dia);
-
   }else{
     /* sposto il verme sul piano Y */
     (myWorm.head)->x = oldHead->x;
     (myWorm.head)->y = oldHead->y + (xy*myWorm.dia);
     (myWorm.head)->z = oldHead->z + (z*myWorm.dia);
   }
+  
+  tmp = (myWorm.head)->prev;
+  /* collision detection tra le sfere del verme*/
+  
+  while(tmp!=NULL){
+    if(sCollisionDetection(((myWorm.head)->x), ((myWorm.head)->y), (myWorm.head)->z, tmp->x, tmp->y, tmp->z, WORMDIA, WORMDIA)){
+      fprintf(stderr, "presa... \n");
+      return 0;
+    }
+    tmp = tmp->prev;
+  }
+  //  fprintf(stderr, "ok ... \n");
+  return 1;
 }
 
 /* Funzione di DEBUG che visualizza il verme*/
