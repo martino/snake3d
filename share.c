@@ -126,7 +126,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   
   while(tmp!=NULL){
     if(sCollisionDetection(((myWorm.head)->x), ((myWorm.head)->y), (myWorm.head)->z, tmp->x, tmp->y, tmp->z, WORMDIA, WORMDIA)){
-      fprintf(stderr, "presa... \n");
+      fprintf(stderr, "gnam gnam verme... \n");
       return 0;
     }
     tmp = tmp->prev;

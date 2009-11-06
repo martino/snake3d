@@ -70,7 +70,7 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
   dim2 = dim2/2;
 
   d = dist2Point(x1, y1, z1, x2, y2, z2);
-  //  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
+  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
 
   if(d<(dim1+dim2))
     return 1;
@@ -322,14 +322,27 @@ void loop(){
   /* controllo se sono in posizione tale da muovermi */
   if(moveFrame){
     float offSetX = 0.0f, offSetY = 0.0f, offSetZ = 0.0f;
+    // collision detection
+    double dist;
+    int collision = 0;
+
     if(worldData.yStatus == 0){
       /* movimento sul piano X */
       offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
       offSetZ = (float)cos(worldData.angleY * PIOVER180) * 3.5f;
       moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+
+      dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
+      if(dist<=(WORMDIA+DIA))
+	collision = 1;
+      else
+	collision = 0;
+      //      printf("DEBUG[cd]: distanza %f %f\n",dist, WORMDIA+DIA);
+      
+
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 1)){
 	/*collision testa del verme*/
-	if(sCollisionDetection(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z, WORMDIA, DIA)){
+	if(collision){
 	  if(worldData.yStatus == 0){
 	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
 	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
@@ -357,9 +370,18 @@ void loop(){
       offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
       offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
       moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+
+      dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
+      if(dist<=(WORMDIA+DIA))
+	collision = 1;
+      else
+	collision = 0;
+      //      printf("DEBUG[cd]: distanza %f %f\n",dist, WORMDIA+DIA);
+      
+
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/
-	if(sCollisionDetection(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z, WORMDIA, DIA)){
+	if(collision){
 	  if(worldData.yStatus == 0){
 	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
 	    increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
