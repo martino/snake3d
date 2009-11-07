@@ -145,13 +145,17 @@ void renderMap(){
   GLfloat xrb=0, yrb=0, xrw=0, yrw=0;
   GLfloat maxD,currD;
   GLfloat br=0.0f;
+  WSphere *ite = myWorm.head;
+
+  db = db*(dim-db)/WORLDIM;
+  dw = dw*(dim-db)/WORLDIM;
 
   /* inizializzo le variabili */
   y=600-dim-10;
-  xw = x;
-  xb = x;
-  yw = y;
-  yb = y;
+  xw = x+db/2;
+  xb = x+db/2;
+  yw = y+db/2;
+  yb = y+db/2;
 
 
 
@@ -160,8 +164,8 @@ void renderMap(){
    *  nero -> distante   rosso -> vicino
    */
 
-  maxD = WORLDIM - WORMDIA - DIA;
-  currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-WORMDIA-DIA/2;
+  maxD = WORLDIM - dw - db;
+  currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-dw-db/2;
   br = 1-(currD)/(maxD);
     
   setOrtographicProjection(); 
@@ -171,18 +175,58 @@ void renderMap(){
   /* disegno il verme */
 /*   yrw = ((((myWorm.head)->x+ WORLDIM )*(dim-dw))/(WORLDIM*2)); */
 /*   xrw = ((((myWorm.head)->z+ WORLDIM )*(dim-dw))/(WORLDIM*2)); */
-  yrw = ((((myWorm.head)->x + WORLDIM )*(dim))/(WORLDIM*2));
-  xrw = ((((myWorm.head)->z + WORLDIM )*(dim))/(WORLDIM*2));
-  printf("%f %f \n", (myWorm.head)->z, xrw);
+
   
-  glColor3f(0.0f, 1.0f, 0.0f); 
+  if(ite->y < ball.y){
+    /* verme */
+    glColor3f(0.0f, 1.0f, 0.0f); 
+    glPointSize(dw);
+    while(ite != NULL){
+      yrw = (((ite->x + WORLDIM )*(dim-db))/(WORLDIM*2));
+      xrw = (((ite->z + WORLDIM )*(dim-db))/(WORLDIM*2));
+      glBegin(GL_POINTS);
+      glVertex2d(xrw+xw,yrw+yw);
+      glEnd();
+      ite = ite->prev; 
+    } 
+
+    /* palla */
+    yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
+    xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
+    glColor3f(br, 0.0f, 0.0f); 
+    glPointSize(db);
+    glBegin(GL_POINTS);
+    glVertex2d(xrb+xb,yrb+yb);
+    glEnd();
+  }else{
+    /* palla */
+    yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
+    xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
+    glColor3f(br, 0.0f, 0.0f); 
+    glPointSize(db);
+    glBegin(GL_POINTS);
+    glVertex2d(xrb+xb,yrb+yb);
+    glEnd();
+
+    /* verme */
+    glColor3f(0.0f, 1.0f, 0.0f); 
+    glPointSize(dw);
+    while(ite != NULL){
+      yrw = (((ite->x + WORLDIM )*(dim-db))/(WORLDIM*2));
+      xrw = (((ite->z + WORLDIM )*(dim-db))/(WORLDIM*2));
+      glBegin(GL_POINTS);
+      glVertex2d(xrw+xw,yrw+yw);
+      glEnd();
+      ite = ite->prev; 
+    } 
+
+
+  }
+  
+
 
 /*   glRectf(xw+xrw,yw+yrw, xw+dw+xrw, yw+dw+yrw);	 */
 
-  glPointSize(WORMDIA*2);
-  glBegin(GL_POINTS);
-  glVertex2d(xw+xrw+WORMDIA,yrw+yw+WORMDIA);
-  glEnd();
 
  
   /* calcolo le coordinate in cui si trova la palla */
@@ -190,19 +234,9 @@ void renderMap(){
 /*   xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); */
 /*   glRectf(xb+xrb,yb+yrb, xb+xrb+db, yb+yrb+db);	 */
 
-  yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim))/(WORLDIM*2));
-  xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim))/(WORLDIM*2));
 
-  /* disegno la palla */
-  glColor3f(br, 0.0f, 0.0f); 
-
-  glPointSize(DIA*2);
-  glBegin(GL_POINTS);
-  glVertex2d(xb+xrb,yrb+yb);
-  glEnd();
-
-
-
+  //  printf("bm %f %f b %f %f \n", ball.z, ball.x, xrb+xb, yrb+yb);
+  //  printf("w %f %f b %f %f \n", xrw+xw, yrw+yw, xrb+xb, yrb+yb);
 
   glColor3f(0.6f, 0.6f, 0.6f); 
   /* rettangolo della mappa */
