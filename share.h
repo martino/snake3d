@@ -48,14 +48,16 @@
 #define winHeight 600
 #define winWidth  800
 //texWallR, texWallG, texWallB, texUp, texDown;
-#define TWR   0  /*wallr.tga*/
-#define TWG   1  /*wallg.tga*/
-#define TWB   2  /*wallb.tga*/
-#define TG    3  /*ground.tga*/
-#define TS    4  /*sky.tga*/
-#define BR    5  /*ball.tga*/
-#define BREF  6  /*bref.tga*/
-#define NTEX  7
+#define TR  0
+#define TG  1
+#define TB  2
+#define TMY 3
+#define TW  4
+#define TP  5
+#define TO  6
+#define TBA 7
+
+#define NTEX  8
 #define WORLDIM 200.0f
 #define PIOVER180 0.0174532925f
 #define WORMDIA 3.5f
@@ -137,6 +139,8 @@ typedef struct{
   GLuint wall, wallsd, ground, sky, ball, worm;
   GLuint cColor;
   
+  GLuint texWall, texWallSd;
+
   /* luci */
   GLfloat ambientLight[4];
   GLfloat diffuseLight[4];
@@ -190,6 +194,8 @@ typedef struct{
   GLint fullscreen; 
   GLint gameStatus; /* flag per la gestione della sconfitta*/
   GLint points;
+  GLint invert;
+
 
   /* effetti grafici */
   GLint multisample;
@@ -226,5 +232,5 @@ void generateBall();
 void destroyBall();
 GLdouble dist2Point(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
 void increaseVel(GLint);
-
+int randomNBall();
 #endif

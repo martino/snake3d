@@ -153,13 +153,12 @@ void printWorm(){
 
 /* Inizializzazione palla */
 int initializeBall(){
-  
   ball.x = 0.0f;
   ball.y = 0.0f;
   ball.z = -50.0f;
   ball.timer = 10000;
-  ball.texture = BR;
-  
+  ball.texture = 3;
+/*   ball.texture = randomNBall(); */
   /* generateBall() */
   return 1;
 }
@@ -186,8 +185,17 @@ void generateBall(){
   randf = ((float)random())/RAND_MAX;
   if(((int)(randf*10))%2)
     ball.z = ball.z * -1;
+  
 
-  fprintf(stderr, "x %f y %f z %f\n", ball.x, ball.y, ball.z);
+  if(ball.texture == 3)
+    programData.invert = 1;
+  else
+    programData.invert = 0;
+
+  worldData.texWall = ball.texture;
+  ball.texture = randomNBall();
+
+  fprintf(stderr, "x %f y %f z %f tex %d\n", ball.x, ball.y, ball.z, ball.texture);
 }
 
 /* distrugge una palla */
@@ -385,4 +393,16 @@ void increaseVel(GLint vel){
     
   fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
 
+}
+
+/*
+ * Genera un numero casuale per la texture della palla
+ */
+int randomNBall(){
+  int res = 0;
+  float randf;
+  randf = ((float)random())/RAND_MAX;
+  res =  (int)(randf*4);
+  
+  return res;
 }

@@ -39,9 +39,10 @@ int initialize(int argc, char *argv[]){
 
 
   GLint i = 0;
-  const char *texFiles[] = {"texture/wallr.tga", "texture/wallg.tga", "texture/wallb.tga", 
-			    "texture/ground.tga","texture/sky.tga", 
-			    "texture/ball.tga", "texture/bref.tga" };
+  const char *texFiles[] = {"texture/texr.tga", "texture/texg.tga", 
+			    "texture/texb.tga", "texture/texmy.tga",
+			    "texture/worm.tga", "texture/ground.tga",
+			    "texture/metal.tga", "texture/bref.tga" };
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -57,7 +58,7 @@ int initialize(int argc, char *argv[]){
   programData.gameStatus = 1;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
   programData.points= 0;
-
+  programData.invert = 0;
   sprintf(programData.fps, "FPS: --");
   sprintf(programData.pointsOSD, "PUNTI: %d", programData.points);
   
@@ -189,12 +190,15 @@ int initialize(int argc, char *argv[]){
   /*
    * Creo le display list
    */
-  worldData.wall   = glGenLists(6);
-  worldData.ground = worldData.wall + 1;
-  worldData.sky    = worldData.wall + 2;
-  worldData.ball   = worldData.wall + 3;
-  worldData.wallsd = worldData.wall + 4;
-  worldData.worm   = worldData.wall + 5;
+  worldData.wall      = glGenLists(6);
+  worldData.ground    = worldData.wall + 1;
+  worldData.sky       = worldData.wall + 2;
+  worldData.ball      = worldData.wall + 3;
+  worldData.wallsd    = worldData.wall + 4;
+  worldData.worm      = worldData.wall + 5;
+  worldData.texWall   = TR;
+  worldData.texWallSd = TO;
+    
   createWorld();
   worldData.cColor = 1;
   

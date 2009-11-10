@@ -188,7 +188,22 @@ void renderMap(){
     /* palla */
     yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
     xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
-    glColor3f(bcolor, 0.0f, 0.0f); 
+    switch(ball.texture){
+    case 0:
+      glColor3f(bcolor, 0.0f, 0.0f); 
+      break;
+    case 1:
+      glColor3f(0.0f, bcolor, 0.0f); 
+      break;
+    case 2:
+      glColor3f(0.0f, 0.0f, bcolor); 
+      break;
+    case 3:
+      glColor3f(bcolor, bcolor, bcolor); 
+      break;
+    }
+
+
     glPointSize(db);
     glBegin(GL_POINTS);
     glVertex2d(xrb+xb,yrb+yb);
@@ -197,7 +212,20 @@ void renderMap(){
     /* palla */
     yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
     xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
-    glColor3f(bcolor, 0.0f, 0.0f); 
+    switch(ball.texture){
+    case 0:
+      glColor3f(bcolor, 0.0f, 0.0f); 
+      break;
+    case 1:
+      glColor3f(0.0f, bcolor, 0.0f); 
+      break;
+    case 2:
+      glColor3f(0.0f, 0.0f, bcolor); 
+      break;
+    case 3:
+      glColor3f(bcolor, bcolor, bcolor); 
+      break;
+    }
     glPointSize(db);
     glBegin(GL_POINTS);
     glVertex2d(xrb+xb,yrb+yb);
@@ -420,18 +448,19 @@ glEnable(GL_LIGHTING);
  */
 void createWorld(){
   GLfloat x = WORLDIM, y = WORLDIM, z = WORLDIM;
-
+  GLfloat rep = 5.0f;
+  GLfloat repsd = 10.0f;
   glNewList(worldData.wall,GL_COMPILE);
    /*retro*/
    glBegin(GL_QUADS);
     glNormal3f(0.0f, 0.0f, -10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, z);
-    glTexCoord2f(10.0f, 0.0f);
+    glTexCoord2f(rep, 0.0f);
     glVertex3f( x, -y, z);
-    glTexCoord2f(10.0f, 10.0f);
+    glTexCoord2f(rep, rep);
     glVertex3f( x,  y, z);
-    glTexCoord2f(0.0f, 10.0f);
+    glTexCoord2f(0.0f, rep);
     glVertex3f(-x,  y, z);
 
    glEnd();
@@ -441,11 +470,11 @@ void createWorld(){
     glNormal3f(0.0f, 0.0f, 10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
-    glTexCoord2f(5.0f, 0.0f);
+    glTexCoord2f(rep, 0.0f);
     glVertex3f( x, -y, -z);
-    glTexCoord2f(5.0f, 5.0f);
+    glTexCoord2f(rep, rep);
     glVertex3f( x,  y, -z);
-    glTexCoord2f(0.0f, 5.0f);
+    glTexCoord2f(0.0f, rep);
     glVertex3f(-x,  y, -z);
    glEnd();
   glEndList();
@@ -456,11 +485,11 @@ void createWorld(){
     glNormal3f(10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
-    glTexCoord2f(10.0f, 0.0f);
+    glTexCoord2f(repsd, 0.0f);
     glVertex3f(-x, -y,  z);
-    glTexCoord2f(10.0f, 10.0f);
+    glTexCoord2f(repsd, repsd);
     glVertex3f(-x,  y,  z);
-    glTexCoord2f(0.0f, 10.0f);
+    glTexCoord2f(0.0f, repsd);
     glVertex3f(-x,  y, -z);
    glEnd(); 
 
@@ -469,11 +498,11 @@ void createWorld(){
     glNormal3f(-10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(x, -y, -z);
-    glTexCoord2f(10.0f, 0.0f);
+    glTexCoord2f(repsd, 0.0f);
     glVertex3f(x, -y,  z);
-    glTexCoord2f(10.0f, 10.0f);
+    glTexCoord2f(repsd, repsd);
     glVertex3f(x,  y,  z);
-    glTexCoord2f(0.0f, 10.0f);
+    glTexCoord2f(0.0f, repsd);
     glVertex3f(x,  y, -z);
    glEnd();
 
@@ -502,11 +531,11 @@ void createWorld(){
     glNormal3f(0.0f, -10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, y, -z);
-    glTexCoord2f(5.0f, 0.0f);
+    glTexCoord2f(repsd, 0.0f);
     glVertex3f( x, y, -z);
-    glTexCoord2f(5.0f, 5.0f);
+    glTexCoord2f(repsd, repsd);
     glVertex3f( x, y,  z);
-    glTexCoord2f(0.0f, 5.0f);
+    glTexCoord2f(0.0f, repsd);
     glVertex3f(-x, y,  z);
    glEnd();
   glEndList();
@@ -584,16 +613,16 @@ void drawWorld(){
   glPushMatrix();
 
   // richiama le varie list in base al colore della texture i wall
-  glBindTexture(GL_TEXTURE_2D, worldData.cColor);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[worldData.texWall]);
   glCallList(worldData.wall);
-  glBindTexture(GL_TEXTURE_2D, worldData.cColor+2);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[worldData.texWallSd]);
   glCallList(worldData.wallsd);
 
   //soffitto
   //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
   glCallList(worldData.sky);
   // ed infine il pavimento
-  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TG]);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TP]);
   glCallList(worldData.ground);
   glPopMatrix();
 

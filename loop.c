@@ -33,37 +33,6 @@ int checkWall(float xy, float z, int piano){
 
 
 
-/*
- * Collision detection tra due sfere
- *   x-y-z1 e' l'oggetto in movimento
- *
- */
-int sCollisionDetectionOld(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
-  GLuint x=0,y=0,z=0;
-  
-  if(dim1==dim2){
-    /*hanno lo stesso raggio*/
-    if((x1-dim1 == x2) || (x1+dim1 == x2) || (x1 == x2)) x=1; 
-    if((y1-dim1 == y2) || (y1+dim1 == y2) || (y1 == y2)) y=1; 
-    if((z1-dim1 == z2) || (z1+dim1 == z2) || (z1 == z2)) z=1; 
-
-    fprintf(stderr, "oggetto 1 %f %f %f %f\n", x1, y1, z1, dim1);
-    fprintf(stderr, "oggetto 2 %f %f %f %f\n", x2, y2, z2, dim2);
-  }else{
-    if((x1+dim1 > x2-dim2)&&(x1-dim1 < x2+dim2)) x=1; 
-    if((y1+dim1 > y2-dim2)&&(y1-dim1 < y2+dim2)) y=1; 
-    if((z1-dim1 < z2+dim2)&&(z1+dim1 > z2-dim2)) z=1; 
-  }
-
-/*   if(dim1==dim2) */
-   /*  fprintf(stderr, "risultato x %d y %d z %d\n", x, y, z); */
-  if(x&&y&&z)
-    return 1;
-  else 
-    return 0;
-}
-
-
 int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
   GLdouble d;
   dim1 = dim1/2;

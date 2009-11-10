@@ -220,25 +220,35 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 void specialKeyHandler(GLint key, GLint x, GLint y){
   if(key == GLUT_KEY_RIGHT){
     /*     worldData.angleY += 90.0f; */
-    worldData.kright = 1;
+    if(programData.invert == 0)
+      worldData.kright = 1;
+    else
+      worldData.kleft = 1;
   }
 
   if(key == GLUT_KEY_LEFT){
     /*     worldData.angleY -= 90.0f; */
-    worldData.kleft = 1;
+    if(programData.invert == 0)
+      worldData.kleft = 1;
+    else
+      worldData.kright = 1;
   }
   
 
   if(key == GLUT_KEY_UP){
 /*     worldData.angleY += 90.0f; */
-    worldData.kup = 1;
-
+    if(programData.invert == 0)
+      worldData.kup = 1;
+    else
+      worldData.kdown = 1;
   }
 
   if(key == GLUT_KEY_DOWN){
 /*     worldData.angleY -= 90.0f; */
-    worldData.kdown = 1;
-
+    if(programData.invert == 0)
+      worldData.kdown = 1;
+    else
+      worldData.kup = 1;
   }
   
 
