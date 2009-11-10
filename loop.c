@@ -70,7 +70,7 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
   dim2 = dim2/2;
 
   d = dist2Point(x1, y1, z1, x2, y2, z2);
-  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
+  //  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
 
   if(d<(dim1+dim2))
     return 1;
@@ -330,7 +330,9 @@ void loop(){
       /* movimento sul piano X */
       offSetX = (float)sin(worldData.angleY * PIOVER180) * 3.5f; 
       offSetZ = (float)cos(worldData.angleY * PIOVER180) * 3.5f;
-      moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
+      if(!moveWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0)){
+	programData.gameStatus = 0;
+      }
 
       dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
       if(dist<=(WORMDIA+DIA))
@@ -359,6 +361,7 @@ void loop(){
 	  fprintf(stderr, "nuove coordinate ball %f %f %f\n", ball.x, ball.y, ball.z);
 	  fprintf(stderr, " presa X!\n");
 	  programData.points+=100;
+	  increaseVel(5);
 	}
       }else{
 	/* e' uscito dai muri */
@@ -369,7 +372,10 @@ void loop(){
       /* movimento sul piano Y */
       offSetY = (float)sin(worldData.angleX * PIOVER180) * 3.5f;
       offSetZ = (float)cos(worldData.angleX * PIOVER180) * 3.5f; 
-      moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
+      if(!moveWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1)){
+	programData.gameStatus = 0;
+      }
+
 
       dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
       if(dist<=(WORMDIA+DIA))
@@ -397,6 +403,7 @@ void loop(){
 	  generateBall();
 	  fprintf(stderr, " presa Y!\n");
 	  programData.points+=100;
+	  increaseVel(5);
 	}
       }else{
 	/* e' uscito dai muri */

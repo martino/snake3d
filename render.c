@@ -144,9 +144,10 @@ void renderMap(){
   GLfloat xw,xb,yw,yb,dw=WORMDIA*2,db = DIA*2; // gestione del verme e della palla
   GLfloat xrb=0, yrb=0, xrw=0, yrw=0;
   GLfloat maxD,currD;
-  GLfloat br=0.0f;
+  GLfloat bcolor=0.0f;
   WSphere *ite = myWorm.head;
-
+  
+  /* rapporto le dimensioni del verme e palla rispetto alla mappa */
   db = db*(dim-db)/WORLDIM;
   dw = dw*(dim-db)/WORLDIM;
 
@@ -157,8 +158,6 @@ void renderMap(){
   yw = y+db/2;
   yb = y+db/2;
 
-
-
   /* 
    * calcolo l'intensita` del colore per la palla 
    *  nero -> distante   rosso -> vicino
@@ -166,18 +165,14 @@ void renderMap(){
 
   maxD = WORLDIM - dw - db;
   currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-dw-db/2;
-  br = 1-(currD)/(maxD);
+  bcolor = 1-(currD)/(maxD);
     
   setOrtographicProjection(); 
   glLoadIdentity();
   glDisable(GL_TEXTURE_2D);
   glEnable(GL_POINT_SMOOTH);    
-  /* disegno il verme */
-/*   yrw = ((((myWorm.head)->x+ WORLDIM )*(dim-dw))/(WORLDIM*2)); */
-/*   xrw = ((((myWorm.head)->z+ WORLDIM )*(dim-dw))/(WORLDIM*2)); */
-
   
-  if(ite->y < ball.y){
+  if(ite->y < ball.y*-1.0f){
     /* verme */
     glColor3f(0.0f, 1.0f, 0.0f); 
     glPointSize(dw);
@@ -193,7 +188,7 @@ void renderMap(){
     /* palla */
     yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
     xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
-    glColor3f(br, 0.0f, 0.0f); 
+    glColor3f(bcolor, 0.0f, 0.0f); 
     glPointSize(db);
     glBegin(GL_POINTS);
     glVertex2d(xrb+xb,yrb+yb);
@@ -202,7 +197,7 @@ void renderMap(){
     /* palla */
     yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
     xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); 
-    glColor3f(br, 0.0f, 0.0f); 
+    glColor3f(bcolor, 0.0f, 0.0f); 
     glPointSize(db);
     glBegin(GL_POINTS);
     glVertex2d(xrb+xb,yrb+yb);
@@ -219,25 +214,8 @@ void renderMap(){
       glEnd();
       ite = ite->prev; 
     } 
-
-
   }
   
-
-
-/*   glRectf(xw+xrw,yw+yrw, xw+dw+xrw, yw+dw+yrw);	 */
-
-
- 
-  /* calcolo le coordinate in cui si trova la palla */
-/*   yrb = ((((ball.x*-1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); */
-/*   xrb = ((((ball.z* 1.0f)+ WORLDIM )*(dim-db))/(WORLDIM*2)); */
-/*   glRectf(xb+xrb,yb+yrb, xb+xrb+db, yb+yrb+db);	 */
-
-
-  //  printf("bm %f %f b %f %f \n", ball.z, ball.x, xrb+xb, yrb+yb);
-  //  printf("w %f %f b %f %f \n", xrw+xw, yrw+yw, xrb+xb, yrb+yb);
-
   glColor3f(0.6f, 0.6f, 0.6f); 
   /* rettangolo della mappa */
   glRectf(x,y, x+dim, y+dim);
@@ -247,9 +225,6 @@ void renderMap(){
   glRectf(x+dim,y-bdim, x+dim+bdim, y+dim+bdim);
   glRectf(x,y-bdim, x+dim, y+bdim);
   glRectf(x,y+dim, x+dim, y+dim+bdim);
-
-
-
 
   glColor3f(1.0f, 1.0f, 1.0f); 
   glEnable(GL_TEXTURE_2D);
@@ -452,11 +427,11 @@ void createWorld(){
     glNormal3f(0.0f, 0.0f, -10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, z);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2f(10.0f, 0.0f);
     glVertex3f( x, -y, z);
-    glTexCoord2f(1.0f, 1.0f);
+    glTexCoord2f(10.0f, 10.0f);
     glVertex3f( x,  y, z);
-    glTexCoord2f(0.0f, 1.0f);
+    glTexCoord2f(0.0f, 10.0f);
     glVertex3f(-x,  y, z);
 
    glEnd();
@@ -466,11 +441,11 @@ void createWorld(){
     glNormal3f(0.0f, 0.0f, 10.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2f(5.0f, 0.0f);
     glVertex3f( x, -y, -z);
-    glTexCoord2f(1.0f, 1.0f);
+    glTexCoord2f(5.0f, 5.0f);
     glVertex3f( x,  y, -z);
-    glTexCoord2f(0.0f, 1.0f);
+    glTexCoord2f(0.0f, 5.0f);
     glVertex3f(-x,  y, -z);
    glEnd();
   glEndList();
@@ -481,11 +456,11 @@ void createWorld(){
     glNormal3f(10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, -y, -z);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2f(10.0f, 0.0f);
     glVertex3f(-x, -y,  z);
-    glTexCoord2f(1.0f, 1.0f);
+    glTexCoord2f(10.0f, 10.0f);
     glVertex3f(-x,  y,  z);
-    glTexCoord2f(0.0f, 1.0f);
+    glTexCoord2f(0.0f, 10.0f);
     glVertex3f(-x,  y, -z);
    glEnd(); 
 
@@ -494,11 +469,11 @@ void createWorld(){
     glNormal3f(-10.0f, 0.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(x, -y, -z);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2f(10.0f, 0.0f);
     glVertex3f(x, -y,  z);
-    glTexCoord2f(1.0f, 1.0f);
+    glTexCoord2f(10.0f, 10.0f);
     glVertex3f(x,  y,  z);
-    glTexCoord2f(0.0f, 1.0f);
+    glTexCoord2f(0.0f, 10.0f);
     glVertex3f(x,  y, -z);
    glEnd();
 
@@ -527,11 +502,11 @@ void createWorld(){
     glNormal3f(0.0f, -10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-x, y, -z);
-    glTexCoord2f(1.0f, 0.0f);
+    glTexCoord2f(5.0f, 0.0f);
     glVertex3f( x, y, -z);
-    glTexCoord2f(1.0f, 1.0f);
+    glTexCoord2f(5.0f, 5.0f);
     glVertex3f( x, y,  z);
-    glTexCoord2f(0.0f, 1.0f);
+    glTexCoord2f(0.0f, 5.0f);
     glVertex3f(-x, y,  z);
    glEnd();
   glEndList();
@@ -609,10 +584,11 @@ void drawWorld(){
   glPushMatrix();
 
   // richiama le varie list in base al colore della texture i wall
-  glBindTexture(GL_TEXTURE_2D, worldData.cColor+2);
-  glCallList(worldData.wallsd);
   glBindTexture(GL_TEXTURE_2D, worldData.cColor);
   glCallList(worldData.wall);
+  glBindTexture(GL_TEXTURE_2D, worldData.cColor+2);
+  glCallList(worldData.wallsd);
+
   //soffitto
   //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
   glCallList(worldData.sky);

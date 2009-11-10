@@ -282,6 +282,88 @@ GLbyte *gltLoadTGA(const char *fileName, GLint *iWidth, GLint *iHeight, GLint *i
   return pBits;
 }
         
+/*
+ * Funzione per scrivere il contenuto del front buffer in un file TGA
+ * senza RLE encoding
+ * parametri:
+ *   - nome del file TGA
+ */
+
+GLint gltWriteTGA(const char *szFileName){
+  FILE *pFile;
+  TGAHEADER tgaHeader;
+  unsigned long lImageSize;
+  GLbyte *pBits = NULL;
+  GLint iViewport[4];
+  GLenum lastBuffer;
+
+
+  // ottengo la dimensione del viewport
+  glGetIntegerv(GL_VIEWPORT, iViewport);
+  
+  // otengo la dimensione dell'immagine
+  lImageSize = iViewport[2] * 3 * iViewport[3];
+
+  //allogo i blocchi
+  pBits = (GLbyte *)malloc(lImageSize);
+  if(pBits == NULL)
+    return 0;
+
+  // leggo i bit dal color bufer
+  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+  glPixelStorei(GL_PACK_ROW_LENGTH, 0);
+  glPixelStorei(GL_PACK_SKIP_ROWS, 0);
+  glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
+
+  
+  
+  // Ottengo il read buffer e lo salvo
+  // Leggo il front buffer e lo leggo
+  // Alla fine ripristino il readBuffer
+  glGetIntegerv(GL_READ_BUFFER, &lastBuffer);
+  glReadBuffer(GL_FRONT);
+  glReadPixels(0, 0, iViewport[2], iViewport[3], GL_BGR, GL_UNSIGNED_BYTE, pBits);
+  glReadBuffer(lastBuffer);
+
+  // Inizializzo l'header TGA
+  tgaHeader.identsize = 0;
+  tgaHeader.colorMapType = 0;
+  tgaHeader.imageType = 2;
+  tgaHeader.colorMapStart = 0;
+  tgaHeader.colorMapLength = 0;
+  tgaHeader.colorMapBits = 0;
+  tgaHeader.xstart = 0;
+  tgaHeader.ystart = 0;
+  tgaHeader.width = iViewport[2];
+  tgaHeader.height = iViewport[3];
+  tgaHeader.bits = 24;
+  tgaHeader.descriptor = 0;
+
+  
+  //apro il file
+  pFile = fopen(szFileName, "wb");
+
+  if(pFile == NULL){
+    free(pBits);
+    return 0;
+  }
+
+  //scrivo l'header
+  fwrite(&tgaHeader, sizeof(TGAHEADER), 1, pFile);
+
+  //scrivo l'immagine
+  fwrite(pBits, lImageSize, 1, pFile);
+
+  //libero la memoria e chiudo il file
+  free(pBits);
+  fclose(pFile);
+
+  return 1;
+}
+
+
+
+
 
 /*
  * Funzione che calcola la distanza euclidea
@@ -289,4 +371,18 @@ GLbyte *gltLoadTGA(const char *fileName, GLint *iWidth, GLint *iHeight, GLint *i
 
 GLdouble dist2Point(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
   return sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2)));
+}
+
+
+/*
+ * Incremento della velocita'
+ */
+void increaseVel(GLint vel){
+
+  programData.velocity += vel;
+  programData.timeFrame = 1250/programData.velocity;
+  programData.velAngolare = programData.velocity*0.2;
+    
+  fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
+
 }

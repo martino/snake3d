@@ -149,12 +149,10 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   }
   
 
-  if(key == 's'){
-    programData.velocity  += 5;
-    programData.timeFrame = 1250/programData.velocity;
-    programData.velAngolare = programData.velocity*0.2;
-    fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
-    programData.timerender = programData.time;
+  if(key == 's'){//screenshot
+    gltWriteTGA("screenshot.tga");
+
+
   }
 
   if(key == 'x'){

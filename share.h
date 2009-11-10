@@ -213,6 +213,7 @@ extern Sphere ball;
 
 /* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
 GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
+GLint gltWriteTGA(const char *szFileName);
 /* gestione verme */
 int initializeWorm(GLfloat, GLfloat, GLfloat, GLfloat);
 int increaseWorm(GLfloat, GLfloat, GLuint);
@@ -224,5 +225,6 @@ int initializeBall();
 void generateBall();
 void destroyBall();
 GLdouble dist2Point(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
+void increaseVel(GLint);
 
 #endif
