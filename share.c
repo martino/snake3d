@@ -127,6 +127,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   while(tmp!=NULL){
     if(sCollisionDetection(((myWorm.head)->x), ((myWorm.head)->y), (myWorm.head)->z, tmp->x, tmp->y, tmp->z, WORMDIA, WORMDIA)){
       fprintf(stderr, "gnam gnam verme... \n");
+      fprintf(stderr, "%f %f %f %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, tmp->x, tmp->y, tmp->z);
       return 0;
     }
     tmp = tmp->prev;
@@ -378,7 +379,7 @@ GLint gltWriteTGA(const char *szFileName){
  */
 
 GLdouble dist2Point(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
-  return sqrt(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2)));
+  return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2));
 }
 
 

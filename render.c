@@ -109,7 +109,10 @@ void resetPerspectiveProjection(){
 void renderText(float x, float y, char *string){
   char *c;
   int xi = x;
-  
+  glDisable(GL_TEXTURE_2D);
+
+  /* glColor3f(1.0f, 0.505f, 0.0f); arancio fico */
+  glColor3f(0.0f, 0.0f, 0.0f);
   for(c=string; *c != '\0'; c++){
     /* la funzione glRasterPos2 mi permette di specificare la posizione
        x e y di un oggetto */
@@ -134,6 +137,9 @@ void renderText(float x, float y, char *string){
      */
     xi = xi + glutBitmapWidth((int *)programData.font, *c); // + spacing;
   }
+  glColor3f(1.0f, 1.0f, 1.0f); 
+  glEnable(GL_TEXTURE_2D);
+
 }
 
 /*
@@ -164,7 +170,7 @@ void renderMap(){
    */
 
   maxD = WORLDIM - dw - db;
-  currD = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z)-dw-db/2;
+  currD = sqrt(dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z))-dw-db/2;
   bcolor = 1-(currD)/(maxD);
     
   setOrtographicProjection(); 
@@ -299,7 +305,7 @@ void renderStatus(){
     break;
   case 2:
     sprintf(text, "HAI VINTO!!");
-  break;
+    break;
   default:
     sprintf(text, "Ma che ci fai qui??");
     break;
@@ -309,11 +315,24 @@ void renderStatus(){
     glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
     xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
   }
-
-
-  xi = x - 70;
+  if(programData.points >= 10000)
+    xi = x - 65;
+  else
+    if(programData.points >= 1000)
+      xi = x - 60;
+    else
+      xi = x - 55;
   y += 25;
 
+  sprintf(text, "Hai totalizzato %d punti", programData.points);
+    for(c = text; *c != '\0'; c++){
+    glRasterPos2f(xi, y);
+    glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+    xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
+  }
+
+  xi = x - 60;
+  y += 25;
   sprintf(text, "Premi N per ricominciare");
   for(c = text; *c != '\0'; c++){
     glRasterPos2f(xi, y);

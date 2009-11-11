@@ -31,13 +31,9 @@ void TimerFunc(int value){
 
 
 int initialize(int argc, char *argv[]){
-
-
   /*
    * Inizializzazione della struttura mondo
    */
-
-
   GLint i = 0;
   const char *texFiles[] = {"texture/texr.tga", "texture/texg.tga", 
 			    "texture/texb.tga", "texture/texmy.tga",
@@ -196,7 +192,8 @@ int initialize(int argc, char *argv[]){
   worldData.ball      = worldData.wall + 3;
   worldData.wallsd    = worldData.wall + 4;
   worldData.worm      = worldData.wall + 5;
-  worldData.texWall   = TR;
+  
+  worldData.texWall   = TB;
   worldData.texWallSd = TO;
     
   createWorld();

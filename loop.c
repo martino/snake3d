@@ -35,15 +35,18 @@ int checkWall(float xy, float z, int piano){
 
 int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat dim1, GLfloat dim2){
   GLdouble d;
+  GLdouble dist;
   dim1 = dim1/2;
   dim2 = dim2/2;
-
+  dist = (dim1+dim2)*(dim1+dim2)-0.01;
+  
   d = dist2Point(x1, y1, z1, x2, y2, z2);
-  //  printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2);
-
-  if(d<(dim1+dim2))
+/*   printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2); */
+  
+  if(d<dist){
+    printf("DEBUG[cd]: distanza %f %f %f %f\n",d, dist, dim1, dim2);
     return 1;
-  else
+  }else
     return 0;
   
 }
@@ -304,7 +307,7 @@ void loop(){
       }
 
       dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
-      if(dist<=(WORMDIA+DIA))
+      if(dist<= ((WORMDIA+DIA)*(WORMDIA+DIA)) )
 	collision = 1;
       else
 	collision = 0;
@@ -347,7 +350,7 @@ void loop(){
 
 
       dist = dist2Point(-((myWorm.head)->x), -((myWorm.head)->y), (myWorm.head)->z, ball.x, ball.y, ball.z);
-      if(dist<=(WORMDIA+DIA))
+      if(dist<= ((WORMDIA+DIA)*(WORMDIA+DIA)) )
 	collision = 1;
       else
 	collision = 0;
