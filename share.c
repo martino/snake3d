@@ -159,7 +159,7 @@ int initializeBall(){
   ball.z = -50.0f;
   ball.timer = 10000;
 
-  ball.texture = randomNBall(); 
+  ball.texture = randomNBall();  
   /* generateBall() */
   return 1;
 }

@@ -56,15 +56,13 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   }
   
   /* gestione dei vari effetti, compreso menù */
-  if(key == 'm'){ // menu
+  if(key == 'p'){ // menu
     programData.menu = !programData.menu;
   }
   
-  if(key == 'f'){ // fullscreen
-    
-  }
 
-  if(key == 'b'){ // multisample
+
+  if(key == 'm'){ // multisample
     programData.multisample = !programData.multisample;
     if(programData.multisample){
       fprintf(stderr, "MULTISAMPLE ON\n");
@@ -76,7 +74,7 @@ void keyHandler(GLubyte key, GLint x, GLint y){
     }
   }
 
-  if(key == 'g'){ // nebbia
+  if(key == 'f'){ // nebbia
     programData.fog= !programData.fog;
     if(programData.fog){
       fprintf(stderr, "FOG ON\n");
@@ -90,6 +88,7 @@ void keyHandler(GLubyte key, GLint x, GLint y){
   
   if(key == 'n'){ // nuova partita
     programData.gameStatus = 1;
+    programData.menu = 0;
     programData.points= 0;
 
     /* Inizializzo la posizione della telecamera */

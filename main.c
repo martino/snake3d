@@ -38,7 +38,8 @@ int initialize(int argc, char *argv[]){
   const char *texFiles[] = {"texture/texr.tga", "texture/texg.tga", 
 			    "texture/texb.tga", "texture/texmy.tga",
 			    "texture/worm.tga", "texture/ground.tga",
-			    "texture/metal.tga", "texture/bref.tga" };
+			    "texture/metal.tga", "texture/bref.tga",
+                            "texture/menu.tga"};
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -49,9 +50,9 @@ int initialize(int argc, char *argv[]){
   programData.timerender = 0;
 
   programData.fullscreen = 0;
-  programData.menu = 0;
+  programData.menu = 1;
   programData.exit = 0;
-  programData.gameStatus = 1;
+  programData.gameStatus = 0;
   programData.font  = (GLint)GLUT_BITMAP_HELVETICA_18;
   programData.points= 0;
   programData.invert = 0;
@@ -71,7 +72,7 @@ int initialize(int argc, char *argv[]){
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
   glutInitWindowPosition(0, 0);
   glutInitWindowSize(programData.width, programData.height);
-  glutCreateWindow("SnakeTreD");
+  glutCreateWindow("Snake3di");
 
 
   /*
@@ -95,6 +96,7 @@ int initialize(int argc, char *argv[]){
     GLenum format;
     
     glBindTexture(GL_TEXTURE_2D, worldData.texObj[i]);
+    printf("%s\n", texFiles[i]);
     pImage = gltLoadTGA(texFiles[i], &width, &height, &components, &format);
    
     /*

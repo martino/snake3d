@@ -158,7 +158,7 @@ void renderMap(){
   dw = dw*(dim-db)/WORLDIM;
 
   /* inizializzo le variabili */
-  y=600-dim-10;
+  y=winHeight-dim-10;
   xw = x+db/2;
   xb = x+db/2;
   yw = y+db/2;
@@ -268,10 +268,13 @@ void renderMap(){
 /*
  * Funzione per visualizzare il menù
  */
-void renderMenu(){
+void renderMenuOld(){
   GLchar text[20];
   GLchar *c;
   GLint x = 80, xi = 80, y = 80;
+  setOrtographicProjection();
+  glLoadIdentity();
+
   sprintf(text, "F - Fullscreen");
   for(c = text; *c != '\0'; c++){
     glRasterPos2f(xi, y);
@@ -287,7 +290,34 @@ void renderMenu(){
     glutBitmapCharacter((int *)programData.font, *c);
     xi = xi + glutBitmapWidth((int *)programData.font, *c);
   }
+
+  resetPerspectiveProjection();
 	
+}
+
+void renderMenu(){
+  GLfloat y = winHeight;
+  GLfloat x = winWidth;
+  setOrtographicProjection();
+  glLoadIdentity();
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TM]);  
+  //  glRectf(x, y, 0,0);
+  
+  glBegin(GL_QUADS);
+
+  glTexCoord2f(0.0f, 0.0f);
+  glVertex2f(0,y);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex2f(x, y);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex2f( x,  0);
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex2f(0,  0);
+  
+  glEnd();
+
+
+  resetPerspectiveProjection();
 }
 
 
@@ -578,12 +608,11 @@ void createWorld(){
  */
 void drawWorm(){
   WSphere *ite = myWorm.head;
-  glBindTexture(GL_TEXTURE_2D, 2);
+  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TW]);
   //  fprintf(stderr, "--- begin verme ---\n");
   while(ite != NULL){
     //    fprintf(stderr,"Palla X %f  Y %f  Z %f \n", ite->x, ite->y, ite->z);
     glPushMatrix();
-
     glTranslatef(-ite->x, -ite->y, ite->z);
     glCallList(worldData.worm);
     glPopMatrix();
@@ -606,21 +635,51 @@ void drawBall(){
 
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
-  glCallList(worldData.ball);
-  /* glBindTexture(GL_TEXTURE_2D, worldData.texObj[BREF]); */
-/*   glColor4f(1.0f, 1.0f, 1.0f, 0.4f); */
-/*   glEnable(GL_BLEND); */
-/*   glBlendFunc(GL_SRC_ALPHA, GL_ONE); */
-/*   glEnable(GL_TEXTURE_GEN_S); */
-/*   glEnable(GL_TEXTURE_GEN_T); */
-/*   glCallList(worldData.ball); */
+  if(ball.texture == TMY){
+    glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
+    glEnable(GL_BLEND);
+    /*
+     * cambia l'equazione con cui si calcola il blending [si creano degli effetti carini]
+     *  GL_FUNC_ADD(default) 	  Cf = (Cs * S) + (Cd* D) 
+     *  GL_FUNC_SUBTRACT 	  Cf = (Cs * S) – (Cd* D) 
+     *  GL_FUNC_REVERSE_SUBTRACT  Cf = (Cd* D) – (Cs * S) 
+     *  GL_MIN 			  Cf = min(Cs, Cd) 
+     *  GL_MAX 			  Cf = max(C, C)
+     */
+    glBlendEquation(GL_FUNC_ADD);
+
+    /*
+     * serve per specificare i due fattori moltiplicatori per i colori
+     * si possono usare i seguenti valori:
+     *  GL_ZERO
+     *  GL_ONE
+     *  GL_SRC_COLOR
+     *  GL_ONE_MINUS_SRC_COLOR
+     *  GL_DST_COLOR
+     *  GL_ONE_MINUS_DST_COLOR
+     *  GL_SRC_ALPHA
+     *  GL_ONE_MINUS_SRC_ALPHA
+     *  GL_DST_ALPHA
+     *  GL_ONE_MINUS_DST_ALPHA
+     *  GL_SRC_ALPHA_SATURATE
+     *  GL_CONSTANT_COLOR
+     *  GL_ONE_MINUS_CONSTANT_COLOR
+     *  GL_CONSTANT_ALPHA
+     *  GL_ONE_MINUS_CONSTANT_ALPHA
+     */
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    glCallList(worldData.ball);
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T); 
+    glDisable(GL_BLEND); 
+  }else{
+    glCallList(worldData.ball);
+  }
 
   glPopMatrix();
 
-
-/*   glDisable(GL__TEXTURE_GEN_S); */
-/*   glDisable(GL_TEXTURE_GEN_T); */
-/*   glDisable(GL_BLEND); */
 
 }
 
@@ -638,9 +697,8 @@ void drawWorld(){
   glCallList(worldData.wallsd);
 
   //soffitto
-  //  glBindTexture(GL_TEXTURE_2D, worldData.texObj[TS]);
   glCallList(worldData.sky);
-  // ed infine il pavimento
+  // pavimento
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TP]);
   glCallList(worldData.ground);
   glPopMatrix();
@@ -673,7 +731,15 @@ void render(){
   glPushAttrib(GL_LIGHTING_BIT);
 
   glDisable(GL_LIGHTING);
-  
+
+  /* nel caso si visualizzasse il menù */
+  if(programData.menu){
+    renderMenu();
+    glutSwapBuffers();
+    return;
+  }
+    
+
   setOrtographicProjection();
   glLoadIdentity();
   renderText(8, 20, programData.fps);
@@ -681,15 +747,6 @@ void render(){
   //  renderMap();
   resetPerspectiveProjection();
 
-  /* nel caso si visualizzasse il menù */
-  if(programData.menu){
-    setOrtographicProjection();
-    glLoadIdentity();
-    renderMenu();
-    resetPerspectiveProjection();
-    /*	glutSwapBuffers();
-	return;*/
-  }
   
   switch(programData.gameStatus){
   case 0:

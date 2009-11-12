@@ -47,7 +47,6 @@
 
 #define winHeight 600
 #define winWidth  800
-//texWallR, texWallG, texWallB, texUp, texDown;
 #define TR  0
 #define TG  1
 #define TB  2
@@ -55,7 +54,7 @@
 #define TW  4
 #define TP  5
 #define TO  6
-#define TBA 7
+#define TM  7
 
 #define NTEX  8
 #define WORLDIM 200.0f
