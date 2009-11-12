@@ -38,8 +38,7 @@ int initialize(int argc, char *argv[]){
   const char *texFiles[] = {"texture/texr.tga", "texture/texg.tga", 
 			    "texture/texb.tga", "texture/texmy.tga",
 			    "texture/worm.tga", "texture/ground.tga",
-			    "texture/metal.tga", "texture/bref.tga",
-                            "texture/menu.tga"};
+			    "texture/metal.tga","texture/menu.tga"};
 
   programData.width = winWidth ;
   programData.height = winHeight;
@@ -61,7 +60,7 @@ int initialize(int argc, char *argv[]){
   
 
   /* Effetti grafici */
-  programData.multisample = 0;
+  programData.multisample = 1;
   programData.fog = 0;
 
   /*
@@ -96,7 +95,6 @@ int initialize(int argc, char *argv[]){
     GLenum format;
     
     glBindTexture(GL_TEXTURE_2D, worldData.texObj[i]);
-    printf("%s\n", texFiles[i]);
     pImage = gltLoadTGA(texFiles[i], &width, &height, &components, &format);
    
     /*
@@ -199,7 +197,6 @@ int initialize(int argc, char *argv[]){
   worldData.texWallSd = TO;
     
   createWorld();
-  worldData.cColor = 1;
   
   
   /*
@@ -227,19 +224,6 @@ int initialize(int argc, char *argv[]){
   worldData.positionA[1] =  -(WORLDIM - 1.0f);
   worldData.positionA[2] =  -(WORLDIM - 1.0f);
   worldData.positionA[3] =   1.0f;
-
-  worldData.spotDirA[0] = -1.0f;
-  worldData.spotDirA[1] = -1.0f;
-  worldData.spotDirA[2] = -1.0f;
-
-  worldData.positionB[0] =  WORLDIM - 1.0f;
-  worldData.positionB[1] = -(WORLDIM - 1.0f);
-  worldData.positionB[2] = -(WORLDIM - 1.0f);
-  worldData.positionB[3] =   1.0f;
-
-  worldData.spotDirB[0] =  1.0f;
-  worldData.spotDirB[1] = -1.0f;
-  worldData.spotDirB[2] = -1.0f;
 
 
   /* Inizializzo la posizione della telecamera */

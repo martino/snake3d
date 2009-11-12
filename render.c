@@ -109,9 +109,9 @@ void resetPerspectiveProjection(){
 void renderText(float x, float y, char *string){
   char *c;
   int xi = x;
+  setOrtographicProjection();
+  glLoadIdentity();
   glDisable(GL_TEXTURE_2D);
-
-  /* glColor3f(1.0f, 0.505f, 0.0f); arancio fico */
   glColor3f(0.0f, 0.0f, 0.0f);
   for(c=string; *c != '\0'; c++){
     /* la funzione glRasterPos2 mi permette di specificare la posizione
@@ -139,7 +139,8 @@ void renderText(float x, float y, char *string){
   }
   glColor3f(1.0f, 1.0f, 1.0f); 
   glEnable(GL_TEXTURE_2D);
-
+  resetPerspectiveProjection();
+  
 }
 
 /*
@@ -268,33 +269,6 @@ void renderMap(){
 /*
  * Funzione per visualizzare il menù
  */
-void renderMenuOld(){
-  GLchar text[20];
-  GLchar *c;
-  GLint x = 80, xi = 80, y = 80;
-  setOrtographicProjection();
-  glLoadIdentity();
-
-  sprintf(text, "F - Fullscreen");
-  for(c = text; *c != '\0'; c++){
-    glRasterPos2f(xi, y);
-    glutBitmapCharacter((int *)programData.font, *c);
-    xi = xi + glutBitmapWidth((int *)programData.font, *c);
-  }
-
-  xi = x; 
-  y = 100;
-  sprintf(text, "N - Nebbia");
-  for(c = text; *c != '\0'; c++){
-    glRasterPos2f(xi, y);
-    glutBitmapCharacter((int *)programData.font, *c);
-    xi = xi + glutBitmapWidth((int *)programData.font, *c);
-  }
-
-  resetPerspectiveProjection();
-	
-}
-
 void renderMenu(){
   GLfloat y = winHeight;
   GLfloat x = winWidth;
@@ -315,8 +289,6 @@ void renderMenu(){
   glVertex2f(0,  0);
   
   glEnd();
-
-
   resetPerspectiveProjection();
 }
 
@@ -329,6 +301,12 @@ void renderStatus(){
   GLchar *c;
   GLint x = (programData.width/2)-80, xi , y = programData.height/2;
   xi = x;
+
+  setOrtographicProjection();
+  glLoadIdentity();
+  glDisable(GL_TEXTURE_2D);
+
+  glColor3f(1.0f, 0.505f, 0.0f);
   switch(programData.gameStatus){
   case 0:
     sprintf(text, "HAI PERSO"); /* premi pippo per riniziare*/
@@ -345,17 +323,19 @@ void renderStatus(){
     glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
     xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
   }
+
   if(programData.points >= 10000)
-    xi = x - 65;
+    xi = x - 55;
   else
     if(programData.points >= 1000)
-      xi = x - 60;
+      xi = x - 50;
     else
-      xi = x - 55;
+      xi = x - 45;
   y += 25;
 
-  sprintf(text, "Hai totalizzato %d punti", programData.points);
-    for(c = text; *c != '\0'; c++){
+  sprintf(text, "Totalizzando %d punti", programData.points); 
+
+  for(c = text; *c != '\0'; c++){
     glRasterPos2f(xi, y);
     glutBitmapCharacter((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
     xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
@@ -370,19 +350,23 @@ void renderStatus(){
     xi = xi + glutBitmapWidth((int *)GLUT_BITMAP_TIMES_ROMAN_24, *c);
   }
 
+  glColor3f(1.0f, 1.0f, 1.0f); 
+  glEnable(GL_TEXTURE_2D);
+  resetPerspectiveProjection();
+  glutSwapBuffers();
+
+
 }
 
 
 /*
  * Funzione che gestisce le luci
  */
-
 void lightWorld(){
 
   glEnable(GL_LIGHTING);
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
 
-
   /*
    * imposta i parametri per le luci
    * 
@@ -403,58 +387,6 @@ void lightWorld(){
    * 
    * l'ultimo parametro sono i valori che si impostano
    */
-  glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
-  glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
-  glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
-  /* test spotlight */
-  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 60.0f);
-  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, worldData.spotDirA);
-  /* abilito la luce */
-  glEnable(GL_LIGHT0);
-
-  glLightfv(GL_LIGHT1, GL_AMBIENT,  worldData.ambientLight);
-  glLightfv(GL_LIGHT1, GL_DIFFUSE,  worldData.diffuseLight);	
-  glLightfv(GL_LIGHT1, GL_SPECULAR, worldData.specularLight);
-  glLightfv(GL_LIGHT1, GL_POSITION, worldData.positionB);
-  /* test spotlight */
-  glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 60.0f);
-  glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, worldData.spotDirB);
-  /* abilito la luce */
-  glEnable(GL_LIGHT1);
-
-
-}
-
-/*
- * Prova di una luce frontale
- */
-void lightFront(){
-glEnable(GL_LIGHTING);
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
-
-
-  /*
-   * imposta i parametri per le luci
-   * 
-   * il primo parametro è il nome della luce:
-   * GL_LIGHT n  -> 0 <= n <= maxlight
-   * 
-   * il secondo parametro sono i parametri della luce che si imposteranno:
-   *  * GL_AMBIENT
-   *  * GL_DIFFUSE
-   *  * GL_SPECULAR
-   *  * GL_POSITION
-   *  * GL_SPOT_CUTOFF
-   *  * GL_SPOT_DIRECTION
-   *  * GL_SPOT_EXPONENT
-   *  * GL_CONSTANT_ATTENUATION
-   *  * GL_LINEAR_ATTENUATION
-   *  * GL_QUADRATIC_ATTENUATION
-   * 
-   * l'ultimo parametro sono i valori che si impostano
-   */
-  glDisable(GL_LIGHT1);
   
   worldData.ambientLight[0] = 0.6f;
   worldData.ambientLight[1] = 0.6f;
@@ -466,29 +398,18 @@ glEnable(GL_LIGHTING);
   worldData.diffuseLight[2] = 0.0f;
   worldData.diffuseLight[3] = 1.0f;
 
-
-
   worldData.positionA[0] =  0.0f;
   worldData.positionA[1] =  0.0f;
   worldData.positionA[2] =  0.0f;
   worldData.positionA[3] =  0.0f;
 
-  worldData.spotDirA[0] = 0.0f;
-  worldData.spotDirA[1] = 0.0f;
-  worldData.spotDirA[2] = 5.0f;
-
-  
   glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
   glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
   glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
   glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
 
-
-
   /* abilito la luce */
   glEnable(GL_LIGHT0);
-
-
 
 }
 
@@ -739,23 +660,14 @@ void render(){
     return;
   }
     
-
-  setOrtographicProjection();
-  glLoadIdentity();
   renderText(8, 20, programData.fps);
   renderText(660, 20, programData.pointsOSD);
-  //  renderMap();
-  resetPerspectiveProjection();
 
   
   switch(programData.gameStatus){
   case 0:
   case 2:
-    setOrtographicProjection();
-    glLoadIdentity();
     renderStatus();
-    resetPerspectiveProjection();
-    glutSwapBuffers();
     return;
     break;
   default:
@@ -763,23 +675,20 @@ void render(){
 
   }
 
-
   // Restore lighting state variables
   glPopAttrib();
 
   // parte il rendering normale
   
 
- /* telecamera */
+  /* telecamera */
   glLoadIdentity();
   glTranslatef(0, 0, myWorm.dia);   
   glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
   glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
   glTranslatef((myWorm.head)->x, (myWorm.head)->y, -(myWorm.head)->z);
-
-
   //lightWorld();
-  lightFront();
+  lightWorld();
   drawWorld();
 
   renderMap();

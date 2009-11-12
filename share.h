@@ -136,7 +136,6 @@ typedef struct{
   /* texture */
   GLuint texObj[NTEX];
   GLuint wall, wallsd, ground, sky, ball, worm;
-  GLuint cColor;
   
   GLuint texWall, texWallSd;
 
@@ -145,9 +144,7 @@ typedef struct{
   GLfloat diffuseLight[4];
   GLfloat specularLight[4];
   GLfloat positionA[4];
-  GLfloat spotDirA[3];
-  GLfloat positionB[4];
-  GLfloat spotDirB[3];
+
   /* materiali */
   GLfloat specref[4];
 

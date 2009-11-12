@@ -17,6 +17,7 @@ int checkWall(float xy, float z, int piano){
     if((xy <= -WORLDIM)) return 0;
     break;
   case 2: /* controllo il piano Y */
+
     if((xy >=  WORLDIM)) return 0;
     if((xy <= -WORLDIM)) return 0;
     break;
@@ -357,7 +358,7 @@ void loop(){
       //      printf("DEBUG[cd]: distanza %f %f\n",dist, WORMDIA+DIA);
       
 
-      if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
+      if(checkWall((myWorm.head)->y+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/
 	if(collision){
 	  if(worldData.yStatus == 0){

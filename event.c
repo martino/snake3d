@@ -154,63 +154,7 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 
   }
 
-  if(key == 'x'){
-    programData.velocity  -= 5;
-    if(programData.velocity == 0)
-      programData.velocity = 1;
-    
-    programData.timeFrame = 1250/programData.velocity;
-    programData.velAngolare = programData.velocity*0.3;
-    fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
-  }
-  
-  if(key == 'r'){ 
-    worldData.cColor = 1;
-  }
 
-  if(key == 't'){ 
-    worldData.cColor = 2;
-  }
-
-  if(key == 'y'){ 
-    worldData.cColor = 3;
-  }
-  if(key == 'd'){ 
-    generateBall();
-  }
-  /*
-    if(key == 'u'){ 
-    worldData.position[0] += 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-    if(key == 'j'){ 
-    worldData.position[0] -= 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-    if(key == 'i'){ 
-    worldData.position[1] += 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-    if(key == 'k'){ 
-    worldData.position[1] -= 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-    if(key == 'o'){ 
-    worldData.position[2] += 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-    if(key == 'l'){ 
-    worldData.position[2] -= 0.1f;
-    fprintf(stderr, "light pos %f %f %f\n", worldData.position[0], worldData.position[1], worldData.position[2]);
-    }
-
-
-*/
 }
 
 /*  
