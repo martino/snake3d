@@ -88,9 +88,9 @@ void loop(){
   }
 
   /* se sono nel menu' non devo muovere nulla */
-  if(programData.menu == 1)
+  if(programData.menu == 1){
     return;
-  
+  }
 
   /* movimento della telecamera a scatti */
   if(programData.time - programData.timerender > programData.timeFrame){

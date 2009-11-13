@@ -653,13 +653,13 @@ void render(){
 
   glDisable(GL_LIGHTING);
 
-  /* nel caso si visualizzasse il menù */
+  /* visualizzo il menu */
   if(programData.menu){
     renderMenu();
     glutSwapBuffers();
     return;
   }
-    
+   
   renderText(8, 20, programData.fps);
   renderText(660, 20, programData.pointsOSD);
 

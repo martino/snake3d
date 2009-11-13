@@ -128,6 +128,9 @@ void keyHandler(GLubyte key, GLint x, GLint y){
     programData.timeFrame = 1250/programData.velocity;
     programData.velAngolare = programData.velocity*0.2;
     
+    programData.timerender = programData.time;
+    programData.timebase = programData.time;
+    programData.frame = 0;
 
     /*worldData.x = 0.0f;
     worldData.y = 0.0f;
