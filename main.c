@@ -14,18 +14,19 @@ void cleanup(){
 }
 
 
+
 /*
  * funcizione che funge da "ciclo" principale
  * vengono gestiti gli eventi, gli update ed alla fine viene disegnato tutto
  */
 void TimerFunc(int value){
-  event();
   loop();
   glutPostRedisplay();
   if(programData.exit){
-	cleanup();
-	exit(0);
+    cleanup();
+    exit(0);
   }
+
   glutTimerFunc(16, TimerFunc, 0);
 }
 

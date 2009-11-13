@@ -61,6 +61,8 @@ void loop(){
   GLuint moveFrame = 0;
   GLuint delay = 0;
 
+
+
   /* calcolo del framerate */
   programData.frame++;
   programData.time = glutGet(GLUT_ELAPSED_TIME);
