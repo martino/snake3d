@@ -17,7 +17,6 @@ int checkWall(float xy, float z, int piano){
     if((xy <= -WORLDIM)) return 0;
     break;
   case 2: /* controllo il piano Y */
-
     if((xy >=  WORLDIM)) return 0;
     if((xy <= -WORLDIM)) return 0;
     break;
@@ -169,45 +168,49 @@ void loop(){
 
   /* movimento laterale --> freccia sx e dx */
   if((worldData.kleft)||(worldData.kright)){
-    
-    if(worldData.xStatus == 0){ /* sto andando dritto */
-      if(worldData.kleft){
-	worldData.nextXstatus = 1; /* vado a sinistra */
-	worldData.nextAngleY = worldData.angleY - 90.0f ;
-	worldData.nextAngleMY = worldData.angleMY - 90.0f ;
-	worldData.angleY = worldData.angleMY;
-      }
-      else{
-	worldData.nextXstatus = 2; /* vado a destra */
-	worldData.nextAngleY = worldData.angleY + 90.0f ;
-	worldData.nextAngleMY = worldData.angleMY + 90.0f ;
-	worldData.angleY = worldData.angleMY;
-      }
-      worldData.xStatus = 1;
+    if(((worldData.kleft)&&(worldData.angleY<=-90.0))||((worldData.kright)&&(worldData.angleY>=90.0))) {
+      worldData.kleft  = 0;
+      worldData.kright = 0;
     }else{
-      switch(worldData.nextXstatus){
-      case 1: /* sto andando verso sinistra */
-	if(worldData.kright){
-	  worldData.nextAngleY = worldData.nextAngleY + 90.0f;
-	  worldData.nextAngleMY = worldData.nextAngleMY + 90.0f;
-	  worldData.nextXstatus = 2;
-	  worldData.angleY = worldData.angleMY;
-	}
-	break;
-      case 2: /* sto andando verso destra */
+      if(worldData.xStatus == 0){ /* sto andando dritto */
 	if(worldData.kleft){
-	  worldData.nextAngleY = worldData.nextAngleY - 90.0f;
-	  worldData.nextAngleMY = worldData.nextAngleMY - 90.0f;
-	  worldData.nextXstatus = 1;
+	  worldData.nextXstatus = 1; /* vado a sinistra */
+	  worldData.nextAngleY = worldData.angleY - 90.0f ;
+	  worldData.nextAngleMY = worldData.angleMY - 90.0f ;
 	  worldData.angleY = worldData.angleMY;
 	}
-	break;
-      default:
-	break;
+	else{
+	  worldData.nextXstatus = 2; /* vado a destra */
+	  worldData.nextAngleY = worldData.angleY + 90.0f ;
+	  worldData.nextAngleMY = worldData.angleMY + 90.0f ;
+	  worldData.angleY = worldData.angleMY;
+	}
+	worldData.xStatus = 1;
+      }else{
+	switch(worldData.nextXstatus){
+	case 1: /* sto andando verso sinistra */
+	  if(worldData.kright){
+	    worldData.nextAngleY = worldData.nextAngleY + 90.0f;
+	    worldData.nextAngleMY = worldData.nextAngleMY + 90.0f;
+	    worldData.nextXstatus = 2;
+	    worldData.angleY = worldData.angleMY;
+	  }
+	  break;
+	case 2: /* sto andando verso destra */
+	  if(worldData.kleft){
+	    worldData.nextAngleY = worldData.nextAngleY - 90.0f;
+	    worldData.nextAngleMY = worldData.nextAngleMY - 90.0f;
+	    worldData.nextXstatus = 1;
+	    worldData.angleY = worldData.angleMY;
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
+      worldData.kleft  = 0;
+      worldData.kright = 0;
     }
-    worldData.kleft  = 0;
-    worldData.kright = 0;
   }
  
   
@@ -278,7 +281,6 @@ void loop(){
       break;
     case 2: /* devo muovermi a destra */
       worldData.angleMY += programData.velAngolare;
-/*       fprintf(stderr, "%f \n", worldData.angleMY); */
       moveFrame = 0;
       if(worldData.angleMY > worldData.nextAngleMY){
 	worldData.angleMY = worldData.nextAngleMY;

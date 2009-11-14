@@ -12,7 +12,6 @@
  */
 void mouseHandler(int x, int y){
   float tmpX = 0.0f, tmpY = 0.0f;
-  static int pippo = 0;
   if((worldData.angleY != worldData.nextAngleY) || (worldData.angleX != worldData.nextAngleX))
     return;
 
@@ -22,18 +21,8 @@ void mouseHandler(int x, int y){
   if((tmpX == 0.0f) && (tmpY == 0.0f))
     return;
 
-/*   if(tmpY > 8.0f) tmpY = 8.0; */
-/*   if(tmpX > 8.0f) tmpX = 8.0; */
-
-/*   if(tmpY < -8.0f) tmpYsi = -8.0; */
-/*   if(tmpX < -8.0f) tmpX = -8.0; */
-
   worldData.angleMX += tmpY * 0.25f;
   worldData.angleMY += tmpX * 0.25f;
-  
-/*   fprintf(stderr, "MX %f  MY %f ", worldData.angleMX, worldData.angleMY); */
-/*   fprintf(stderr, "tmp x %f  y %f ", tmpX, tmpY); */
-/*   fprintf(stderr, "x %d  y %d \n", x, y); */
   
   if( (worldData.angleMY > (worldData.angleY+45.0f)) ||  (worldData.angleMY< (worldData.angleY-45.0f) ))
     worldData.angleMY -= tmpX * 0.25f;
@@ -41,11 +30,7 @@ void mouseHandler(int x, int y){
   if( (worldData.angleMX > (worldData.angleX+45.0f)) ||  (worldData.angleMX< (worldData.angleX-45.0f) ))
     worldData.angleMX -= tmpY * 0.25f;
 
-
   glutWarpPointer(programData.width/2, programData.height/2);
-  pippo++;
-  fprintf(stderr, "%d\n", pippo);
-
 
 }
 
