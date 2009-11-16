@@ -147,7 +147,7 @@ void loop(){
 	  worldData.angleX = worldData.nextAngleX;
 	  /* qui bisogna muovere il verme */
 	  worldData.nextAngleX = worldData.angleX - 90.0f;
-	  worldData.nextAngleMX = worldData.angleMX - 90.0f;
+	  worldData.nextAngleMX = worldData.angleX - 90.0f;
 
 	}
       }else{
@@ -157,7 +157,7 @@ void loop(){
  	  worldData.angleX = worldData.nextAngleX;
 	  /* qui bisogna muovere il verme */
 	  worldData.nextAngleX = worldData.angleX  + 90.0f;
-	  worldData.nextAngleMX = worldData.angleMX + 90.0f;
+	  worldData.nextAngleMX = worldData.angleX + 90.0f;
 	}
       }
     }
@@ -287,7 +287,6 @@ void loop(){
 	worldData.angleY = worldData.nextAngleY;
 	worldData.xStatus = 0;
 	worldData.nextXstatus = 0;
-	fprintf(stderr, "---- %f \n", worldData.angleMY);
       }
       break;
     default:
