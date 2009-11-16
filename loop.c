@@ -41,10 +41,9 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
   dist = (dim1+dim2)*(dim1+dim2)-0.01;
   
   d = dist2Point(x1, y1, z1, x2, y2, z2);
-/*   printf("DEBUG[cd]: distanza %f %f %f\n",d, dim1, dim2); */
   
   if(d<dist){
-    printf("DEBUG[cd]: distanza %f %f %f %f\n",d, dist, dim1, dim2);
+/*     printf("DEBUG[cd]: distanza %f %f %f %f\n",d, dist, dim1, dim2); */
     return 1;
   }else
     return 0;
@@ -59,7 +58,6 @@ int sCollisionDetection(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat 
 void loop(){
   GLuint moveFrame = 0;
   GLuint delay = 0;
-
 
 
   /* calcolo del framerate */
@@ -168,49 +166,45 @@ void loop(){
 
   /* movimento laterale --> freccia sx e dx */
   if((worldData.kleft)||(worldData.kright)){
-    if(((worldData.kleft)&&(worldData.angleY<=-90.0))||((worldData.kright)&&(worldData.angleY>=90.0))) {
-      worldData.kleft  = 0;
-      worldData.kright = 0;
-    }else{
-      if(worldData.xStatus == 0){ /* sto andando dritto */
-	if(worldData.kleft){
-	  worldData.nextXstatus = 1; /* vado a sinistra */
-	  worldData.nextAngleY = worldData.angleY - 90.0f ;
-	  worldData.nextAngleMY = worldData.angleMY - 90.0f ;
-	  worldData.angleY = worldData.angleMY;
-	}
-	else{
-	  worldData.nextXstatus = 2; /* vado a destra */
-	  worldData.nextAngleY = worldData.angleY + 90.0f ;
-	  worldData.nextAngleMY = worldData.angleMY + 90.0f ;
-	  worldData.angleY = worldData.angleMY;
-	}
-	worldData.xStatus = 1;
-      }else{
-	switch(worldData.nextXstatus){
-	case 1: /* sto andando verso sinistra */
-	  if(worldData.kright){
-	    worldData.nextAngleY = worldData.nextAngleY + 90.0f;
-	    worldData.nextAngleMY = worldData.nextAngleMY + 90.0f;
-	    worldData.nextXstatus = 2;
-	    worldData.angleY = worldData.angleMY;
-	  }
-	  break;
-	case 2: /* sto andando verso destra */
-	  if(worldData.kleft){
-	    worldData.nextAngleY = worldData.nextAngleY - 90.0f;
-	    worldData.nextAngleMY = worldData.nextAngleMY - 90.0f;
-	    worldData.nextXstatus = 1;
-	    worldData.angleY = worldData.angleMY;
-	  }
-	  break;
-	default:
-	  break;
-	}
+    if(worldData.xStatus == 0){ /* sto andando dritto */
+      if(worldData.kleft){
+	worldData.nextXstatus = 1; /* vado a sinistra */
+	worldData.nextAngleY = worldData.angleY - 90.0f ;
+	worldData.nextAngleMY = worldData.angleMY - 90.0f ;
+	worldData.angleY = worldData.angleMY;
       }
-      worldData.kleft  = 0;
-      worldData.kright = 0;
+      else{
+	worldData.nextXstatus = 2; /* vado a destra */
+	worldData.nextAngleY = worldData.angleY + 90.0f ;
+	worldData.nextAngleMY = worldData.angleMY + 90.0f ;
+	worldData.angleY = worldData.angleMY;
+      }
+      worldData.xStatus = 1;
+    }else{
+      switch(worldData.nextXstatus){
+      case 1: /* sto andando verso sinistra */
+	if(worldData.kright){
+	  worldData.nextAngleY = worldData.nextAngleY + 90.0f;
+	  worldData.nextAngleMY = worldData.nextAngleMY + 90.0f;
+	  worldData.nextXstatus = 2;
+	  worldData.angleY = worldData.angleMY;
+	}
+	break;
+      case 2: /* sto andando verso destra */
+	if(worldData.kleft){
+	  worldData.nextAngleY = worldData.nextAngleY - 90.0f;
+	  worldData.nextAngleMY = worldData.nextAngleMY - 90.0f;
+	  worldData.nextXstatus = 1;
+	  worldData.angleY = worldData.angleMY;
+	}
+	break;
+      default:
+	break;
+      }
     }
+      
+    worldData.kleft  = 0;
+    worldData.kright = 0;
   }
  
   
@@ -315,8 +309,6 @@ void loop(){
 	collision = 1;
       else
 	collision = 0;
-      //      printf("DEBUG[cd]: distanza %f %f\n",dist, WORMDIA+DIA);
-      
 
       if(checkWall((myWorm.head)->x+myWorm.dia, (myWorm.head)->z +myWorm.dia, 1)){
 	/*collision testa del verme*/
@@ -358,8 +350,6 @@ void loop(){
 	collision = 1;
       else
 	collision = 0;
-      //      printf("DEBUG[cd]: distanza %f %f\n",dist, WORMDIA+DIA);
-      
 
       if(checkWall((myWorm.head)->y+myWorm.dia, (myWorm.head)->z +myWorm.dia, 2)){
 	/*collision testa del verme*/

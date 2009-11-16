@@ -62,8 +62,6 @@ int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
   /* xz o yz si capisce come si capisce il movimento */
   /* il piu' o meno si capisce uguale in base al caso xz o yz */
 
-  /* secondo me non e' sempre uguale il segno */
-
   if(dir == 0 ){
     /* sposto il verme sul piano X */
     tmp->x = (myWorm.tail)->x + (xy*myWorm.dia);
@@ -126,14 +124,10 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   
   while(tmp!=NULL){
     if(sCollisionDetection(((myWorm.head)->x), ((myWorm.head)->y), (myWorm.head)->z, tmp->x, tmp->y, tmp->z, WORMDIA, WORMDIA)){
-      fprintf(stderr, "gnam gnam verme... \n");
-      fprintf(stderr, "%f %f %f %f %f %f\n", (myWorm.head)->x, (myWorm.head)->y, (myWorm.head)->z, tmp->x, tmp->y, tmp->z);
       return 0;
     }
     tmp = tmp->prev;
   }
-  //  fprintf(stderr, "ok ... \n");
-  //  printf("%f %f %f \n", (myWorm.head)->y,(myWorm.head)->x,(myWorm.head)->z);
   return 1;
 }
 
@@ -160,7 +154,6 @@ int initializeBall(){
   ball.timer = 10000;
 
   ball.texture = randomNBall();  
-  /* generateBall() */
   return 1;
 }
 
@@ -196,7 +189,7 @@ void generateBall(){
   worldData.texWall = ball.texture;
   ball.texture = randomNBall();
 
-  fprintf(stderr, "x %f y %f z %f tex %d\n", ball.x, ball.y, ball.z, ball.texture);
+  /* fprintf(stderr, "x %f y %f z %f tex %d\n", ball.x, ball.y, ball.z, ball.texture); */
 }
 
 /* distrugge una palla */
@@ -233,7 +226,7 @@ GLbyte *gltLoadTGA(const char *fileName, GLint *iWidth, GLint *iHeight, GLint *i
   *iComponent = GL_RGB8;
 	
   // provo ad aprire il file
-  pFile = fopen(fileName, "rb");  // da provare ad eliminare la b
+  pFile = fopen(fileName, "rb");  
   if(pFile == NULL){
     fprintf(stderr, "Non riesco a caricare il file\n");
     return NULL;
@@ -303,9 +296,7 @@ GLint gltWriteTGA(const char *szFileName){
   TGAHEADER tgaHeader;
   unsigned long lImageSize;
   GLbyte *pBits = NULL;
-  GLint iViewport[4];
-  GLenum lastBuffer;
-
+  GLint iViewport[4], lastBuffer;
 
   // ottengo la dimensione del viewport
   glGetIntegerv(GL_VIEWPORT, iViewport);
@@ -324,8 +315,6 @@ GLint gltWriteTGA(const char *szFileName){
   glPixelStorei(GL_PACK_SKIP_ROWS, 0);
   glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
 
-  
-  
   // Ottengo il read buffer e lo salvo
   // Leggo il front buffer e lo leggo
   // Alla fine ripristino il readBuffer
@@ -387,12 +376,11 @@ GLdouble dist2Point(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, 
  * Incremento della velocita'
  */
 void increaseVel(GLint vel){
-
   programData.velocity += vel;
   programData.timeFrame = 1250/programData.velocity;
   programData.velAngolare = programData.velocity*0.2;
-    
-  fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare);
+
+/*   fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare); */
 
 }
 
@@ -402,6 +390,7 @@ void increaseVel(GLint vel){
 int randomNBall(){
   int res = 0;
   float randf;
+  
   randf = ((float)random())/RAND_MAX;
   res =  (int)(randf*4);
   

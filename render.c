@@ -167,7 +167,7 @@ void renderMap(){
 
   /* 
    * calcolo l'intensita` del colore per la palla 
-   *  nero -> distante   rosso -> vicino
+   *  nero -> distante   colore della palla -> vicino
    */
 
   maxD = WORLDIM - dw - db;
@@ -275,20 +275,18 @@ void renderMenu(){
   setOrtographicProjection();
   glLoadIdentity();
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TM]);  
-  //  glRectf(x, y, 0,0);
-  
-  glBegin(GL_QUADS);
 
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(0,y);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(x, y);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex2f( x,  0);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex2f(0,  0);
-  
+  glBegin(GL_QUADS);
+   glTexCoord2f(0.0f, 0.0f);
+   glVertex2f(0,y);
+   glTexCoord2f(1.0f, 0.0f);
+   glVertex2f(x, y);
+   glTexCoord2f(1.0f, 1.0f);
+   glVertex2f( x,  0);
+   glTexCoord2f(0.0f, 1.0f);
+   glVertex2f(0,  0);
   glEnd();
+  
   resetPerspectiveProjection();
 }
 
@@ -309,7 +307,7 @@ void renderStatus(){
   glColor3f(1.0f, 0.505f, 0.0f);
   switch(programData.gameStatus){
   case 0:
-    sprintf(text, "HAI PERSO"); /* premi pippo per riniziare*/
+    sprintf(text, "HAI PERSO"); 
     break;
   case 2:
     sprintf(text, "HAI VINTO!!");
@@ -354,8 +352,6 @@ void renderStatus(){
   glEnable(GL_TEXTURE_2D);
   resetPerspectiveProjection();
   glutSwapBuffers();
-
-
 }
 
 
@@ -530,17 +526,13 @@ void createWorld(){
 void drawWorm(){
   WSphere *ite = myWorm.head;
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TW]);
-  //  fprintf(stderr, "--- begin verme ---\n");
   while(ite != NULL){
-    //    fprintf(stderr,"Palla X %f  Y %f  Z %f \n", ite->x, ite->y, ite->z);
     glPushMatrix();
     glTranslatef(-ite->x, -ite->y, ite->z);
     glCallList(worldData.worm);
     glPopMatrix();
     ite = ite->prev;
   }
-  //  fprintf(stderr, "--- end verme ---\n");
-
 }
 
 /*
@@ -552,8 +544,6 @@ void drawBall(){
 
   glTranslatef(ball.x, ball.y, ball.z);
   
-/*   glColor3f(1.0f, 1.0f, 1.0f); */
-
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
   if(ball.texture == TMY){
@@ -600,9 +590,8 @@ void drawBall(){
   }
 
   glPopMatrix();
-
-
 }
+
 
 /*
  * Funzione per disegnare il mondo
@@ -628,8 +617,7 @@ void drawWorld(){
   drawWorm();
   /* disegno la palla */
   drawBall();
-  
-  
+ 
 }
 
 
@@ -637,9 +625,6 @@ void drawWorld(){
 
 /*
  *  questa funzione ha il compito di disegnare il tutto
- *
- * nebbia...
- *
  */
  
 void render(){
@@ -678,16 +663,12 @@ void render(){
   // Restore lighting state variables
   glPopAttrib();
 
-  // parte il rendering normale
-  
-
   /* telecamera */
   glLoadIdentity();
   glTranslatef(0, 0, myWorm.dia);   
   glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
   glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
   glTranslatef((myWorm.head)->x, (myWorm.head)->y, -(myWorm.head)->z);
-  //lightWorld();
   lightWorld();
   drawWorld();
 

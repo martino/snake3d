@@ -68,20 +68,6 @@
  * strutture dati
  */
 
-/* esempio
-
-typedef struct{
-	int nvert;
-	int nedge;
-	int nface;
-	
-	float x[MAXVERT], y[MAXVERT], z[MAXVERT];
-	int edge[MAXEDGE][2];
-	int face[MAXFACE][3];
-} Mesh;
-
-*/
-
 
 /* struttura per la gestione delle TGA */
 #pragma pack(1)// da capire bene
@@ -153,10 +139,6 @@ typedef struct{
   GLfloat angleMX, angleMY;
   GLfloat nextAngleX, nextAngleY;
   GLfloat nextAngleMX, nextAngleMY;
-
-
-  /*  GLfloat x, y, z;*/
-  /*  GLfloat lastX, lastY, lastZ;*/
   
   GLuint kup, kdown, kleft, kright;
   GLuint xStatus, yStatus;

@@ -14,7 +14,6 @@ void cleanup(){
 }
 
 
-
 /*
  * funcizione che funge da "ciclo" principale
  * vengono gestiti gli eventi, gli update ed alla fine viene disegnato tutto
@@ -76,20 +75,11 @@ int initialize(int argc, char *argv[]){
 
 
   /*
-   * bisogna inizializzare:
-   *   mondo
-   *   oggetti
-   *
-   */
-
-
-  /*
    * Carico le texutre
    */
   glEnable(GL_TEXTURE_2D);
   glGenTextures(NTEX, worldData.texObj);
-  //parametri delle texutre
-  //  glTexEnvi(GL_TEXTURE....
+    
   for(i=0; i<NTEX; i++){ // carico tutte le texture
     GLbyte *pImage;
     GLint width, height, components;
@@ -285,8 +275,6 @@ int initialize(int argc, char *argv[]){
   glMateriali(GL_FRONT, GL_SHININESS, 128);
 
   
-
-
   glutDisplayFunc(render);
   glutReshapeFunc(changeSize);
   
@@ -321,14 +309,5 @@ int main(int argc, char *argv[]){
   if(!initialize(argc, argv))
     return 0;
 
-  // questo ciclo va messo in una funzione richamata poi dal timer glut
-
-/*   while(1){ */
-/*     event();  */
-/*     loop(); */
-/*     render(); */
-/*   } */
-
-//  cleanup();
   return 1;
 }
