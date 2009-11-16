@@ -326,15 +326,12 @@ void loop(){
 	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
 	  }
 	  generateBall();
-	  fprintf(stderr, "nuove coordinate ball %f %f %f\n", ball.x, ball.y, ball.z);
-	  fprintf(stderr, " presa X!\n");
 	  programData.points+=100;
 	  increaseVel(5);
 	}
       }else{
 	/* e' uscito dai muri */
 	programData.gameStatus = 0;
-	fprintf(stderr, "sono uscito\n");
       }
     }else{
       /* movimento sul piano Y */
@@ -367,14 +364,12 @@ void loop(){
 	    increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
 	  }
 	  generateBall();
-	  fprintf(stderr, " presa Y!\n");
 	  programData.points+=100;
 	  increaseVel(5);
 	}
       }else{
 	/* e' uscito dai muri */
 	programData.gameStatus = 0;
-	fprintf(stderr, "sono uscito\n");
       }
     }
 

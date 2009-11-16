@@ -8,29 +8,27 @@
 #include "render.h"
 
 void fog(GLint flag){
-  GLfloat fFog[] = {0.25f, 0.25f, 0.25f, 1.0f};
+  GLfloat fFog[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
   if(flag){
-    	/*
-	 * glFog serve per impostare i vari parametri della nebbia
-	 *  il primo parametro può essere:
-	 *      * GL_FOG_MODE	specifica l'equazione della nebbia:
-	 *				GL_LINEAR
-	 *				GL_EXP
-	 *				GL_EXP2
-	 *	* GL_FOG_INDEX		specifica il fog index??
-	 *	* GL_FOG_COLOR		specifica il colore della nebbia
-	 *    --> con GL_EXP e GL_EXP2
-	 *	* GL_FOG_DENSITY	specifica la densità della nebbia, il valore iniziale è 1 e deve essere positivo
-	 *    --> con GL_NORMAL
-	 *	* GL_FOG_START		specifica dove inizia la nebbia (default 0)
-	 *	* GL_FOG_END		specifica dove termina la nebbia (default 1)
-	 */
-	glFogfv(GL_FOG_COLOR, fFog);		
-	glFogf(GL_FOG_DENSITY, 0.01f);
-	glFogi(GL_FOG_MODE, GL_EXP2);
-
-
+    /*
+     * glFog serve per impostare i vari parametri della nebbia
+     *  il primo parametro può essere:
+     *      * GL_FOG_MODE	specifica l'equazione della nebbia:
+     *				GL_LINEAR
+     *				GL_EXP
+     *				GL_EXP2
+     *	* GL_FOG_COLOR		specifica il colore della nebbia
+     *    --> con GL_EXP e GL_EXP2
+     *	* GL_FOG_DENSITY	specifica la densità della nebbia, il valore iniziale è 1 e deve essere positivo
+     *    --> con GL_NORMAL
+     *	* GL_FOG_START		specifica dove inizia la nebbia (default 0)
+     *	* GL_FOG_END		specifica dove termina la nebbia (default 1)
+     */
+    glFogi(GL_FOG_MODE, GL_EXP2);
+    glFogfv(GL_FOG_COLOR, fFog);		
+    glFogf(GL_FOG_DENSITY, 0.05f);
+    glHint(GL_FOG_HINT, GL_NICEST); //  Makes the fog per pixel
     glEnable(GL_FOG);
   }else{
     glDisable(GL_FOG);
