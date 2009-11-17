@@ -7,6 +7,7 @@
 
 #include "render.h"
 
+
 void fog(GLint flag){
   GLfloat fFog[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
@@ -14,16 +15,16 @@ void fog(GLint flag){
     /*
      * glFog serve per impostare i vari parametri della nebbia
      *  il primo parametro può essere:
-     *      * GL_FOG_MODE	specifica l'equazione della nebbia:
-     *				GL_LINEAR
-     *				GL_EXP
-     *				GL_EXP2
-     *	* GL_FOG_COLOR		specifica il colore della nebbia
+     *  * GL_FOG_MODE	specifica l'equazione della nebbia:
+     *		GL_LINEAR
+     *		GL_EXP
+     *		GL_EXP2
      *    --> con GL_EXP e GL_EXP2
-     *	* GL_FOG_DENSITY	specifica la densità della nebbia, il valore iniziale è 1 e deve essere positivo
+     *	   * GL_FOG_DENSITY	specifica la densità della nebbia, il valore iniziale è 1 e deve essere positivo
      *    --> con GL_NORMAL
-     *	* GL_FOG_START		specifica dove inizia la nebbia (default 0)
-     *	* GL_FOG_END		specifica dove termina la nebbia (default 1)
+     *	   * GL_FOG_START		specifica dove inizia la nebbia (default 0)
+     *	   * GL_FOG_END		specifica dove termina la nebbia (default 1)
+     *	* GL_FOG_COLOR		specifica il colore della nebbia
      */
     glFogi(GL_FOG_MODE, GL_EXP2);
     glFogfv(GL_FOG_COLOR, fFog);		
@@ -354,60 +355,6 @@ void renderStatus(){
 
 
 /*
- * Funzione che gestisce le luci
- */
-void lightWorld(){
-
-  glEnable(GL_LIGHTING);
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
-
-  /*
-   * imposta i parametri per le luci
-   * 
-   * il primo parametro è il nome della luce:
-   * GL_LIGHT n  -> 0 <= n <= maxlight
-   * 
-   * il secondo parametro sono i parametri della luce che si imposteranno:
-   *  * GL_AMBIENT
-   *  * GL_DIFFUSE
-   *  * GL_SPECULAR
-   *  * GL_POSITION
-   *  * GL_SPOT_CUTOFF
-   *  * GL_SPOT_DIRECTION
-   *  * GL_SPOT_EXPONENT
-   *  * GL_CONSTANT_ATTENUATION
-   *  * GL_LINEAR_ATTENUATION
-   *  * GL_QUADRATIC_ATTENUATION
-   * 
-   * l'ultimo parametro sono i valori che si impostano
-   */
-  
-  worldData.ambientLight[0] = 0.6f;
-  worldData.ambientLight[1] = 0.6f;
-  worldData.ambientLight[2] = 0.6f;
-  worldData.ambientLight[3] = 1.0f;
-  
-  worldData.diffuseLight[0] = 0.0f;
-  worldData.diffuseLight[1] = 0.0f;
-  worldData.diffuseLight[2] = 0.0f;
-  worldData.diffuseLight[3] = 1.0f;
-
-  worldData.positionA[0] =  0.0f;
-  worldData.positionA[1] =  0.0f;
-  worldData.positionA[2] =  0.0f;
-  worldData.positionA[3] =  0.0f;
-
-  glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
-  glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
-  glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
-
-  /* abilito la luce */
-  glEnable(GL_LIGHT0);
-
-}
-
-/*
  * Funzione per creare la display list del mondo
  */
 void createWorld(){
@@ -622,7 +569,6 @@ void drawWorld(){
  */
  
 void render(){
-
   /* Inizio la vera e propria funzione di render*/
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
@@ -663,10 +609,10 @@ void render(){
   glRotatef(worldData.angleMX, 1.0f, 0.0f, 0.0f);
   glRotatef(worldData.angleMY, 0.0f, 1.0f, 0.0f);
   glTranslatef((myWorm.head)->x, (myWorm.head)->y, -(myWorm.head)->z);
-  lightWorld();
   drawWorld();
 
   renderMap();
+
   glutSwapBuffers();
 
 }

@@ -194,27 +194,55 @@ int initialize(int argc, char *argv[]){
    * Gestione luci
    */
 
-  /* luce ambientale bianca */
-  worldData.ambientLight[0] = 0.4f;
-  worldData.ambientLight[1] = 0.4f;
-  worldData.ambientLight[2] = 0.4f;
+  glEnable(GL_LIGHTING);
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
+  /*
+   * imposta i parametri per le luci
+   * 
+   * il primo parametro è il nome della luce:
+   * GL_LIGHT n  -> 0 <= n <= maxlight
+   * 
+   * il secondo parametro sono i parametri della luce che si imposteranno:
+   *  * GL_AMBIENT
+   *  * GL_DIFFUSE
+   *  * GL_SPECULAR
+   *  * GL_POSITION
+   *  * GL_SPOT_CUTOFF
+   *  * GL_SPOT_DIRECTION
+   *  * GL_SPOT_EXPONENT
+   *  * GL_CONSTANT_ATTENUATION
+   *  * GL_LINEAR_ATTENUATION
+   *  * GL_QUADRATIC_ATTENUATION
+   * 
+   * l'ultimo parametro sono i valori che si impostano
+   */
+
+  worldData.ambientLight[0] = 0.6f;
+  worldData.ambientLight[1] = 0.6f;
+  worldData.ambientLight[2] = 0.6f;
   worldData.ambientLight[3] = 1.0f;
-  
+  glLightfv(GL_LIGHT0, GL_AMBIENT,  worldData.ambientLight);
+
   worldData.diffuseLight[0] = 0.4f;
   worldData.diffuseLight[1] = 0.4f;
   worldData.diffuseLight[2] = 0.4f;
   worldData.diffuseLight[3] = 1.0f;
+  glLightfv(GL_LIGHT0, GL_DIFFUSE,  worldData.diffuseLight);	
 
   worldData.specularLight[0] = 1.0f;
   worldData.specularLight[1] = 1.0f;
   worldData.specularLight[2] = 1.0f;
   worldData.specularLight[3] = 1.0f;
+  glLightfv(GL_LIGHT0, GL_SPECULAR, worldData.specularLight);
 
-  /* posizioni delle due luci spot in fronte basso che puntano verso l'alto*/
-  worldData.positionA[0] =  -(WORLDIM - 1.0f);
-  worldData.positionA[1] =  -(WORLDIM - 1.0f);
-  worldData.positionA[2] =  -(WORLDIM - 1.0f);
-  worldData.positionA[3] =   1.0f;
+  worldData.positionA[0] = 0.0f;
+  worldData.positionA[1] = 0.0f;
+  worldData.positionA[2] = 0.0f;
+  worldData.positionA[3] = 0.0f;
+  glLightfv(GL_LIGHT0, GL_POSITION, worldData.positionA);
+
+  /* abilito la luce */
+  glEnable(GL_LIGHT0);
 
 
   /* Inizializzo la posizione della telecamera */
