@@ -27,7 +27,7 @@ void fog(GLint flag){
      */
     glFogi(GL_FOG_MODE, GL_EXP2);
     glFogfv(GL_FOG_COLOR, fFog);		
-    glFogf(GL_FOG_DENSITY, 0.05f);
+    glFogf(GL_FOG_DENSITY, 0.02f);
     glHint(GL_FOG_HINT, GL_NICEST); //  Makes the fog per pixel
     glEnable(GL_FOG);
   }else{
@@ -545,7 +545,7 @@ void drawBall(){
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
   if(ball.texture == TMY){
-    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
     glEnable(GL_BLEND);
     /*
      * cambia l'equazione con cui si calcola il blending 
@@ -576,7 +576,7 @@ void drawBall(){
      *  GL_CONSTANT_ALPHA
      *  GL_ONE_MINUS_CONSTANT_ALPHA
      */
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glCallList(worldData.ball); 
     glDisable(GL_BLEND); 
   }else{
