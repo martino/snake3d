@@ -545,15 +545,15 @@ void drawBall(){
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
   if(ball.texture == TMY){
-    glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
     glEnable(GL_BLEND);
     /*
-     * cambia l'equazione con cui si calcola il blending [si creano degli effetti carini]
+     * cambia l'equazione con cui si calcola il blending 
      *  GL_FUNC_ADD(default) 	  Cf = (Cs * S) + (Cd* D) 
      *  GL_FUNC_SUBTRACT 	  Cf = (Cs * S) – (Cd* D) 
      *  GL_FUNC_REVERSE_SUBTRACT  Cf = (Cd* D) – (Cs * S) 
      *  GL_MIN 			  Cf = min(Cs, Cd) 
-     *  GL_MAX 			  Cf = max(C, C)
+     *  GL_MAX 			  Cf = max(Cs, Cd)
      */
     glBlendEquation(GL_FUNC_ADD);
 
@@ -577,11 +577,7 @@ void drawBall(){
      *  GL_ONE_MINUS_CONSTANT_ALPHA
      */
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glEnable(GL_TEXTURE_GEN_S);
-    glEnable(GL_TEXTURE_GEN_T);
-    glCallList(worldData.ball);
-    glDisable(GL_TEXTURE_GEN_S);
-    glDisable(GL_TEXTURE_GEN_T); 
+    glCallList(worldData.ball); 
     glDisable(GL_BLEND); 
   }else{
     glCallList(worldData.ball);
