@@ -123,64 +123,55 @@ int initialize(int argc, char *argv[]){
      *	  -> type:   specifica il tipo di dati (es: GL_UNSIGNED_BYTE, etc etc)
      *	  -> pixels: è un puntatore al blocco di pixel 
      */
-    if(i<NTEX-1){
-      glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, pImage);
-   
-      /*
-       *	glTexParameteri  -> imposta i parametri della texture
-       *	parametri:
-       *	  -> target: specifica la texture  GL_TEXTURE_1D, GL_TEXTURE_2D, or GL_TEXTURE_3D
-       *	  -> pname:  specifica quale parametro viene impostato
-       *		* basic filtering
-       *		   il processo di calcolare i "color fragmnet" da una texture map ingrandita o rimpicciolita è detto filtering
-       *		   posso agire sul funzionamento di quest'ultimo utilizzando due parametri:
-       *			--> GL_TEXTURE_MAG_FILTER magnification
-       *			--> GL_TEXTURE_MIN_FILTER minification  (bisogna sempre scegliere uno dei due filtri sottostanti se non utilizzo mipmapping)
-       *		   ed i parametri impostabili sono: (manca mipmapping)
-       *			--> GL_LINEAR  [linear filtering] è un pochino più esoso del NEAREST(ma con l'hw attuale non rappresenta un problmea)
-       *					il valore del pixel viene interpolato dai suoi vicini
-       *			--> GL_NEAREST [nearest	neighbor] è il filtro più veloce e semplice, restituisce il valore del texel più vicino al pixel che deve essere disegnato
-       *	 		
-       *		* texture warp	
-       *		   normalmente le coordinate texture vengono specificate tra 0.0 e 1.0, se però le coordinate texture escono da questo range allora OpenGL funziona in base alla warp mode impostata
-       *		   il warp si può configurare per ogni coordinata quindi ho a disposizione:
-       *			--> GL_TEXTURE_WARP_S
-       *			--> GL_TEXTURE_WARP_T
-       *			--> GL_TEXTURE_WARP_R
-       *		   ed i parametri disponibili sono:
-       *			--> GL_REPEAT	semplicemente fa in modo che la texture si ripeta nella direzione in cui la coordinata è maggiore di 1.0
-       *					questo metodo è molto comodo per ripetere le texture più volte
-       *			--> GL_CLAMP	i texel vengono presi dal bordo della texture oppure da TEXTURE_BORDER_COLOR (impostato dempre con la glTexParameter) 
-       *			--> GL_CLAMP_TO_EDGE	i texel fuori dal range vengono presi dall'ultima riga/colonna
-       *			--> GL_CLAMP_TO_BORDER	utilizza i border texel 
-       *	 -> param:  specifica il valore del parametro
-       */
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);	
-    }else{
-      /*
-       *  gluBuild2DMipmaps -> carica una texture 2d in memoria creando tutte le immagini scalate per il mipmap
-       *  parametri: uguali a glTexImage2D senza i livelli(dato che li crea) ed i bordi
-       *
-       */
-      gluBuild2DMipmaps(GL_TEXTURE_2D, components, width, height, format, GL_UNSIGNED_BYTE, pImage);
-      /*
-       * il mipmap introduce i seguenti nuovi parametri
-       *    -> GL_NEAREST_MIPMAP_NEAREST  sceglie il livello di mipmap piu` vicino e poi applica un GL_NEAREST
-       *    -> GL_NEAREST_MIPMAP_LINEAR   fa un'interpolazione lineare tra i livelli di mipmap e poi applica un GL_NEAREST
-       *    -> GL_LINEAR_MIPMAP_NEAREST   sceglie il livello di mipmap piu` vicino e poi fa un GL_LINEAR
-       *    -> GL_LINEAR_MIPMAP_LINEAR    fa un'interpolazione lineare ed applica un GL_LINEAR, viene chiamato trilinear mipmapping
-       *             [quest'ultimo da i risultati migliori]
-       */
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    }
+    /*
+     *  gluBuild2DMipmaps -> carica una texture 2d in memoria creando tutte le immagini scalate per il mipmap
+     *  parametri: uguali a glTexImage2D senza i livelli(dato che li crea) ed i bordi
+     *
+     */
+    
+    gluBuild2DMipmaps(GL_TEXTURE_2D, components, width, height, format, GL_UNSIGNED_BYTE, pImage);   
+    /*
+     *	glTexParameteri  -> imposta i parametri della texture
+     *	parametri:
+     *	  -> target: specifica la texture  GL_TEXTURE_1D, GL_TEXTURE_2D, or GL_TEXTURE_3D
+     *	  -> pname:  specifica quale parametro viene impostato
+     *		* basic filtering
+     *		   il processo di calcolare i "color fragmnet" da una texture map ingrandita o rimpicciolita è detto filtering
+     *		   posso agire sul funzionamento di quest'ultimo utilizzando due parametri:
+     *			--> GL_TEXTURE_MAG_FILTER magnification
+     *			--> GL_TEXTURE_MIN_FILTER minification  (bisogna sempre scegliere uno dei due filtri sottostanti se non utilizzo mipmapping)
+     *		   ed i parametri impostabili sono: (manca mipmapping)
+     *			--> GL_LINEAR  [linear filtering] è un pochino più esoso del NEAREST(ma con l'hw attuale non rappresenta un problmea)
+     *					il valore del pixel viene interpolato dai suoi vicini
+     *			--> GL_NEAREST [nearest	neighbor] è il filtro più veloce e semplice, restituisce il valore del texel più vicino al pixel che deve essere disegnato
+     *                  --> GL_NEAREST_MIPMAP_NEAREST  sceglie il livello di mipmap piu` vicino e poi applica un GL_NEAREST
+     *                  --> GL_NEAREST_MIPMAP_LINEAR   fa un'interpolazione lineare tra i livelli di mipmap e poi applica un GL_NEAREST
+     *                  --> GL_LINEAR_MIPMAP_NEAREST   sceglie il livello di mipmap piu` vicino e poi fa un GL_LINEAR
+     *                  --> GL_LINEAR_MIPMAP_LINEAR    fa un'interpolazione lineare ed applica un GL_LINEAR, viene chiamato trilinear mipmapping
+     *                                               [quest'ultimo da i risultati migliori]
+     *	 		
+     *		* texture warp	
+     *		   normalmente le coordinate texture vengono specificate tra 0.0 e 1.0, se però le coordinate texture escono da questo range allora OpenGL funziona in base alla warp mode impostata
+     *		   il warp si può configurare per ogni coordinata quindi ho a disposizione:
+     *			--> GL_TEXTURE_WARP_S
+     *			--> GL_TEXTURE_WARP_T
+     *			--> GL_TEXTURE_WARP_R
+     *		   ed i parametri disponibili sono:
+     *			--> GL_REPEAT	semplicemente fa in modo che la texture si ripeta nella direzione in cui la coordinata è maggiore di 1.0
+     *					questo metodo è molto comodo per ripetere le texture più volte
+     *			--> GL_CLAMP	i texel vengono presi dal bordo della texture oppure da TEXTURE_BORDER_COLOR (impostato dempre con la glTexParameter) 
+     *			--> GL_CLAMP_TO_EDGE	i texel fuori dal range vengono presi dall'ultima riga/colonna
+     *			--> GL_CLAMP_TO_BORDER	utilizza i border texel 
+     *	 -> param:  specifica il valore del parametro
+     */
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);	
     free(pImage);
 
   }
-  
-  
 
   /* imposto  Sphere Mapping */
   glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
