@@ -488,7 +488,9 @@ void drawBall(){
   glPushMatrix();
 
   glTranslatef(ball.x, ball.y, ball.z);
-  
+  glEnable(GL_TEXTURE_GEN_S);
+  glEnable(GL_TEXTURE_GEN_T);
+
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
   if(ball.texture == TMY){
@@ -529,6 +531,8 @@ void drawBall(){
   }else{
     glCallList(worldData.ball);
   }
+  glDisable(GL_TEXTURE_GEN_S);
+  glDisable(GL_TEXTURE_GEN_T);
 
   glPopMatrix();
 }

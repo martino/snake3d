@@ -52,9 +52,9 @@
 #define TB  2
 #define TMY 3
 #define TW  4
-#define TP  5
-#define TO  6
-#define TM  7
+#define TO  5
+#define TM  6
+#define TP  7
 
 #define NTEX  8
 #define WORLDIM 200.0f
