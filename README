@@ -1,1 +1,34 @@
-Snake3d
+################
+### Snake3di ###
+################
+
+Snake3di e`un clone del piu` famoso Snake, in cui l'obiettivo era far mangiare
+al serpente piu` palline possibile allo scopo di farlo crescere evitando di 
+toccare se stesso ed i muri della stanza.
+
+
+--> Dipendenze
+
+libglut3-dev
+
+
+--> Compilazione/esecuzione
+
+> make
+> ./main
+
+
+
+--> Comandi
+
+Il serpente va sempre avanti, con le frecce lo si puo` direzionare e con il 
+mouse si puo` guardarsi attorno
+
+[N]	 nuova partita
+[F]	 abilita/disabilita nebbia
+[M]	 abilita/disabilita il multisampling
+[S]	 crea uno screenshot
+[Q]	 esce dal gioco
+[P]	 apre il menu`
+
+	    
