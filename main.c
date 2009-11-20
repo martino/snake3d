@@ -8,21 +8,14 @@
 #include "share.h"
 
 
-
-void cleanup(){
-
-}
-
-
 /*
- * funcizione che funge da "ciclo" principale
+ * funcizione che funge da ciclo principale
  * vengono gestiti gli eventi, gli update ed alla fine viene disegnato tutto
  */
 void TimerFunc(int value){
   loop();
   glutPostRedisplay();
   if(programData.exit){
-    cleanup();
     exit(0);
   }
 
@@ -64,9 +57,7 @@ int initialize(int argc, char *argv[]){
   programData.multisample = 1;
   programData.fog = 0;
 
-  /*
-   * Inizializzazione openGL
-   */
+  /* Inizializzazione openGL */
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
@@ -74,10 +65,7 @@ int initialize(int argc, char *argv[]){
   glutInitWindowSize(programData.width, programData.height);
   glutCreateWindow("Snake3di");
 
-
-  /*
-   * Carico le texutre
-   */
+  /* Carico le texutre */
   glEnable(GL_TEXTURE_2D);
   glGenTextures(NTEX, worldData.texObj);
     
@@ -186,9 +174,7 @@ int initialize(int argc, char *argv[]){
   gluQuadricTexture(worldData.q, GL_TRUE);
 
    
-  /*
-   * Creo le display list
-   */
+  /* Creo le display list */
   worldData.wall      = glGenLists(6);
   worldData.ground    = worldData.wall + 1;
   worldData.sky       = worldData.wall + 2;
@@ -202,9 +188,7 @@ int initialize(int argc, char *argv[]){
   createWorld();
   
   
-  /*
-   * Gestione luci
-   */
+  /* Gestione luci */
 
   glEnable(GL_LIGHTING);
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, worldData.ambientLight);
@@ -294,13 +278,13 @@ int initialize(int argc, char *argv[]){
   programData.timeFrame = 1250/programData.velocity;
   programData.velAngolare = programData.velocity*0.2;
     
-  // sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor
+  /* sistemo  i materiali con il metodo più utilizzato, cioè lasciando la colorazione a glcolor */
   glEnable(GL_COLOR_MATERIAL);
 	
   glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
   
-  // imposto la componente speculare sul materiale
-  //		NB: fino a che non richiamo ancora glMaterialfv tutte le superfici sono trasparenti
+  /* imposto la componente speculare sul materiale */
+  /*  NB: fino a che non richiamo ancora glMaterialfv tutte le superfici sono trasparenti */
   worldData.specref[0] = 1.0f;
   worldData.specref[1] = 1.0f;
   worldData.specref[2] = 1.0f;
@@ -308,7 +292,7 @@ int initialize(int argc, char *argv[]){
 
   glMaterialfv(GL_FRONT, GL_SPECULAR, worldData.specref);
   
-  // ora però devo specificare l'esponente di brilantezza (0 è come non impostare nulla)
+  /* ora però devo specificare l'esponente di brilantezza (0 è come non impostare nulla) */
   glMateriali(GL_FRONT, GL_SHININESS, 128);
 
   
@@ -316,20 +300,18 @@ int initialize(int argc, char *argv[]){
   glutReshapeFunc(changeSize);
   
 
-  /*
-   * funzione per gestire il movimento del mouse
-   */
+  /* funzione per gestire il movimento del mouse */
   glutPassiveMotionFunc(mouseHandler);
 
   /*
    * funzione per gestire i tasti speciali:
-   *  - freccie
+   *  - frecce
    */
   glutSpecialFunc(specialKeyHandler);
 
   /*
    * funzione per gestire i tasti normali:
-   *  - lettere
+   *  - caratteri
    */
   glutKeyboardFunc(keyHandler);
 

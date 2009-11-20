@@ -16,9 +16,7 @@ Sphere ball;
 
 /* Gestione del verme */
 
-/*
- * Inizializzazione del verme
- */
+/* Inizializzazione del verme */
 int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia){
   WSphere *tmp;
 
@@ -38,9 +36,7 @@ int initializeWorm(GLfloat x, GLfloat y, GLfloat z, GLfloat dia){
   return 1;
 }
 
-/*
- * Deallocazione della memoria utilizzata per il verme
- */
+/* Deallocazione della memoria utilizzata per il verme */
 void destroyWorm(){
   WSphere *ite = myWorm.head;
   WSphere *tmp;
@@ -52,9 +48,7 @@ void destroyWorm(){
   }
 }
 
-/*
- * Funzione che fa crescere il verme
- */
+/* Funzione che fa crescere il verme */
 int increaseWorm(GLfloat xy, GLfloat z, GLuint dir){
   WSphere *tmp = (WSphere *)calloc(1, sizeof(WSphere));
   if(tmp == NULL) return 0;
@@ -120,7 +114,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   
 
   tmp = (myWorm.head)->prev;
-  /* collision detection tra le sfere del verme*/
+  /* collision detection tra le sfere del verme */
   
   while(tmp!=NULL){
     if(sCollisionDetection(((myWorm.head)->x), ((myWorm.head)->y), (myWorm.head)->z, tmp->x, tmp->y, tmp->z, WORMDIA, WORMDIA)){
@@ -131,7 +125,7 @@ int moveWorm(GLfloat xy, GLfloat z, GLuint dir){
   return 1;
 }
 
-/* Funzione di DEBUG che visualizza il verme*/
+/* Funzione di DEBUG che visualizza il verme */
 void printWorm(){
   WSphere *ite = myWorm.head;
   fprintf(stderr,"--- BEGIN WORM ---\n");
@@ -151,8 +145,6 @@ int initializeBall(){
   ball.x = 0.0f;
   ball.y = 0.0f;
   ball.z = -50.0f;
-  ball.timer = 10000;
-
   ball.texture = randomNBall();   
 
   return 1;
@@ -190,12 +182,6 @@ void generateBall(){
   worldData.texWall = ball.texture;
   ball.texture = randomNBall();
 
-  /* fprintf(stderr, "x %f y %f z %f tex %d\n", ball.x, ball.y, ball.z, ball.texture); */
-}
-
-/* distrugge una palla */
-void destroyBall(){
-
 }
 
 
@@ -214,57 +200,57 @@ void destroyBall(){
  */
 GLbyte *gltLoadTGA(const char *fileName, GLint *iWidth, GLint *iHeight, GLint *iComponent, GLenum *eFormat){
 
-  FILE *pFile;	           // file pointer
-  TGAHEADER tgaHeader;	   // header del TGA
-  unsigned long lImageSize;// dimensione in byte dell'immagine
-  short sDepth;		   // pixel depth
-  GLbyte *pBits = NULL;	   // puntatore ai bit
+  FILE *pFile;	           /* file pointer */
+  TGAHEADER tgaHeader;	   /* header del TGA */
+  unsigned long lImageSize;/* dimensione in byte dell'immagine */
+  short sDepth;		   /* pixel depth */
+  GLbyte *pBits = NULL;	   /* puntatore ai bit */
 	
-  // carico dei valori de default
+  /* carico dei valori de default */
   *iWidth = 0;
   *iHeight = 0;
   *eFormat = GL_BGR_EXT;
   *iComponent = GL_RGB8;
 	
-  // provo ad aprire il file
+  /* provo ad aprire il file */
   pFile = fopen(fileName, "rb");  
   if(pFile == NULL){
     fprintf(stderr, "Non riesco a caricare il file\n");
     return NULL;
   }
 		
-  // leggo l'header (binario)
+  /* leggo l'header (binario) */
   fread(&tgaHeader, 18, 1, pFile); // 18 --> sizeof(TGAHEADER)	
-  // ottengo i parametri base dell'immagine
+  /* ottengo i parametri base dell'immagine */
   *iWidth = tgaHeader.width; 
   *iHeight = tgaHeader.height;
   sDepth = tgaHeader.bits/8;	
 	
-  // accetto targa solo con 8, 24, 32 bit
+  /* accetto targa solo con 8, 24, 32 bit */
   if(tgaHeader.bits != 8 && tgaHeader.bits != 24 &&tgaHeader.bits != 32){
     fprintf(stderr, "Il file ha una profondita' di colore sbagliata\n");
     return NULL;
   }
 		
-  // calcolo le dimensioni dell'image buffer
+  /* calcolo le dimensioni dell'image buffer */
   lImageSize = tgaHeader.width * tgaHeader.height * sDepth;
 	
-  // alloco la menoria neccessaria per memorizzare la tga
+  /* alloco la menoria neccessaria per memorizzare la tga */
   pBits = (GLbyte*)malloc(lImageSize * sizeof(GLbyte));
   if(pBits == NULL){
     fprintf(stderr, "Non riesco ad allocare la memoria neccessaria\n");
     return NULL;
   }
 	
-  // ora posso finalmente caricare i bits
-  // capisco se è rle dato che le dimensioni sono diverse
+  /* ora posso finalmente caricare i bits */
+  /* capisco se è rle dato che le dimensioni sono diverse */
   if(fread(pBits, lImageSize, 1, pFile) != 1){
     free(pBits);
     fprintf(stderr, "Errore nella lettura dell'immagine");
     return NULL;
   }
 	
-  // posso impostare il formato che si aspetta OpenGL
+  /* posso impostare il formato che si aspetta OpenGL */
   switch(sDepth){
   case 3:
     *eFormat = GL_BGR_EXT;
@@ -299,32 +285,32 @@ GLint gltWriteTGA(const char *szFileName){
   GLbyte *pBits = NULL;
   GLint iViewport[4], lastBuffer;
 
-  // ottengo la dimensione del viewport
+  /* ottengo la dimensione del viewport */
   glGetIntegerv(GL_VIEWPORT, iViewport);
   
-  // otengo la dimensione dell'immagine
+  /* ottengo la dimensione dell'immagine */
   lImageSize = iViewport[2] * 3 * iViewport[3];
 
-  //allogo i blocchi
+  /* allogo i blocchi */
   pBits = (GLbyte *)malloc(lImageSize);
   if(pBits == NULL)
     return 0;
 
-  // leggo i bit dal color bufer
+  /* leggo i bit dal color bufer */
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
   glPixelStorei(GL_PACK_ROW_LENGTH, 0);
   glPixelStorei(GL_PACK_SKIP_ROWS, 0);
   glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
 
-  // Ottengo il read buffer e lo salvo
-  // Leggo il front buffer e lo leggo
-  // Alla fine ripristino il readBuffer
+  /* Ottengo il read buffer e lo salvo */
+  /* Leggo il front buffer e lo leggo */
+  /* Alla fine ripristino il readBuffer */
   glGetIntegerv(GL_READ_BUFFER, &lastBuffer);
   glReadBuffer(GL_FRONT);
   glReadPixels(0, 0, iViewport[2], iViewport[3], GL_BGR, GL_UNSIGNED_BYTE, pBits);
   glReadBuffer(lastBuffer);
 
-  // Inizializzo l'header TGA
+  /* Inizializzo l'header TGA */
   tgaHeader.identsize = 0;
   tgaHeader.colorMapType = 0;
   tgaHeader.imageType = 2;
@@ -339,7 +325,7 @@ GLint gltWriteTGA(const char *szFileName){
   tgaHeader.descriptor = 0;
 
   
-  //apro il file
+  /* apro il file */
   pFile = fopen(szFileName, "wb");
 
   if(pFile == NULL){
@@ -347,13 +333,13 @@ GLint gltWriteTGA(const char *szFileName){
     return 0;
   }
 
-  //scrivo l'header
+  /* scrivo l'header */
   fwrite(&tgaHeader, sizeof(TGAHEADER), 1, pFile);
 
-  //scrivo l'immagine
+  /* scrivo l'immagine */
   fwrite(pBits, lImageSize, 1, pFile);
 
-  //libero la memoria e chiudo il file
+  /* libero la memoria e chiudo il file */
   free(pBits);
   fclose(pFile);
 
@@ -364,30 +350,22 @@ GLint gltWriteTGA(const char *szFileName){
 
 
 
-/*
- * Funzione che calcola la distanza euclidea
- */
+/* Funzione che calcola la distanza euclidea */
 
 GLdouble dist2Point(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
   return ((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)) + ((z1 - z2) * (z1 - z2));
 }
 
 
-/*
- * Incremento della velocita'
- */
+/* Incremento della velocita' */
 void increaseVel(GLint vel){
   programData.velocity += vel;
   programData.timeFrame = 1250/programData.velocity;
   programData.velAngolare = programData.velocity*0.2;
 
-/*   fprintf(stderr, " velocity %d timeframe %d velangolare %f \n", programData.velocity, programData.timeFrame, programData.velAngolare); */
-
 }
 
-/*
- * Genera un numero casuale per la texture della palla
- */
+/* Genera un numero casuale per la texture della palla */
 int randomNBall(){
   int res = 0;
   float randf;

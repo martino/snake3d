@@ -66,9 +66,7 @@ void changeSize(GLint w, GLint h){
   
 }
 
-/*
- * Funzione per impostare le proiezioni ortogonali
- */
+/* Funzione per impostare le proiezioni ortogonali */
 void setOrtographicProjection(){
   /* torno al projection mode */
   glMatrixMode(GL_PROJECTION);
@@ -91,9 +89,7 @@ void setOrtographicProjection(){
 }
 
 
-/*
- * Funzione per ritornare alle proiezioni prospettiche
- */
+/* Funzione per ritornare alle proiezioni prospettiche */
 void resetPerspectiveProjection(){
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
@@ -101,9 +97,7 @@ void resetPerspectiveProjection(){
 }
 
 
-/*
- * Funzione per scrivere del testo
- */
+/* Funzione per scrivere del testo */
 
 void renderText(float x, float y, char *string){
   char *c;
@@ -142,9 +136,7 @@ void renderText(float x, float y, char *string){
   
 }
 
-/*
- * Funzione che visualizza la mappa di gioco
- */
+/* Funzione che visualizza la mappa di gioco */
 void renderMap(){
   GLint x=10, y, dim=120, bdim = 2; // variabili per la gestione della mappa
   GLfloat xw,xb,yw,yb,dw=WORMDIA*2,db = DIA*2; // gestione del verme e della palla
@@ -265,9 +257,7 @@ void renderMap(){
   resetPerspectiveProjection();
 }
 
-/*
- * Funzione per visualizzare il menù
- */
+/* Funzione per visualizzare il menù */
 void renderMenu(){
   GLfloat y = winHeight;
   GLfloat x = winWidth;
@@ -290,9 +280,7 @@ void renderMenu(){
 }
 
 
-/*
- * Funzione per visualizzare la vittoria/sconfitta
- */
+/* Funzione per visualizzare la vittoria/sconfitta */
 void renderStatus(){
   GLchar text[40];
   GLchar *c;
@@ -354,9 +342,7 @@ void renderStatus(){
 }
 
 
-/*
- * Funzione per creare la display list del mondo
- */
+/* Funzione per creare la display list del mondo */
 void createWorld(){
   GLfloat x = WORLDIM, y = WORLDIM, z = WORLDIM;
   GLfloat rep = 5.0f;
@@ -421,7 +407,7 @@ void createWorld(){
 
 
   glNewList(worldData.ground,GL_COMPILE);
-  // ground
+  /* ground */
 
    glBegin(GL_QUADS);
     glNormal3f(0.0f, 10.0f, 0.0f);
@@ -437,7 +423,7 @@ void createWorld(){
   glEndList();
   
   glNewList(worldData.sky,GL_COMPILE);
-  // sky
+  /* sky */
    glBegin(GL_QUADS);
     glNormal3f(0.0f, -10.0f, 0.0f);
     glTexCoord2f(0.0f, 0.0f);
@@ -451,7 +437,7 @@ void createWorld(){
    glEnd();
   glEndList();
 
-  /*verme*/
+  /*serpente*/
   glNewList(worldData.worm, GL_COMPILE);
     gluSphere(worldData.q, WORMDIA, 32, 16);
   glEndList();
@@ -465,9 +451,7 @@ void createWorld(){
 
 
 
-/* 
- * Funzione che disegna il verme
- */
+/* Funzione che disegna il verme */
 void drawWorm(){
   WSphere *ite = myWorm.head;
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TW]);
@@ -480,9 +464,7 @@ void drawWorm(){
   }
 }
 
-/*
- * Funzione che disegna la palla
- */
+/* Funzione che disegna la palla */
 void drawBall(){
 
   glPushMatrix();
@@ -494,7 +476,7 @@ void drawBall(){
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[ball.texture]);
 
   if(ball.texture == TMY){
-    glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
+    glColor4f(1.0f, 1.0f, 1.0f, 0.4f);
     glEnable(GL_BLEND);
     /*
      * cambia l'equazione con cui si calcola il blending 
@@ -538,22 +520,20 @@ void drawBall(){
 }
 
 
-/*
- * Funzione per disegnare il mondo
- */
+/* Funzione per disegnare il mondo */
 void drawWorld(){
   /* disegno le pareti */
   glPushMatrix();
 
-  // richiama le varie list in base al colore della texture i wall
+  /* richiama le varie list in base al colore della texture i wall */
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[worldData.texWall]);
   glCallList(worldData.wall);
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[worldData.texWallSd]);
   glCallList(worldData.wallsd);
 
-  //soffitto
+  /* soffitto */
   glCallList(worldData.sky);
-  // pavimento
+  /* pavimento */
   glBindTexture(GL_TEXTURE_2D, worldData.texObj[TP]);
   glCallList(worldData.ground);
   glPopMatrix();
@@ -568,9 +548,7 @@ void drawWorld(){
 
 
 
-/*
- *  questa funzione ha il compito di disegnare il tutto
- */
+/* questa funzione ha il compito di disegnare il tutto */
  
 void render(){
   /* Inizio la vera e propria funzione di render*/
@@ -604,7 +582,6 @@ void render(){
 
   }
 
-  // Restore lighting state variables
   glPopAttrib();
 
   /* telecamera */
@@ -616,7 +593,7 @@ void render(){
   drawWorld();
 
   renderMap();
-
+  
   glutSwapBuffers();
 
 }

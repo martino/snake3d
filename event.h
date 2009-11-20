@@ -13,10 +13,6 @@
 
 void event();
 void mouseHandler(int, int);
-/*
- * entrambi hanno come primo parametro il tasto premuto
- * mentre la X e la Y contengono 
- */
 void keyHandler(GLubyte, GLint, GLint); // key x y
 void specialKeyHandler(GLint, GLint, GLint); // key x y
 

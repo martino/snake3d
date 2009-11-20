@@ -7,9 +7,7 @@
 
 #include "event.h"
 
-/*
- * gestisce il mouse
- */
+/* gestisce il mouse */
 void mouseHandler(int x, int y){
   float tmpX = 0.0f, tmpY = 0.0f;
   if((worldData.angleY != worldData.nextAngleY) || (worldData.angleX != worldData.nextAngleX))
@@ -34,29 +32,28 @@ void mouseHandler(int x, int y){
 
 }
 
-/*
- * gestisce i tasti "normali"
- */ 
+/* gestisce i tasti carattere */ 
 void keyHandler(GLubyte key, GLint x, GLint y){
+  static int sCount=0;
   if(key== 'q'){
     fprintf(stderr, "Exit\n");
     programData.exit = 1;
   }else{  
-    if(key == 'p'){ // menu
+    if(key == 'p'){ /* menu */
       programData.menu = !programData.menu;
     }else{
-      if(key == 'm'){ // multisample
+      if(key == 'm'){ /* multisampling */
 	programData.multisample = !programData.multisample;
 	if(programData.multisample){
-	  fprintf(stderr, "MULTISAMPLE ON\n");
+	  fprintf(stderr, "MULTISAMPING ON\n");
 	  glEnable(GL_MULTISAMPLE);
 	}
 	else{
-	  fprintf(stderr, "MULTISAMPLE OFF\n");
+	  fprintf(stderr, "MULTISAMPING OFF\n");
 	  glDisable(GL_MULTISAMPLE);
 	}
       }else{
-      	if(key == 'f'){ // nebbia
+      	if(key == 'f'){ /* nebbia */
 	  programData.fog= !programData.fog;
 	  if(programData.fog){
 	    fprintf(stderr, "FOG ON\n");
@@ -67,7 +64,7 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 	    fog(0);
 	  }
 	}else{
-	  if(key == 'n'){ // nuova partita
+	  if(key == 'n'){ /* nuova partita */
 	    programData.gameStatus = 1;
 	    programData.menu = 0;
 	    programData.points= 0;
@@ -114,17 +111,13 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 	    programData.frame = 0;
 	    
 	  }else{
-	    if(key == 'a'){
-	      if(worldData.yStatus == 0)
-		increaseWorm((float)sin(worldData.angleY * PIOVER180), (float)cos(worldData.angleY * PIOVER180), 0);
-	      else
-		increaseWorm((float)sin(worldData.angleX * PIOVER180), (float)cos(worldData.angleX * PIOVER180), 1);
-	    }else{
-	      if(key == 's'){//screenshot
-		gltWriteTGA("screenshot.tga");
-	      }
-	    }	      
-	  }
+	    if(key == 's'){/* screenshot */
+	      char sname[20];
+	      sprintf(sname, "screenshot%d.tga",sCount);
+	      gltWriteTGA(sname);
+	      sCount++;
+	    }
+	  }	      
 	}
       }
     }
@@ -132,34 +125,29 @@ void keyHandler(GLubyte key, GLint x, GLint y){
 }
 
 
-/*  
- * gestisce le freccie
- */
+
+/* gestisce le frecce */
 void specialKeyHandler(GLint key, GLint x, GLint y){
   switch(key){
   case GLUT_KEY_RIGHT:
-    /*     worldData.angleY += 90.0f; */
     if(programData.invert == 0)
       worldData.kright = 1;
     else
       worldData.kleft = 1;
     break;
   case GLUT_KEY_LEFT:
-    /*     worldData.angleY -= 90.0f; */
     if(programData.invert == 0)
       worldData.kleft = 1;
     else
       worldData.kright = 1;
     break;
   case GLUT_KEY_UP:
-    /*     worldData.angleY += 90.0f; */
     if(programData.invert == 0)
       worldData.kup = 1;
     else
       worldData.kdown = 1;
     break;
   case GLUT_KEY_DOWN:
-    /*     worldData.angleY -= 90.0f; */
     if(programData.invert == 0)
       worldData.kdown = 1;
     else

@@ -11,21 +11,17 @@
 #define SHARE_H
 
 
-/*
- * include OpenGL
- */
+/* include OpenGL */
 
-#ifdef __APPLE__                // Mac OS X
-#include <OpenGL/gl.h>		// Apple OpenGL haders (version depends on OS X SDK version)
-#include <OpenGL/glu.h>		// OpenGL Utilities
-#include <Glut/glut.h>		// Apples Implementation of GLUT
-#else                           // Linux
+#ifdef __APPLE__                /* Mac OS X */
+#include <OpenGL/gl.h>		/* Apple OpenGL haders (version depends on OS X SDK version) */
+#include <OpenGL/glu.h>		/* OpenGL Utilities */
+#include <Glut/glut.h>		/* Apple Implementation of GLUT */
+#else                           /*  Linux */
 #include <GL/glut.h>
 #endif
 
-/*
- * include comuni
- */
+/* include comuni */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,17 +29,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-/*
- * include degli altri file
- */
+/* include degli altri file */
 
 #include "render.h"
 #include "event.h"
 #include "loop.h"
 
-/**
- * costanti
- */
+/* costanti */
 
 #define winHeight 600
 #define winWidth  800
@@ -64,26 +56,24 @@
 #define VELOCITY 15
 
 
-/*
- * strutture dati
- */
+/* strutture dati */
 
 
 /* struttura per la gestione delle TGA */
-#pragma pack(1)// da capire bene
+#pragma pack(1)
 typedef struct{
-  GLbyte identsize;		// Dimensione del campo ID che segue l'header
-  GLbyte colorMapType;		// 0 = none, 1 = paletted
-  GLbyte imageType;		// 0 = none, 1 = indexed, 2 = rgb, 3 = gray, +8 = rle
-  unsigned short colorMapStart;	// prima entry color map
-  unsigned short colorMapLength;// numero di colori
-  unsigned char  colorMapBits;	// bit per ogni palette entry
-  unsigned short xstart;	// origine x dell'immagine
-  unsigned short ystart;	// origine y dell'immagine
-  unsigned short width;		// larghezza dell'immagine
-  unsigned short height;	// altezza dell'immagine
-  GLbyte bits;			// bitss per pixel (8,16,24,32)
-  GLbyte descriptor;		// descrittore dell'immagine
+  GLbyte identsize;		/* Dimensione del campo ID che segue l'header */
+  GLbyte colorMapType;		/* 0 = none, 1 = paletted */
+  GLbyte imageType;		/* 0 = none, 1 = indexed, 2 = rgb, 3 = gray, +8 = rle */
+  unsigned short colorMapStart;	/* prima entry color map */
+  unsigned short colorMapLength;/* numero di colori */
+  unsigned char  colorMapBits;	/* bit per ogni palette entry */
+  unsigned short xstart;	/* origine x dell'immagine */
+  unsigned short ystart;	/* origine y dell'immagine */
+  unsigned short width;		/* larghezza dell'immagine */
+  unsigned short height;	/* altezza dell'immagine */
+  GLbyte bits;			/* bits per pixel (8,16,24,32) */
+  GLbyte descriptor;		/* descrittore dell'immagine */
 } TGAHEADER;
 #pragma pack(8)
 
@@ -91,7 +81,6 @@ typedef struct{
 
 typedef struct{
   GLfloat x, y,z; /* centro */
-  GLint   timer;  /* timer */
   GLint   texture;/* texture utilizzata */
 } Sphere;
 
@@ -110,9 +99,9 @@ typedef struct{
   WSphere *head;/*testa*/
   WSphere *tail;/*coda*/
   
-  // velocita
+  /* velocita */
   GLfloat vel;
-  // dimensione
+  /* dimensione */
   GLfloat dim;
   GLfloat dia;
 } Worm;
@@ -195,7 +184,6 @@ extern Sphere ball;
  * prototipi funzioni
  */
 
-/* esempio, meglio non mettere i nomi delle variabili -- int initMesh(Mesh *, char *);*/
 GLbyte *gltLoadTGA(const char*, GLint*, GLint*, GLint*, GLenum*);
 GLint gltWriteTGA(const char *szFileName);
 /* gestione verme */
@@ -207,7 +195,6 @@ void printWorm();
 /* gestione sfere */
 int initializeBall();
 void generateBall();
-void destroyBall();
 GLdouble dist2Point(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat, GLfloat);
 void increaseVel(GLint);
 int randomNBall();
